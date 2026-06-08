@@ -5,12 +5,29 @@
 // Aluno: _____________________________________ Data: ___/___/_____
 //
 // -----------------------------------------------------------------------------
-// ETAPA 1 (Intermediária): Faça a leitura de A0 (dias, 1 a 30) e A1 (km, 1 a 1000).
-//                          Calcule o custo total (diária 30.0 + 0.01 por km) com 10%
-//                          de desconto e imprima no LCD 16x2.
+// APRESENTAÇÃO E DIRETRIZES:
+// O objetivo desta atividade é simular as duas entradas de um sistema de aluguel de carros
+// (Locadora "Sai da Frente") utilizando dois potenciômetros. O programa calcula o custo total
+// aplicando um desconto de 10% e exibe tudo formatado no LCD 16x2 de maneira otimizada.
 //
-// ETAPA 2 (Final - Desafio): Elimine a oscilação do display LCD utilizando a
-//                             condição de atualização sob variação dupla.
+// ETAPAS DE DESENVOLVIMENTO:
+// - ETAPA 1 (Intermediária):
+//   1. Leia o potenciômetro 1 (A0) e converta para Tempo (1 a 30 dias).
+//   2. Leia o potenciômetro 2 (A1) e converta para Distância (1 a 1000 km).
+//   3. Calcule o valor total da locação com a fórmula:
+//      -> Custo = (Dias * 30.0 + Km * 0.01) * 0.90 (desconto de 10%)
+//   4. Imprima os valores numéricos de dias, km e o custo total no LCD no layout:
+//      T: XXd  D: XXXkm
+//      Total: R$ XXX.XX
+//
+// - ETAPA 2 (Final - Desafio):
+//   1. Elimine o flicker escrevendo os rótulos de texto fixo ("T:   d  D:    km"
+//      e "Total: R$       ") uma única vez dentro do setup().
+//   2. No loop(), implemente um Filtro de Estado duplo: atualize as saídas numéricas 
+//      do LCD apenas se o valor atual de tempo for diferente de 'ultimoTempo' 
+//      OU se a distância atual for diferente de 'ultimaDistancia' (operador lógico OR '||').
+//   3. Limpe as casas numéricas dinâmicas com espaços em branco ("  " ou "    ") antes
+//      de imprimir para apagar dígitos órfãos residuais.
 // -----------------------------------------------------------------------------
 //
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
@@ -29,42 +46,54 @@
 // Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-// TODO: Defina as variáveis globais de estado para reter a última leitura de tempo e distância
+// TODO: Defina as variáveis globais de estado para reter a última leitura de tempo e distância.
+// Elas iniciam em -1 para forçar a primeira escrita na tela logo ao inicializar o loop().
 int ultimoTempo = -1;
 int ultimaDistancia = -1;
 
 void setup() {
-  // Inicializa o LCD de 16 colunas e 2 linhas
+  // Inicializa o LCD com 16 colunas e 2 linhas
   LCD.begin(16, 2);
   
-  // TODO (Etapa 2): Desenhe o layout estático inicial uma única vez
-  // Dica: LCD.print("T:   d  D:    km");
+  // TODO (Etapa 2): Desenhe o layout estático inicial na tela de uma única vez.
+  // Escrever as etiquetas aqui economiza processamento e evita cintilações no LCD.
+  // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
+  // LCD.setCursor(0, 0);
+  // LCD.print("T:   d  D:    km");
+  // LCD.setCursor(0, 1);
+  // LCD.print("Total: R$       ");
 }
 
 void loop() {
-  // TODO: Leia e mapeie o potenciômetro 1 (A0) para a faixa de 1 a 30 dias (tempo)
+  // TODO: Leia e mapeie o potenciômetro 1 (conectado em A0) para a faixa de 1 a 30 dias (tempo).
+  // Dica: map(analogRead(pino), 0, 1023, min, max)
   int tempo = 0; 
   
-  // TODO: Leia e mapeie o potenciômetro 2 (A1) para a faixa de 1 a 1000 km (distancia)
+  // TODO: Leia e mapeie o potenciômetro 2 (conectado em A1) para a faixa de 1 a 1000 km (distancia).
   int distancia = 0; 
 
-  // TODO (Etapa 2): Estruture a condição 'if' composta para comparar se
-  // o 'tempo' é diferente de 'ultimoTempo' OU se a 'distancia' é diferente de 'ultimaDistancia'.
+  // TODO (Etapa 2): Filtro de Estado Composto.
+  // Crie um bloco 'if' que verifica se houve mudança nas entradas:
+  // if (tempo != ultimoTempo || distancia != ultimaDistancia)
   
   // {
-    // TODO: Calcule o valor total da diária com 10% de desconto
-    // Fórmula: (tempo * 30.0 + distancia * 0.01) * 0.90
+    // TODO: Calcule o valor total da locação com 10% de desconto.
+    // Fórmula de negócio: (tempo * 30.0 + distancia * 0.01) * 0.90
+    // ATENÇÃO: Use números em float (como 30.0 e 0.01) para que as operações ocorram com precisão decimal.
     float valorTotal = 0.0;
     
-    // TODO: Posicione o cursor e exiba o tempo atual no LCD
-    // TODO: Posicione o cursor e exiba a distância atual no LCD
-    // TODO: Posicione o cursor e exiba o valor total a pagar no LCD
+    // TODO: Posicione o cursor e exiba a quantidade de dias no LCD (Linha 0).
+    // Dica: Posicione na coluna 2 da linha 0. Limpe com espaços ("  ") antes de escrever.
     
-    // Dica (Etapa 2): Sempre limpe com espaços vazios ("    ") antes de imprimir
-    // os novos números para não embolar os dígitos do display.
+    // TODO: Posicione o cursor e exiba a distância percorrida no LCD (Linha 0).
+    // Dica: Posicione na coluna 10 da linha 0. Limpe com espaços ("    ") antes de escrever.
     
-    // TODO (Etapa 2): Atualize as variáveis de estado para o próximo ciclo
+    // TODO: Posicione o cursor e exiba o valor total formatado no LCD (Linha 1).
+    // Dica: Posicione na coluna 10 da linha 1. Use LCD.print(valorTotal, 2) para duas casas decimais.
+    
+    // TODO (Etapa 2): Atualize as variáveis de estado para reter as leituras atuais.
+    
   // }
   
-  delay(100);
+  delay(100); // Pausa para estabilidade de hardware
 }

@@ -5,13 +5,32 @@
 // Aluno: _____________________________________ Data: ___/___/_____
 //
 // -----------------------------------------------------------------------------
-// ETAPA 1 (Intermediária): Leia o nível do tanque (A0, 0-50L) e consumo (A1, 0-20 L/h).
-//                          Calcule a autonomia em horas (cuidado com consumo = 0!).
-//                          Exiba os valores numéricos no LCD 20x4.
+// APRESENTAÇÃO E DIRETRIZES:
+// O objetivo desta atividade é projetar um painel de telemetria industrial utilizando
+// um display LCD 20x4, dois potenciômetros de ajuste e um LED físico indicador de reserva.
+// A interface apresenta barras de progresso gráficas e proteção matemática contra falhas.
 //
-// ETAPA 2 (Final - Desafio): Evite o flicker (redesenho apenas sob alteração).
-//                             Desenhe a barra de progresso do tanque de 10 segmentos.
-//                             Acione o LED vermelho (Pino 7) se o nível cair abaixo de 5L.
+// ETAPAS DE DESENVOLVIMENTO:
+// - ETAPA 1 (Intermediária):
+//   1. Configure o pino do LED de alerta (Pino 7) como OUTPUT.
+//   2. Leia A0 e converta para Volume (faixa de 0.0 a 50.0 Litros).
+//   3. Leia A1 e converta para Consumo (faixa de 0.0 a 20.0 L/h).
+//   4. Calcule a autonomia (Volume / Consumo). 
+//      ATENÇÃO: proteja o código contra divisão por zero (caso consumo < 0.1 L/h).
+//   5. Exiba os valores numéricos de litros, consumo e autonomia no LCD 20x4.
+//
+// - ETAPA 2 (Final - Desafio):
+//   1. Implemente o Filtro de Estado: a tela só deve ser atualizada se o percentual
+//      de combustível mudar OU se a leitura inteira de consumo mudar.
+//   2. Desenhe uma barra de progresso gráfica na linha 2 do LCD.
+//      -> Calcule o percentual de preenchimento (0 a 100%).
+//      -> O número de blocos (0 a 10) é dado por percentual / 10.
+//      -> Use um loop 'for' de 10 iterações. Se o índice do loop for menor que o número
+//         de blocos calculados, imprima o bloco sólido (char(255)). Senão, imprima um espaço (" ").
+//   3. Implemente a lógica de reserva: se o volume for menor que 5.0 Litros:
+//      -> Acenda o LED vermelho do pino 7.
+//      -> Altere a etiqueta da linha 3 para exibir "!RESERVA!" em vez de "Autonomia:".
+//      -> Caso contrário, mantenha o LED apagado e restaure o texto original.
 // -----------------------------------------------------------------------------
 //
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
@@ -29,50 +48,77 @@
 // Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
+// Pino do LED vermelho indicador de combustível em reserva
 int pinoAlerta = 7;
 
-// TODO: Declare as variáveis globais de estado necessárias para reter os valores anteriores
-int ultimoTempo = -1; // você pode usar variáveis para volume e consumo anterior
+// TODO: Defina as variáveis globais de estado para reter o último percentual do tanque e 
+// o último consumo (em formato inteiro) exibidos. Elas impedem redesenhos constantes no loop().
+int ultimoPercentual = -1;
+int ultimoConsumoInt = -1;
 
 void setup() {
+  // Inicializa o LCD de 20 colunas por 4 linhas
   LCD.begin(20, 4);
-  pinMode(pinoAlerta, OUTPUT);
   
-  // TODO (Etapa 2): Desenhe a moldura e textos fixos uma única vez
-  // LCD.setCursor(0, 0);
-  // LCD.print("  PAINEL TELEMETRIA ");
+  // TODO: Configure o pino do LED de alerta como saída (OUTPUT)
+  
+  // TODO (Etapa 2): Desenhe a moldura estática inicial no display de uma única vez no setup().
+  // Linha 0 (Cursor 0,0) -> "PAINEL DE TELEMETRIA"
+  // Linha 1 (Cursor 0,1) -> "Tanque:     L"
+  // Linha 3 (Cursor 0,3) -> "Autonomia:        h"
 }
 
 void loop() {
-  // TODO: Leia o potenciômetro de nível (A0) e mapeie para 0 a 50 litros
-  int potNivel = analogRead(A0);
-  float volume = 0.0; // Faça a conversão do potenciômetro para float (0.0 a 50.0)
+  // TODO: Leia o potenciômetro de nível (A0) e mapeie proporcionalmente para 0.0 a 50.0 litros.
+  // Dica: Use cálculo em ponto flutuante: volume = (analogRead(A0) / 1023.0) * 50.0
+  float volume = 0.0; 
 
-  // TODO: Leia o potenciômetro de consumo (A1) e mapeie para 0 a 20 L/h
-  int potConsumo = analogRead(A1);
-  float consumo = 0.0; // Faça a conversão do potenciômetro para float (0.0 a 20.0)
+  // TODO: Leia o potenciômetro de consumo (A1) e mapeie proporcionalmente para 0.0 a 20.0 L/h.
+  float consumo = 0.0; 
 
-  // TODO (Etapa 2): Condição de atualização sob variação (Filtro de Estado)
+  // Calcule o percentual inteiro atual do tanque (0 a 100%) para uso no Filtro de Estado
+  float percentual = (volume / 50.0) * 100.0;
+  int percentualInt = (int)percentual;
+  
+  // Calcule o consumo como inteiro com 1 casa decimal (multiplicado por 10) para o Filtro de Estado
+  int consumoInt = (int)(consumo * 10.0);
+
+  // TODO (Etapa 2): Filtro de Estado. Envolva toda a atualização do LCD dentro de um bloco 'if':
+  // if (percentualInt != ultimoPercentual || consumoInt != ultimoConsumoInt)
+  
   // {
-    
-    // TODO: Calcule a autonomia (Volume / Consumo)
-    // ATENÇÃO: Faça a proteção de software para evitar a divisão por zero!
+    // TODO: Proteção contra Divisão por Zero.
+    // Se o consumo for muito baixo (menor que 0.1 L/h), defina a autonomia como 0 ou exiba
+    // uma constante indicando infinito. Caso contrário, execute a divisão (volume / consumo).
     float autonomia = 0.0;
+    bool divisaoPorZero = false;
 
-    // TODO: Exiba o volume e consumo no LCD (Linha 1)
+    // TODO: Imprima o volume de combustível atualizado no LCD (Linha 1).
+    // Dica: Posicione na coluna 8 da linha 1. Imprima "     " antes para limpar o número antigo.
     
-    // TODO: Desenhe a barra de progresso gráfica na Linha 2
-    // Dica: Calcule a porcentagem de combustível: percentual = (volume / 50.0) * 100.0
-    // O número de blocos (0 a 10) será: blocos = percentual / 10
-    // Use um loop 'for' para escrever os caracteres de bloco (char(255)) e espaços.
+    // TODO: Imprima o consumo atualizado no LCD (Linha 1).
+    // Dica: Posicione na coluna 13 da linha 1. Use LCD.print(consumo, 1) e escreva "/h".
     
-    // TODO: Exiba a autonomia em horas na Linha 3
+    // TODO (Etapa 2): Desenhe a Barra de Progresso textual horizontal de 10 segmentos (Linha 2).
+    // O número de blocos preenchidos será de 0 a 10 (blocos = percentualInt / 10).
+    // Utilize um loop 'for (int i = 0; i < 10; i++)' para imprimir o caractere sólido 'char(255)'
+    // nas posições correspondentes e espaços em branco " " nas posições vazias da barra.
+    // Formato final esperado: "Barra: [██████    ] 60%"
     
-    // TODO: Lógica de Reserva (Volume < 5L)
-    // Se estiver na reserva, ligue/pisque o pino de alerta (7) e exiba "RESERVA CRITICA" na Linha 3.
-    // Senão, mantenha o pino de alerta desligado e apague o aviso.
+    // TODO: Imprima a autonomia calculada no LCD (Linha 3).
+    // Dica: Se for divisão por zero, imprima "INF". Caso contrário, imprima o valor real com 2 casas decimais.
+    
+    // TODO (Etapa 2): Lógica e Alerta de Reserva.
+    // - Se o volume atual for menor que 5.0 Litros:
+    //   -> Ative o pino do LED de alerta (HIGH).
+    //   -> Posicione no início da linha 3 e escreva "!RESERVA! ".
+    // - Caso contrário (normal):
+    //   -> Desative o pino do LED de alerta (LOW).
+    //   -> Posicione no início da linha 3 e restaure o rótulo "Autonomia:".
+    
+    // TODO (Etapa 2): Atualize as variáveis globais de controle de estado anterior.
     
   // }
   
-  delay(100);
+  delay(100); // Pausa do loop principal
 }
