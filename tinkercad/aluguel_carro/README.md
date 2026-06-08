@@ -2,7 +2,12 @@
 
 ## 1. Objetivos de Aprendizagem
 *   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 16x2.
-*   **Nível Final (Desafio):** Integrar a detecção de mudança de estado duplo para que o LCD seja atualizado apenas sob variação em alguma das entradas, eliminando a oscilação (*flicker*) do display.
+*   **Nível Final (Desafio):** 
+    1.  Integrar a detecção de mudança de estado duplo para que o LCD seja atualizado apenas sob variação em alguma das entradas, eliminando a oscilação (*flicker*) do display.
+    2.  Implementar controle de categoria do veículo via hardware: use uma chave tipo slide no pino **9** (`INPUT_PULLUP`). 
+        - Chave em `LOW` (Esquerda): Categoria **Popular** (`POP`) com diária de R$ 30,00 e R$ 0,01 por km.
+        - Chave em `HIGH` (Direita): Categoria **SUV** (`SUV`) com diária de R$ 80,00 e R$ 0,05 por km.
+        - Exibir o indicador da categoria (`POP` ou `SUV`) no LCD.
 
 ---
 
@@ -49,25 +54,28 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
     *   `VCC` -> 5V | `GND` -> GND
 *   **Potenciômetro 1 (Dias):** Cursor no pino analógico `A0`
 *   **Potenciômetro 2 (Distância):** Cursor no pino analógico `A1`
+*   **Chave Slide (Seletor de Categoria):** Pino central conectado ao pino digital **9** (utilizando pull-up interno: `INPUT_PULLUP`). Outro pino ao GND.
 
 ---
 
 ## 4. O Desafio (Mão na Massa)
 1.  **Ponto de Partida:** Abra o arquivo [aluguel_carro_template.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro_template.ino).
-2.  **Tarefa Intermediária:** Complete a lógica do cálculo e a fiação no simulador. Realize a apresentação no LCD no seguinte padrão de texto:
+2.  **Tarefa Intermediária:** Complete a lógica do cálculo e a fiação no simulador. Realize a apresentação no LCD no seguinte padrão de texto (mesmo com flicker):
     ```text
-    T: 12d  D: 450km
-    Total: R$ 301.05
+    T:12d K:1000 POP
+    Total: R$ 306.00
     ```
-3.  **Tarefa Final (Desafio):** Implemente a lógica sem oscilação. As etiquetas fixas como `T:` e `Total: R$` devem ser escritas somente no `setup()`. A escrita em tela no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia`.
+3.  **Tarefa Final (Desafio):** 
+    *   Implemente a fiação da chave slide e a lógica condicional para mudar as tarifas (POP vs SUV).
+    *   Elimine a oscilação do display: as etiquetas fixas (`T:`, `d K:`, `Total: R$`) devem ser escritas somente no `setup()`. A escrita dinâmica no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia` **ou** `categoria != ultimaCategoria`.
 
 ---
 
 ## 5. ✅ Checklist de Entrega
-1.  **Etapa Intermediária:** Leitura simultânea das duas faixas de dados e cálculo matemático no LCD.
-2.  **Etapa Final:** Valores numéricos e total atualizados suavemente no LCD sem flicker.
+1.  **Etapa Intermediária:** Leitura simultânea das duas faixas de dados e cálculo matemático correto exibido no LCD.
+2.  **Etapa Final:** Controle de tarifas funcional via chave slide mudando o valor da diária, taxa por km e rótulo (`POP`/`SUV`), com visualização suave e sem flicker no display.
 3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do código.
-4.  **Explicação Oral:** Explicação da lógica matemática dos descontos e a lógica condicional de atualização composta (`||`).
+4.  **Explicação Oral:** Explicação de como a chave slide altera as constantes da equação de processamento e a lógica condicional complexa de atualização (`||`).
 
 ---
 

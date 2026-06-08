@@ -46,25 +46,36 @@
 // Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-// TODO: Defina as variáveis globais de estado para reter a última leitura de tempo e distância.
+// TODO: Defina as variáveis globais de estado para reter a última leitura de tempo, distância e categoria.
 // Elas iniciam em -1 para forçar a primeira escrita na tela logo ao inicializar o loop().
 int ultimoTempo = -1;
 int ultimaDistancia = -1;
+int ultimaCategoria = -1;
+
+// TODO: Defina o pino digital conectado à chave slide (Pino 9).
+int pinoChave = 9;
 
 void setup() {
   // Inicializa o LCD com 16 colunas e 2 linhas
   LCD.begin(16, 2);
   
+  // TODO: Configure o pino da chave slide como entrada utilizando resistor de pull-up interno.
+  // Dica de pesquisa: use 'pinMode(pino, INPUT_PULLUP)'.
+  
   // TODO (Etapa 2): Desenhe o layout estático inicial na tela de uma única vez.
   // Escrever as etiquetas aqui economiza processamento e evita cintilações no LCD.
   // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
   // LCD.setCursor(0, 0);
-  // LCD.print("T:   d  D:    km");
+  // LCD.print("T:   d K:     ");
   // LCD.setCursor(0, 1);
   // LCD.print("Total: R$       ");
 }
 
 void loop() {
+  // TODO: Leia o estado da chave slide (POP/SUV) conectada ao pino digital 9.
+  // Dica de pesquisa: use 'digitalRead(pino)'.
+  int categoria = 0; 
+
   // TODO: Leia e mapeie o potenciômetro 1 (conectado em A0) para a faixa de 1 a 30 dias (tempo).
   // Dica: map(analogRead(pino), 0, 1023, min, max)
   int tempo = 0; 
@@ -73,20 +84,30 @@ void loop() {
   int distancia = 0; 
 
   // TODO (Etapa 2): Filtro de Estado Composto.
-  // Crie um bloco 'if' que verifica se houve mudança nas entradas:
-  // if (tempo != ultimoTempo || distancia != ultimaDistancia)
+  // Crie um bloco 'if' que verifica se houve mudança nas entradas analógicas ou na chave slide:
+  // if (tempo != ultimoTempo || distancia != ultimaDistancia || categoria != ultimaCategoria)
   
   // {
+    // TODO: Determine os valores da diária e da taxa de km rodado baseando-se no estado da chave.
+    // - Se categoria for LOW (Popular - POP):
+    //   -> Diária = R$ 30.00, Km = R$ 0.01.
+    // - Se categoria for HIGH (SUV):
+    //   -> Diária = R$ 80.00, Km = R$ 0.05.
+    float diaria = 0.0;
+    float taxaKm = 0.0;
+    
     // TODO: Calcule o valor total da locação com 10% de desconto.
-    // Fórmula de negócio: (tempo * 30.0 + distancia * 0.01) * 0.90
-    // ATENÇÃO: Use números em float (como 30.0 e 0.01) para que as operações ocorram com precisão decimal.
+    // Fórmula de negócio: (tempo * diaria + distancia * taxaKm) * 0.90
     float valorTotal = 0.0;
     
     // TODO: Posicione o cursor e exiba a quantidade de dias no LCD (Linha 0).
     // Dica: Posicione na coluna 2 da linha 0. Limpe com espaços ("  ") antes de escrever.
     
     // TODO: Posicione o cursor e exiba a distância percorrida no LCD (Linha 0).
-    // Dica: Posicione na coluna 10 da linha 0. Limpe com espaços ("    ") antes de escrever.
+    // Dica: Posicione na coluna 8 da linha 0. Limpe com espaços ("    ") antes de escrever.
+    
+    // TODO: Posicione o cursor e exiba o rótulo da categoria ("POP" ou "SUV") na linha 0.
+    // Dica: Posicione na coluna 13 da linha 0.
     
     // TODO: Posicione o cursor e exiba o valor total formatado no LCD (Linha 1).
     // Dica: Posicione na coluna 10 da linha 1. Use LCD.print(valorTotal, 2) para duas casas decimais.

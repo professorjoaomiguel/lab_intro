@@ -331,23 +331,25 @@ Trazer a regra da locadora para a simulação física do Arduino Uno.
 <div>
 
 ### Lógica da Simulação
-* **Entrada de dados:** Dois potenciômetros:
-  - Potenciômetro 1 (`A0`): Controla o tempo de locação (mapeado de 1 a 30 dias).
-  - Potenciômetro 2 (`A1`): Controla a distância percorrida (mapeado de 1 a 1000 km).
-* **Saída (LCD):**
-  - **Linha 1:** Quantidade de dias e quilômetros rodados.
-  - **Linha 2:** O total a pagar calculado com desconto.
+* **Entradas de Dados:**
+  - Potenciômetro 1 (`A0`): tempo de locação (1 a 30 dias).
+  - Potenciômetro 2 (`A1`): distância rodada (1 a 1000 km).
+  - **Chave Slide (`Pin 9`):** categoria do veículo (Popular vs. SUV).
+* **Processamento (Tarifas):**
+  - Chave em `LOW`: Popular (`POP`) -> diária R$ 30,00, R$ 0,01/km.
+  - Chave em `HIGH`: SUV (`SUV`) -> diária R$ 80,00, R$ 0,05/km.
+  - Desconto de 10% aplicado no total.
 
 </div>
 <div>
 
 ### Código Arduino no LCD
-O LCD mostrará as informações formatadas de forma compacta:
+O LCD mostrará as informações formatadas:
 ```text
-T: 12d  D: 450km
-Total: R$ 301.05
+T:12d K:1000 POP
+Total: R$ 306.00
 ```
-Assim como na atividade 1, as leituras são monitoradas e a tela só atualiza se os valores de dias ou quilômetros sofrerem modificações.
+Leituras monitoradas: atualização de tela somente se houver alteração de dias, quilômetros ou na chave de categoria.
 
 </div>
 </div>
@@ -356,43 +358,48 @@ Assim como na atividade 1, as leituras são monitoradas e a tela só atualiza se
 
 # Solução Completa da Atividade 3
 
-```cpp {all|14-22|24-26|27-37}
+```cpp {all|4-5|9-10|15-17|19-23|34-35}
 #include <LiquidCrystal.h>
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
-int ultimoTempo = -1, ultimaDistancia = -1;
+
+const int pinoChave = 9;
+int ultimoTempo = -1, ultimaDistancia = -1, ultimaCategoria = -1;
 
 void setup() {
   LCD.begin(16, 2);
+  pinMode(pinoChave, INPUT_PULLUP);
   LCD.setCursor(0, 0);
-  LCD.print("T:   d  D:    km");
+  LCD.print("T:   d K:     ");
   LCD.setCursor(0, 1);
   LCD.print("Total: R$       ");
 }
 
 void loop() {
+  int categoria = digitalRead(pinoChave);
   int tempo = map(analogRead(A0), 0, 1023, 1, 30);
   int distancia = map(analogRead(A1), 0, 1023, 1, 1000);
   
-  if (tempo != ultimoTempo || distancia != ultimaDistancia) {
-    float valorTotal = (tempo * 30.0 + distancia * 0.01) * 0.9;
+  if (tempo != ultimoTempo || distancia != ultimaDistancia || categoria != ultimaCategoria) {
+    float diaria = (categoria == HIGH) ? 80.0 : 30.0;
+    float taxaKm = (categoria == HIGH) ? 0.05 : 0.01;
+    char* catLabel = (categoria == HIGH) ? "SUV" : "POP";
     
-    LCD.setCursor(2, 0);
-    LCD.print("  "); // Limpa o tempo anterior
-    LCD.setCursor(2, 0);
-    LCD.print(tempo);
+    float valorTotal = (tempo * diaria + distancia * taxaKm) * 0.9;
     
-    LCD.setCursor(10, 0);
-    LCD.print("    "); // Limpa a distância anterior
-    LCD.setCursor(10, 0);
-    LCD.print(distancia);
+    LCD.setCursor(2, 0); LCD.print("  ");
+    LCD.setCursor(2, 0); LCD.print(tempo);
     
-    LCD.setCursor(10, 1);
-    LCD.print("      "); // Limpa o valor anterior
-    LCD.setCursor(10, 1);
-    LCD.print(valorTotal, 2); // Imprime com duas casas decimais
+    LCD.setCursor(8, 0); LCD.print("    ");
+    LCD.setCursor(8, 0); LCD.print(distancia);
+    
+    LCD.setCursor(13, 0); LCD.print(catLabel);
+    
+    LCD.setCursor(10, 1); LCD.print("      ");
+    LCD.setCursor(10, 1); LCD.print(valorTotal, 2);
     
     ultimoTempo = tempo;
     ultimaDistancia = distancia;
+    ultimaCategoria = categoria;
   }
   delay(100);
 }

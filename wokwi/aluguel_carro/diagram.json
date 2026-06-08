@@ -6,7 +6,8 @@
     { "type": "wokwi-arduino-uno", "id": "uno", "top": 120, "left": 0 },
     { "type": "wokwi-lcd1602", "id": "lcd", "top": -120, "left": -20 },
     { "type": "wokwi-potentiometer", "id": "pot1", "top": 150, "left": -250, "attrs": { "label": "Dias" } },
-    { "type": "wokwi-potentiometer", "id": "pot2", "top": 270, "left": -250, "attrs": { "label": "Distancia" } }
+    { "type": "wokwi-potentiometer", "id": "pot2", "top": 270, "left": -250, "attrs": { "label": "Distancia" } },
+    { "type": "wokwi-slide-switch", "id": "sw", "top": 150, "left": 200, "attrs": { "label": "Categoria" } }
   ],
   "connections": [
     [ "uno:GND.1", "lcd:GND", "black", [] ],
@@ -25,7 +26,10 @@
     
     [ "uno:GND.3", "pot2:GND", "black", [] ],
     [ "uno:5V", "pot2:VCC", "red", [] ],
-    [ "uno:A1", "pot2:SIG", "yellow", [] ]
+    [ "uno:A1", "pot2:SIG", "yellow", [] ],
+    
+    [ "uno:9", "sw:2", "blue", [] ],
+    [ "uno:GND.3", "sw:1", "black", [] ]
   ],
   "dependencies": {}
 }

@@ -3,10 +3,7 @@
 // Professor: João Miguel Lac Roehe
 //
 // Atividade 3: Cálculo de Aluguel de Carro (Locadora Sai da Frente)
-// Utiliza dois potenciômetros para entrada:
-// - Potenciômetro 1 (A0): tempo do aluguel (1 a 30 dias)
-// - Potenciômetro 2 (A1): distância rodada (1 a 1000 km)
-// Exibe os parâmetros e o valor total com 10% de desconto no LCD.
+// Simulação otimizada para o Wokwi.
 
 #include <LiquidCrystal.h>
 
@@ -14,21 +11,27 @@
 // LiquidCrystal(rs, enable, d4, d5, d6, d7)
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
+const int pinoChave = 9;
+
 int ultimoTempo = -1;
 int ultimaDistancia = -1;
+int ultimaCategoria = -1;
 
 void setup() {
-  // Inicializa o display LCD de 16x2
   LCD.begin(16, 2);
+  pinMode(pinoChave, INPUT_PULLUP);
   
-  // Imprime os labels fixos para economizar ciclos e evitar piscadas no display
+  // Imprime os labels fixos no LCD (K: no lugar de D: para liberar colunas para a categoria)
   LCD.setCursor(0, 0);
-  LCD.print("T:   d  D:    km");
+  LCD.print("T:   d K:     ");
   LCD.setCursor(0, 1);
   LCD.print("Total: R$       ");
 }
 
 void loop() {
+  // Lê a chave slide (LOW = Popular, HIGH = SUV)
+  int categoria = digitalRead(pinoChave);
+
   // Lê e mapeia a quantidade de dias (pino A0, de 1 a 30)
   int potTempo = analogRead(A0);
   int tempo = map(potTempo, 0, 1023, 1, 30);
@@ -37,33 +40,48 @@ void loop() {
   int potDist = analogRead(A1);
   int distancia = map(potDist, 0, 1023, 1, 1000);
   
-  // Atualiza a tela apenas se houver variação nas leituras
-  if (tempo != ultimoTempo || distancia != ultimaDistancia) {
-    // Cálculo do valor: R$30.00 por dia + R$0.01 por km, com 10% de desconto (* 0.9)
-    float valorTotal = (tempo * 30.0 + distancia * 0.01) * 0.9;
+  // Só atualiza o display se houver alteração em alguma das entradas analógicas ou na chave
+  if (tempo != ultimoTempo || distancia != ultimaDistancia || categoria != ultimaCategoria) {
+    float diaria = 30.0;
+    float taxaKm = 0.01;
+    char* catLabel = "POP";
     
-    // Atualiza o tempo no display (coluna 2, linha 0)
+    // Altera tarifas baseando-se no estado físico da chave slide
+    if (categoria == HIGH) {
+      diaria = 80.0;
+      taxaKm = 0.05;
+      catLabel = "SUV";
+    }
+    
+    // Cálculo do valor com 10% de desconto
+    float valorTotal = (tempo * diaria + distancia * taxaKm) * 0.9;
+    
+    // Atualiza o tempo no LCD (coluna 2, linha 0)
     LCD.setCursor(2, 0);
-    LCD.print("  "); // Limpa dois caracteres
+    LCD.print("  ");
     LCD.setCursor(2, 0);
     LCD.print(tempo);
     
-    // Atualiza a distância no display (coluna 10, linha 0)
-    LCD.setCursor(10, 0);
-    LCD.print("    "); // Limpa quatro caracteres
-    LCD.setCursor(10, 0);
+    // Atualiza a distância no LCD (coluna 8, linha 0)
+    LCD.setCursor(8, 0);
+    LCD.print("    ");
+    LCD.setCursor(8, 0);
     LCD.print(distancia);
     
-    // Atualiza o valor total a pagar no display (coluna 10, linha 1)
-    LCD.setCursor(10, 1);
-    LCD.print("      "); // Limpa o valor anterior
-    LCD.setCursor(10, 1);
-    LCD.print(valorTotal, 2); // Exibe com duas casas decimais
+    // Atualiza a sigla da categoria (coluna 13, linha 0)
+    LCD.setCursor(13, 0);
+    LCD.print(catLabel);
     
-    // Salva as referências atuais
+    // Atualiza o valor total no LCD (coluna 10, linha 1)
+    LCD.setCursor(10, 1);
+    LCD.print("      ");
+    LCD.setCursor(10, 1);
+    LCD.print(valorTotal, 2);
+    
     ultimoTempo = tempo;
     ultimaDistancia = distancia;
+    ultimaCategoria = categoria;
   }
   
-  delay(100); // Pequeno atraso para estabilização
+  delay(100);
 }
