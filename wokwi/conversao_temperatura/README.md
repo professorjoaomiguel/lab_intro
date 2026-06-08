@@ -1,5 +1,17 @@
 # Experimento 01: Conversão de Temperatura com Display LCD
 
+Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+
+---
+
+## 🧭 Guia do Aluno: Como Iniciar
+1.  **Onde programar:** Abra o arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
+2.  **Onde simular:** 
+    *   **VS Code:** Certifique-se de ter a extensão **Wokwi Simulator** instalada. Pressione a tecla **F1**, selecione `Wokwi: Start Simulator` (ou abra o arquivo `diagram.json` e clique no botão verde de play no circuito).
+    *   **Wokwi Web:** Consulte o [Guia de Início Rápido do Wokwi Web](file:///C:/GitHub/lab_intro/docs/Guia_Wokwi_Inicio_Rapido.md) na pasta `docs/` para colar o layout do hardware (`diagram.json`) e seu código.
+
+---
+
 ## 1. Objetivos de Aprendizagem
 *   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 16x2.
 *   **Nível Final (Desafio):** 
@@ -33,9 +45,9 @@ int tempC = map(potenciometro, 0, 1023, 0, 60);
 ### Conversão Celsius para Fahrenheit
 A conversão matemática clássica é dada pela fórmula:
 
-$$F = C \times \frac{9}{5} + 32$$
+$$F = C \times 1.8 + 32$$
 
-No código C/C++ do Arduino, lembre-se de usar números reais (`9.0` e `5.0`) na divisão para evitar o truncamento da divisão inteira.
+No código C/C++ do Arduino, lembre-se de usar números reais (`9.0` e `5.0` ou `1.8`) na divisão/multiplicação para evitar o truncamento da divisão inteira.
 
 ---
 
@@ -66,7 +78,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 ---
 
 ## 4. O Desafio (Mão na Massa)
-1.  **Ponto de Partida:** Abra o arquivo [conversao_temperatura_template.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura_template.ino).
+1.  **Ponto de Partida:** Abra o arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino).
 2.  **Tarefa Intermediária:** Complete o código nas seções `# TODO` para realizar as leituras analógicas e imprimir no LCD. A tela pode piscar nesta etapa.
 3.  **Tarefa Final (Desafio):** 
     *   Implemente a lógica de no-flicker (redesenho dinâmico somente sob variação).
@@ -77,7 +89,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Temperatura calculada e exibida no display.
 2.  **Etapa Final:** Circuito operando sem piscar a tela, com controle de status visual de LEDs e exibição de `OK`/`ALERTA` no LCD a partir de 40 °C.
-3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no código-fonte.
+3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino).
 4.  **Explicação Oral:** Capacidade de explicar as conexões físicas, a lógica matemática do mapeamento e a lógica de condicionais para alarmes.
 
 ---
@@ -89,12 +101,12 @@ Na serra gaúcha (APL Vitivinícola) e na região metropolitana (APL Metalmecân
 ---
 
 ## 7. 🧠 Reflexão Técnica (No Código)
-Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [conversao_temperatura_template.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura_template.ino).
+Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino).
 
 ---
 
 ## 🤖 Dica de Prompt para IA (Uso Saudável)
-> *"Estou no Experimento 1 de Arduino. Preciso ler um potenciômetro em A0 e mostrar Celsius e Fahrenheit em um LCD 16x2. **Não me dê o código completo**. Explique como usar a função map do Arduino para reescalar 0-1023 para 0-60 e como fazer a conversão matemática sem perder as casas decimais no cálculo em C++."*
+> *"Estou no Experimento 1 de Arduino. Preciso ler um potenciômetro em A0 e mostrar Celsius e Fahrenheit em um LCD 16x2. Não me dê o código completo. Explique como usar a função map do Arduino para reescalar 0-1023 para 0-60 e como fazer a conversão matemática sem perder as casas decimais no cálculo em C++."*
 
 ---
 

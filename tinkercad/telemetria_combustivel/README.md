@@ -1,90 +1,104 @@
 # Experimento 03: Telemetria de Combustível e Autonomia (LCD 20x4)
 
+Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+
+---
+
+## 🧭 Guia do Aluno: Como Iniciar
+1.  **Onde programar:** Abra o arquivo [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/tinkercad/telemetria_combustivel/telemetria_combustivel.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
+2.  **Onde simular:** 
+    *   **Tinkercad:** Crie uma conta no Tinkercad, monte o circuito do Arduino Uno com o display LCD 20x4, LED e potenciômetros de acordo com o diagrama e cole o código deste arquivo na aba de Código (modo Texto) para simular.
+
+---
+
 ## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Ler e processar dados de dois potenciômetros (nível de combustível e consumo instantâneo), realizar a divisão de autonomia com tratamento de divisão por zero e exibir os valores numéricos no LCD 20x4.
-*   **Nível Final (Desafio):** 
-    1.  Eliminar o flicker do display LCD 20x4 com o padrão de filtro de estado composto.
-    2.  Implementar uma **barra de progresso horizontal gráfica** no LCD para indicar visualmente a quantidade de combustível.
-    3.  Acionar um LED de alerta físico e mostrar um aviso no LCD se a quantidade de combustível cair abaixo do limiar de reserva (menos de 5 litros).
+*   **Nível Intermediário:** Ler e reescalar duas entradas analógicas usando cálculo em ponto flutuante: volume do combustível ($0.0$ a $50.0$ litros) e taxa de consumo de combustível ($0.0$ a $20.0$ L/h). Calcular a autonomia do veículo de forma segura contra falhas matemáticas (divisão por zero) e apresentar no LCD de 20 colunas e 4 linhas.
+*   **Nível Final (Desafio):**
+    1.  Otimizar o display contra oscilações utilizando o Filtro de Estado.
+    2.  Desenhar de forma dinâmica uma barra de progresso horizontal gráfica na Linha 2 do display LCD utilizando caracteres sólidos (bloco preenchido com o código `char(255)`).
+    3.  Implementar controle de nível em reserva: se o volume for menor que $5.0$ litros, deve acender o LED indicador físico (Pino 7), e o rótulo da Linha 3 do LCD deve mudar dinamicamente de `Autonomia:` para `!RESERVA!`. Caso contrário, apaga o LED de alarme e exibe a mensagem de autonomia normal.
 
 ---
 
 ## 2. Cenário e Teoria
 
-### Transição Didática: O Display LCD 20x4 (HD44780)
-O LCD 20x4 opera exatamente sob o mesmo protocolo físico do LCD 16x2. A pinagem e a biblioteca `LiquidCrystal` utilizada são idênticas. A diferença reside na inicialização e na coordenada de posicionamento:
-*   **Inicialização:** `LCD.begin(20, 4);`
-*   **Linhas:** O cursor de linha pode ser posicionado de `0` a `3`. O cursor de coluna vai de `0` a `19`.
-*   **Vantagem:** O espaço extra permite criar interfaces ricas de telemetria, simulando painéis de controle industriais reais.
+### Proteção Contra Divisão por Zero
+Em programação de sistemes embarcados, falhas matemáticas como tentar dividir um número por zero podem travar o processador ou produzir valores inválidos (como `NaN` ou `Infinity`). 
+Ao calcular a autonomia de combustível ($Autonomia = Volume / Consumo$), se o potenciômetro de consumo estiver no mínimo ($0.0$ L/h), haverá uma tentativa de divisão por zero.
+Para contornar este problema crítico, devemos usar uma estrutura condicional:
 
-### Proteção de Software: Divisão por Zero
-A autonomia de tempo é dada pela fórmula física:
-
-$$\text{Autonomia (horas)} = \frac{\text{Volume Restante (Litros)}}{\text{Taxa de Consumo (L/h)}}$$
-
-Se a taxa de consumo for remapeada de forma que seu valor mínimo seja zero, a execução da divisão direta causará uma exceção de hardware ou retornará um valor indefinido (infinito). Em sistemas embarcados, **é obrigatório proteger a CPU contra divisão por zero**:
 ```cpp
-if (consumo == 0.0) {
-  autonomia = 99.9; // Valor simbólico de autonomia máxima ou "infinito"
+if (consumo < 0.1) {
+  // Define que a autonomia é "infinita" ou zero e avisa o sistema
+  divisaoPorZero = true;
 } else {
   autonomia = volume / consumo;
 }
 ```
 
-### Barra de Progresso Gráfica com Caracteres
-Para gerar um impacto visual premium, criamos uma barra de progresso textual de 10 caracteres no LCD. Se o tanque está em $100\%$ ($50$ Litros), a barra estará cheia. Se está em $50\%$, exibirá metade.
-Para criar a barra, calculamos o número de blocos a serem exibidos:
+### Barra de Progresso Gráfica no LCD
+Displays LCD de caracteres possuem 256 posições na tabela ASCII padrão. O caractere de código **255** representa um bloco totalmente preenchido (sólido).
+Para desenhar uma barra de progresso de 10 segmentos:
+1.  Descubra o percentual atual do volume do tanque (escala de 0% a 100%).
+2.  Divida o percentual por 10 para saber quantos blocos sólidos (0 a 10) devem ser acesos.
+3.  Utilize um laço de repetição `for` de 10 passos para imprimir `char(255)` para blocos preenchidos e espaço em branco `" "` para blocos vazios:
 
-$$\text{Número de Blocos} = \text{percentual} / 10$$
-
-No LCD, o caractere de código ASCII `255` (`char(255)`) é exibido como um bloco sólido `█`. Podemos preencher a barra escrevendo caracteres de bloco e espaços vazios:
-*   Se blocos = 4: `[████      ]` (4 blocos sólidos e 6 espaços).
+```cpp
+int blocos = percentual / 10;
+for (int i = 0; i < 10; i++) {
+  if (i < blocos) {
+    LCD.write(255); // Bloco preenchido
+  } else {
+    LCD.print(" "); // Espaço vazio
+  }
+}
+```
 
 ---
 
-## 3. Componentes e Conexões (Wokwi)
+## 3. Componentes e Conexões
 *   **Arduino Uno R3**
 *   **Display LCD 20x4 (Ligação Paralela)**
     *   `RS` -> Pino 12 | `E` -> Pino 11
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
-*   **Potenciômetro 1 (Nível - A0)**
-*   **Potenciômetro 2 (Consumo - A1)**
-*   **LED Vermelho de Alerta:** Conectado no Pino Digital 7 (com resistor de 220 ohms)
+*   **Potenciômetro 1 (Nível Combustível):** Cursor no pino analógico `A0`
+*   **Potenciômetro 2 (Consumo):** Cursor no pino analógico `A1`
+*   **LED de Alerta de Reserva:** Conectado no pino digital **7** (com resistor de 220 ohms)
 
 ---
 
 ## 4. O Desafio (Mão na Massa)
-1.  **Ponto de Partida:** Abra o arquivo [telemetria_combustivel_template.ino](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/telemetria_combustivel_template.ino).
-2.  **Tarefa Intermediária:** Complete o mapeamento analógico ($0$ a $50$ Litros para volume; $0$ a $20$ L/h para consumo). Implemente a exibição formatada das variáveis.
-3.  **Tarefa Final (Desafio):** 
-    *   Crie o filtro de estado para que a tela não pisque ao rotacionar os potenciômetros.
-    *   Desenhe a barra de progresso gráfica horizontal na linha 2.
-    *   Implemente a lógica de reserva: se `volume < 5.0` Litros, pisque o LED do pino 7 e altere a linha 4 para exibir o aviso `* RESERVA CRITICA *`.
+1.  **Ponto de Partida:** Abra o arquivo [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/tinkercad/telemetria_combustivel/telemetria_combustivel.ino).
+2.  **Tarefa Intermediária:** Complete os `# TODO` para realizar as leituras analógicas das entradas de volume e consumo, proteja a equação matemática contra divisão por zero e escreva no LCD de forma simples (mesmo com flicker).
+3.  **Tarefa Final (Desafio):**
+    *   Implemente o Filtro de Estado para remover oscilações.
+    *   Desenhe a barra de progresso gráfica com os blocos no LCD de 20x4.
+    *   Ligue a saída do LED Vermelho no pino 7 e implemente a alteração visual dinâmica do texto de alarme (`!RESERVA!`) quando o tanque cair abaixo de $5.0$ litros.
 
 ---
 
 ## 5. ✅ Checklist de Entrega
-1.  **Etapa Intermediária:** Cálculo de autonomia correto exibido no LCD 20x4.
-2.  **Etapa Final:** Barra de progresso funcional, ausência de flicker e sistema de alerta de reserva ativo (LED + LCD).
-3.  **Reflexão Técnica:** Preenchimento da reflexão técnica obrigatória no cabeçalho do código.
-4.  **Explicação Oral:** Explicação da proteção de divisão por zero e da lógica de iteração para desenhar a barra de progresso.
+1.  **Etapa Intermediária:** Leitura em ponto flutuante calibrada e exibição correta dos valores de volume e consumo com proteção contra divisões inválidas.
+2.  **Etapa Final:** Barra gráfica de 10 segmentos funcional, controle de nível de alarme acendendo o LED físico 7 e redefinindo dinamicamente as strings do LCD para `!RESERVA!` e `Autonomia:`, operando de forma otimizada (no-flicker).
+3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/tinkercad/telemetria_combustivel/telemetria_combustivel.ino).
+4.  **Explicação Oral:** Explicação da aritmética por trás da lógica da barra de progresso e o funcionamento da validação preventiva contra divisão por zero.
 
 ---
 
 ## 6. Conexão com a Indústria (APL/RS) 🏭
 *Reflexão contextualizada para o Rio Grande do Sul:*
-No polo metalmecânico e agrícola gaúcho (regiões de Passo Fundo, Erechim e Não-Me-Toque), estão localizadas grandes montadoras e fabricantes de implementos agrícolas. O projeto de IHMs e painéis de telemetria digital embarcada em colheitadeiras e tratores exige a exibição gráfica clara de parâmetros operacionais críticos sob severas condições de ruído e vibração no campo.
+No APL de Máquinas e Implementos Agrícolas (região de Não-Me-Toque e Passo Fundo/RS), tratores e colheitadeiras possuem painéis locais eletrônicos robustos para monitorar o tanque de combustível e arla32 em campo. A prevenção de falhas de hardware/software nestes veículos e a rápida percepção ergonômica de combustível pelo operador rural via barras de progresso evitam paradas indesejadas de maquinário agrícola em colheitas críticas.
 
 ---
 
 ## 7. 🧠 Reflexão Técnica (No Código)
-Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [telemetria_combustivel_template.ino](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/telemetria_combustivel_template.ino).
+Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/tinkercad/telemetria_combustivel/telemetria_combustivel.ino).
 
 ---
 
 ## 🤖 Dica de Prompt para IA (Uso Saudável)
-> *"Estou no Experimento 3 de Arduino com display LCD 20x4. Preciso desenhar uma barra de progresso horizontal com 10 caracteres baseada no percentual de combustível (0 a 100%). Como posso fazer uma lógica com um loop for para imprimir o caractere char(255) para a parte cheia e espaço em branco ' ' para a parte vazia? Não me dê o código pronto."*
+> *"Estou no Experimento 3 de Arduino. Preciso calcular a autonomia dividindo o volume do tanque (0 a 50L) pelo consumo (0 a 20 L/h). Como posso estruturar uma rotina em C que impeça a divisão por zero caso o consumo seja nulo ou muito próximo a zero? Não me dê o código pronto."*
 
 ---
 

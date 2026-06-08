@@ -1,72 +1,117 @@
-// Faculdade SENAI Porto Alegre
+// Faculdade de Tecnologia SENAI Porto Alegre
 // Disciplina: Programação Básica
-// Professor: João Miguel Lac Roehe
+// Experimento 01: Conversão de Temperatura com Display LCD e Alarme
+// 
+// Aluno: _____________________________________ Data: ___/___/_____
 //
-// Atividade 1: Conversão de Temperatura (Celsius para Fahrenheit) com display LCD
-// Simulação otimizada para o Wokwi.
+// -----------------------------------------------------------------------------
+// APRESENTAÇÃO E DIRETRIZES:
+// O objetivo desta atividade é ler um sensor analógico (representado pelo potenciômetro),
+// realizar cálculos matemáticos de mapeamento e conversão de escala em C++, e
+// apresentar os resultados no LCD 16x2 de forma estável (sem piscar a tela).
+// Além disso, há um controle de estado com LEDs de sinalização baseados em um limiar.
+//
+// ETAPAS DE DESENVOLVIMENTO:
+// - ETAPA 1 (Intermediária): 
+//   1. Configure os pinos digitais dos LEDs como saídas.
+//   2. Leia o pino A0 usando analogRead().
+//   3. Converta o valor (0-1023) para Celsius (0-60) usando a função map().
+//   4. Calcule Fahrenheit usando a fórmula física (F = C * 1.8 + 32).
+//   5. Imprima ambos os valores Celsius e Fahrenheit no LCD 16x2.
+//   *(Nesta etapa, o uso de lcd.clear() causará oscilação/flicker na tela).*
+//
+// - ETAPA 2 (Final - Desafio):
+//   1. Elimine o flicker escrevendo os rótulos estáticos ("TempC:" e "TempF:")
+//      uma única vez dentro do setup().
+//   2. No loop(), envolva toda a escrita do display e controle dos LEDs dentro de
+//      uma condição 'if' que verifica se o valor atual de 'tempC' mudou em relação
+//      a 'ultimoTempC' (Filtro de Estado).
+//   3. Implemente a lógica do alarme: se a temperatura atingir 40 °C ou mais,
+//      acenda o LED Vermelho, apague o LED Verde e exiba "AL" (Alerta) no LCD. 
+//      Caso contrário, mantenha o LED Verde aceso, Vermelho apagado e exiba "OK".
+//   4. Limpe o espaço numérico com espaços em branco ("    ") antes de imprimir
+//      novos números para evitar resíduos numéricos antigos na tela.
+// -----------------------------------------------------------------------------
+//
+// 🧠 REFLEXÃO TÉCNICA (Obrigatório):
+// 1. Por que atualizar o display LCD continuamente a cada iteração do loop() causa 
+//    o efeito visual de piscada (flicker)? 
+// 2. Como a variável global de estado (como 'ultimoTempC') resolve esse problema?
+//
+// Resposta: ___________________________________________________________________
+// _____________________________________________________________________________
+// _____________________________________________________________________________
 
 #include <LiquidCrystal.h>
 
-// Inicializa o display LCD nos pinos correspondentes:
-// LiquidCrystal(rs, enable, d4, d5, d6, d7)
+// Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
+// Dica de pesquisa: consulte 'LiquidCrystal' no Portal do Arduino.
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-const int pinoVermelho = 7;
-const int pinoVerde = 8;
+// TODO: Defina as variáveis globais de estado necessárias para a Etapa 2.
+// Elas armazenam o último valor impresso para podermos fazer comparações.
+int ultimoTempC = -1; 
 
-int ultimoTempC = -1;
+// TODO: Defina os pinos correspondentes para os LEDs vermelho e verde.
+// Conectamos o LED Vermelho no pino digital 7 e o LED Verde no pino digital 8.
+int pinoVermelho = 7;
+int pinoVerde = 8;
 
 void setup() {
+  // Inicializa o LCD configurando a resolução para 16 colunas e 2 linhas
   LCD.begin(16, 2);
   
-  pinMode(pinoVermelho, OUTPUT);
-  pinMode(pinoVerde, OUTPUT);
+  // TODO: Configure os pinos digitais dos LEDs como saídas.
+  // Dica de pesquisa: use a função 'pinMode(pino, modo)' com o modo 'OUTPUT'.
   
-  // Imprime os textos estáticos
-  LCD.setCursor(0, 0);
-  LCD.print("TempC:      oC");
-  LCD.setCursor(0, 1);
-  LCD.print("TempF:      oF");
+  // TODO (Etapa 2): Escreva os rótulos fixos (labels) que nunca mudam no display.
+  // Escrevê-los aqui garante que eles não sejam apagados e reescritos no loop().
+  // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
+  // Exemplo:
+  // LCD.setCursor(0, 0);
+  // LCD.print("TempC:      oC");
 }
 
 void loop() {
-  // Lê o potenciômetro em A0 (0 a 1023)
-  int potenciometro = analogRead(A0);
+  // TODO: Realize a leitura analógica do potenciômetro conectado ao pino A0.
+  // Dica de pesquisa: use a função 'analogRead(pino)'. Ela retorna um inteiro de 0 a 1023.
+  int potenciometro = 0; 
   
-  // Mapeia a leitura para 0 a 60 graus Celsius
-  int tempC = map(potenciometro, 0, 1023, 0, 60);
+  // TODO: Converta o valor bruto do potenciômetro para graus Celsius (escala de 0 a 60).
+  // Dica de pesquisa: use a função 'map(valor, deMin, deMax, paraMin, paraMax)'.
+  int tempC = 0; 
+
+  // TODO (Etapa 2): Implemente o Filtro de Estado.
+  // Crie uma estrutura condicional 'if (tempC != ultimoTempC)' para envelopar os cálculos,
+  // escrita no display e acionamento de LEDs. Isso otimiza o uso da CPU e previne o flicker.
+  // (Para validar a Etapa 1, você pode fazer sem este 'if').
   
-  // Só atualiza o LCD se houver mudança
-  if (tempC != ultimoTempC) {
-    float tempF = (9.0 / 5.0) * tempC + 32.0;
+  // {
+    // TODO: Calcule a conversão matemática de Celsius para Fahrenheit.
+    // Fórmula física: Fahrenheit = Celsius * (9.0 / 5.0) + 32.0.
+    // ATENÇÃO: use '9.0' e '5.0' para indicar números de ponto flutuante, evitando divisão inteira.
+    float tempF = 0.0;
     
-    // Celsius
-    LCD.setCursor(7, 0);
-    LCD.print("    ");
-    LCD.setCursor(7, 0);
-    LCD.print(tempC);
+    // TODO (Etapa 1): Posicione o cursor e exiba o valor de Celsius na linha 0.
+    // Dica: Use LCD.setCursor(coluna, linha) para ir até o local correto.
+    // Lembre-se (Etapa 2) de imprimir espaços em branco ("   ") para limpar resíduos antigos.
     
-    // Fahrenheit
-    LCD.setCursor(7, 1);
-    LCD.print("      ");
-    LCD.setCursor(7, 1);
-    LCD.print(tempF, 1);
+    // TODO (Etapa 1): Posicione o cursor e exiba o valor de Fahrenheit na linha 1.
+    // Dica: LCD.print(tempF, 1) exibe o valor float com apenas 1 casa decimal.
     
-    // Controle de Alarme e Status (Limiar de 40 °C)
-    if (tempC >= 40) {
-      digitalWrite(pinoVermelho, HIGH);
-      digitalWrite(pinoVerde, LOW);
-      LCD.setCursor(13, 0);
-      LCD.print("AL"); // Alerta
-    } else {
-      digitalWrite(pinoVermelho, LOW);
-      digitalWrite(pinoVerde, HIGH);
-      LCD.setCursor(13, 0);
-      LCD.print("OK"); // Normal
-    }
+    // TODO (Etapa 2): Controle dos LEDs de Alarme e Status no LCD baseado no limiar de 40 °C.
+    // Dica de pesquisa: use 'digitalWrite(pino, estado)' com 'HIGH' e 'LOW'.
+    // - Se a temperatura atual for igual ou maior que 40 °C:
+    //   -> Acenda o LED Vermelho e apague o LED Verde.
+    //   -> Vá até a coluna 13 da linha 0 e imprima "AL" (Alerta).
+    // - Caso contrário (menor que 40 °C):
+    //   -> Apague o LED Vermelho e acenda o LED Verde.
+    //   -> Vá até a coluna 13 da linha 0 e imprima "OK" (Normal).
     
-    ultimoTempC = tempC;
-  }
+    // TODO (Etapa 2): Atualize a variável de controle de estado anterior.
+    // Isso garante que no próximo ciclo a comparação condicional funcione.
+    
+  // }
   
-  delay(100);
+  delay(100); // Pequena pausa (100ms) para estabilização de leitura do sensor
 }

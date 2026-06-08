@@ -1,5 +1,17 @@
 # Experimento 02: Cálculo de Aluguel de Carro com Display LCD
 
+Este guia orienta o desenvolvimento do segundo experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+
+---
+
+## 🧭 Guia do Aluno: Como Iniciar
+1.  **Onde programar:** Abra o arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
+2.  **Onde simular:** 
+    *   **VS Code:** Certifique-se de ter a extensão **Wokwi Simulator** instalada. Pressione a tecla **F1**, selecione `Wokwi: Start Simulator` (ou abra o arquivo `diagram.json` e clique no botão verde de play no circuito).
+    *   **Wokwi Web:** Consulte o [Guia de Início Rápido do Wokwi Web](file:///C:/GitHub/lab_intro/docs/Guia_Wokwi_Inicio_Rapido.md) na pasta `docs/` para colar o layout do hardware (`diagram.json`) e seu código.
+
+---
+
 ## 1. Objetivos de Aprendizagem
 *   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 16x2.
 *   **Nível Final (Desafio):** 
@@ -15,8 +27,8 @@
 
 ### O Problema da Locadora "Sai da Frente"
 O algoritmo deve calcular o valor total de uma locação junina nas seguintes condições:
-*   Preço da diária: **R$ 30,00**.
-*   Preço por quilômetro rodado: **R$ 0,01**.
+*   Preço da diária: **R$ 30,00** (Popular) ou **R$ 80,00** (SUV).
+*   Preço por quilômetro rodado: **R$ 0,01** (Popular) ou **R$ 0,05** (SUV).
 *   Desconto especial: **10%** sobre o valor total ($Total \times 0.9$).
 
 ### Mapeamento de Múltiplas Entradas Analógicas
@@ -59,7 +71,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 ---
 
 ## 4. O Desafio (Mão na Massa)
-1.  **Ponto de Partida:** Abra o arquivo [aluguel_carro_template.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro_template.ino).
+1.  **Ponto de Partida:** Abra o arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino).
 2.  **Tarefa Intermediária:** Complete a lógica do cálculo e a fiação no simulador. Realize a apresentação no LCD no seguinte padrão de texto (mesmo com flicker):
     ```text
     T:12d K:1000 POP
@@ -74,7 +86,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Leitura simultânea das duas faixas de dados e cálculo matemático correto exibido no LCD.
 2.  **Etapa Final:** Controle de tarifas funcional via chave slide mudando o valor da diária, taxa por km e rótulo (`POP`/`SUV`), com visualização suave e sem flicker no display.
-3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do código.
+3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino).
 4.  **Explicação Oral:** Explicação de como a chave slide altera as constantes da equação de processamento e a lógica condicional complexa de atualização (`||`).
 
 ---
@@ -86,7 +98,7 @@ No APL de Logística e Transportes de Carga (região do Porto Seco e fronteira d
 ---
 
 ## 7. 🧠 Reflexão Técnica (No Código)
-Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [aluguel_carro_template.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro_template.ino).
+Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino).
 
 ---
 
@@ -103,4 +115,4 @@ Para aprofundar seu conhecimento sobre a sintaxe, hardware e funções utilizada
 -   [Referência da Função analogRead()](https://www.arduino.cc/reference/pt/language/functions/analog-io/analogread/) — Leitura dos canais conversores de sinal analógico para digital (ADC).
 -   [Referência da Função map()](https://www.arduino.cc/reference/pt/language/functions/math/map/) — Sintaxe matemática do mapeamento proporcional de valores.
 -   [Referência da Função delay()](https://www.arduino.cc/reference/pt/language/functions/time/delay/) — Pausa na execução do programa por um período de tempo em milissegundos.
--   [Página de Referência Geral da Linguagem (Português)](https://www.arduino.cc/reference/pt/) — Dicionário de comandos, estruturas de repetição e tipos de variáveis em C++.
+-   [Página de Referência Geral da Linguagem (Português)](https://www.arduino.cc/reference/pt/) — Dicionário de comandos, estruturas de repetição e tipos de variáveis in C++.
