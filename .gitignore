@@ -1,0 +1,20 @@
+# Arduino IDE files
+*.o
+*.elf
+*.hex
+*.bin
+*.zip
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# PlatformIO
+.pio/
+
+# Build output
+build/
+
+# Misc
+.DS_Store
+Thumbs.db

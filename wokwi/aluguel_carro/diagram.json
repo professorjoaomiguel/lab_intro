@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "author": "João Miguel Lac Roehe",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 120, "left": 0 },
+    { "type": "wokwi-lcd1602", "id": "lcd", "top": -120, "left": -20 },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 150, "left": -250, "attrs": { "label": "Dias" } },
+    { "type": "wokwi-potentiometer", "id": "pot2", "top": 270, "left": -250, "attrs": { "label": "Distancia" } }
+  ],
+  "connections": [
+    [ "uno:GND.1", "lcd:GND", "black", [] ],
+    [ "uno:5V", "lcd:VCC", "red", [] ],
+    [ "uno:12", "lcd:RS", "blue", [] ],
+    [ "uno:GND.2", "lcd:RW", "black", [] ],
+    [ "uno:11", "lcd:E", "blue", [] ],
+    [ "uno:5", "lcd:D4", "blue", [] ],
+    [ "uno:4", "lcd:D5", "blue", [] ],
+    [ "uno:3", "lcd:D6", "blue", [] ],
+    [ "uno:2", "lcd:D7", "blue", [] ],
+    
+    [ "uno:GND.3", "pot1:GND", "black", [] ],
+    [ "uno:5V", "pot1:VCC", "red", [] ],
+    [ "uno:A0", "pot1:SIG", "green", [] ],
+    
+    [ "uno:GND.3", "pot2:GND", "black", [] ],
+    [ "uno:5V", "pot2:VCC", "red", [] ],
+    [ "uno:A1", "pot2:SIG", "yellow", [] ]
+  ],
+  "dependencies": {}
+}
