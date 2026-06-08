@@ -1,21 +1,19 @@
-# Experimento 01: Conversão de Temperatura com Display LCD
+# Experimento 01: Conversão de Temperatura com Display LCD (Tinkercad Clássico)
 
-Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino no simulador Tinkercad. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
 
 ---
 
 ## 🧭 Guia do Aluno: Como Iniciar
 1.  **Onde programar:** Abra o arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/tinkercad/conversao_temperatura/conversao_temperatura.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
 2.  **Onde simular:** 
-    *   **Tinkercad:** Crie uma conta no Tinkercad, monte o circuito do Arduino Uno com o display LCD 16x2 e potenciômetros de acordo com o diagrama e cole o código deste arquivo na aba de Código (modo Texto) para simular.
+    *   **Tinkercad:** Acesse sua conta no [Tinkercad](https://www.tinkercad.com/). Crie um novo circuito contendo um Arduino Uno e um display LCD 16x2 de acordo com a pinagem. Copie o código do arquivo `.ino` e cole-o na aba de Código (modo Texto) para testar e simular.
 
 ---
 
 ## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 16x2.
-*   **Nível Final (Desafio):** 
-    1.  Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
-    2.  Implementar controle de estado visual (Alerta de Temperatura): se a temperatura for maior ou igual a $40^{\circ}\text{C}$, liga o LED Vermelho (Pino 7), desliga o LED Verde (Pino 8) e escreve `ALERTA` no LCD. Caso contrário (temperatura normal), mantém o LED Verde (Pino 8) ligado, o LED Vermelho desligado e escreve `OK` no LCD.
+*   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro em A0, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 16x2.
+*   **Nível Final (Desafio):** Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
 
 ---
 
@@ -71,41 +69,21 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
 *   **Potenciômetro:** Cursor no pino analógico `A0`
-*   **LED Vermelho (Alerta Temp Alta):** Conectado no pino digital 7 (com resistor de 220 ohms)
-*   **LED Verde (Status Normal):** Conectado no pino digital 8 (com resistor de 220 ohms)
 
 ---
 
 ## 4. O Desafio (Mão na Massa)
 1.  **Ponto de Partida:** Abra o arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/tinkercad/conversao_temperatura/conversao_temperatura.ino).
 2.  **Tarefa Intermediária:** Complete o código nas seções `# TODO` para realizar as leituras analógicas e imprimir no LCD. A tela pode piscar nesta etapa.
-3.  **Tarefa Final (Desafio):** 
-    *   Implemente a lógica de no-flicker (redesenho dinâmico somente sob variação).
-    *   Implemente a lógica de controle de estado: se a temperatura atingir $40^{\circ}\text{C}$ ou mais, acione o LED vermelho, desligue o verde e mostre `ALERTA` no LCD. Caso contrário, mantenha o LED verde aceso, o vermelho apagado e exiba `OK` no LCD.
+3.  **Tarefa Final (Desafio):** Implemente a lógica de no-flicker (redesenho dinâmico somente sob variação).
 
 ---
 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Temperatura calculada e exibida no display.
-2.  **Etapa Final:** Circuito operando sem piscar a tela, com controle de status visual de LEDs e exibição de `OK`/`ALERTA` no LCD a partir de 40 °C.
+2.  **Etapa Final:** Circuito operando no Tinkercad sem piscar a tela.
 3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/tinkercad/conversao_temperatura/conversao_temperatura.ino).
-4.  **Explicação Oral:** Capacidade de explicar as conexões físicas, a lógica matemática do mapeamento e a lógica de condicionais para alarmes.
-
----
-
-## 6. Conexão com a Indústria (APL/RS) 🏭
-*Reflexão contextualizada para o Rio Grande do Sul:*
-Na serra gaúcha (APL Vitivinícola) e na região metropolitana (APL Metalmecânico), a medição e sinalização local de temperatura e umidade em silos, adegas de maturação de vinhos ou caldeiras é crucial para a segurança do operador e a qualidade do produto. Exibições IHMs locais robustas e otimizadas evitam erros humanos de leitura causados por oscilações visuais de tela.
-
----
-
-## 7. 🧠 Reflexão Técnica (No Código)
-Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/tinkercad/conversao_temperatura/conversao_temperatura.ino).
-
----
-
-## 🤖 Dica de Prompt para IA (Uso Saudável)
-> *"Estou no Experimento 1 de Arduino. Preciso ler um potenciômetro em A0 e mostrar Celsius e Fahrenheit em um LCD 16x2. Não me dê o código completo. Explique como usar a função map do Arduino para reescalar 0-1023 para 0-60 e como fazer a conversão matemática sem perder as casas decimais no cálculo em C++."*
+4.  **Explicação Oral:** Capacidade de explicar a lógica matemática do mapeamento e a eliminação de flicker.
 
 ---
 

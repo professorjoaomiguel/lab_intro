@@ -6,9 +6,11 @@ Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino.
 
 ## 🧭 Guia do Aluno: Como Iniciar
 1.  **Onde programar:** Abra o arquivo [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/telemetria_combustivel.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
-2.  **Onde simular:** 
-    *   **VS Code:** Certifique-se de ter a extensão **Wokwi Simulator** instalada. Pressione a tecla **F1**, selecione `Wokwi: Start Simulator` (ou abra o arquivo `diagram.json` e clique no botão verde de play no circuito).
-    *   **Wokwi Web:** Consulte o [Guia de Início Rápido do Wokwi Web](file:///C:/GitHub/lab_intro/docs/Guia_Wokwi_Inicio_Rapido.md) na pasta `docs/` para colar o layout do hardware (`diagram.json`) e seu código.
+2.  **Como simular no Wokwi Web (Navegador):**
+    *   Acesse [wokwi.com/projects/new/arduino-uno](https://wokwi.com/projects/new/arduino-uno).
+    *   Substitua o conteúdo da aba **`diagram.json`** no simulador pelo conteúdo do arquivo [diagram.json](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/diagram.json) desta pasta para carregar o circuito automaticamente.
+    *   Copie o código de [telemetria_combustivel.ino](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/telemetria_combustivel.ino) e cole-o no arquivo de código principal do simulador (`sketch.ino`).
+    *   *(Opcional)* Crie um arquivo `README.md` no Wokwi e cole o conteúdo deste roteiro para lê-lo diretamente na tela da simulação. Consulte o [Guia de Início Rápido do Wokwi Web](file:///C:/GitHub/lab_intro/docs/Guia_Wokwi_Inicio_Rapido.md) para mais detalhes.
 
 ---
 

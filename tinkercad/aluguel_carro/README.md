@@ -1,24 +1,19 @@
-# Experimento 02: Cálculo de Aluguel de Carro com Display LCD
+# Experimento 02: Cálculo de Aluguel de Carro com Display LCD (Tinkercad Clássico)
 
-Este guia orienta o desenvolvimento do segundo experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+Este guia orienta o desenvolvimento do segundo experimento prático de Arduino no simulador Tinkercad. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
 
 ---
 
 ## 🧭 Guia do Aluno: Como Iniciar
 1.  **Onde programar:** Abra o arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/tinkercad/aluguel_carro/aluguel_carro.ino) localizado nesta pasta. Ele é o seu template de trabalho e contém comentários marcados com `# TODO` onde você deve inserir seu código.
 2.  **Onde simular:** 
-    *   **Tinkercad:** Crie uma conta no Tinkercad, monte o circuito do Arduino Uno com o display LCD 16x2, chave slide e potenciômetros de acordo com o diagrama e cole o código deste arquivo na aba de Código (modo Texto) para simular.
+    *   **Tinkercad:** Acesse sua conta no [Tinkercad](https://www.tinkercad.com/). Crie um novo circuito contendo um Arduino Uno, display LCD 16x2 e dois potenciômetros. Copie o código do arquivo `.ino` e cole-o na aba de Código (modo Texto) para testar e simular.
 
 ---
 
 ## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 16x2.
-*   **Nível Final (Desafio):** 
-    1.  Integrar a detecção de mudança de estado duplo para que o LCD seja atualizado apenas sob variação em alguma das entradas, eliminando a oscilação (*flicker*) do display.
-    2.  Implementar controle de categoria do veículo via hardware: use uma chave tipo slide no pino **9** (`INPUT_PULLUP`). 
-        - Chave em `LOW` (Esquerda): Categoria **Popular** (`POP`) com diária de R$ 30,00 e R$ 0,01 por km.
-        - Chave em `HIGH` (Direita): Categoria **SUV** (`SUV`) com diária de R$ 80,00 e R$ 0,05 por km.
-        - Exibir o indicador da categoria (`POP` ou `SUV`) no LCD.
+*   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes em A0 e A1, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 16x2.
+*   **Nível Final (Desafio):** Integrar a detecção de mudança de estado duplo para que o LCD seja atualizado apenas sob variação em alguma das entradas, eliminando a oscilação (*flicker*) do display.
 
 ---
 
@@ -26,8 +21,8 @@ Este guia orienta o desenvolvimento do segundo experimento prático de Arduino. 
 
 ### O Problema da Locadora "Sai da Frente"
 O algoritmo deve calcular o valor total de uma locação junina nas seguintes condições:
-*   Preço da diária: **R$ 30,00** (Popular) ou **R$ 80,00** (SUV).
-*   Preço por quilômetro rodado: **R$ 0,01** (Popular) ou **R$ 0,05** (SUV).
+*   Preço da diária: **R$ 30,00**.
+*   Preço por quilômetro rodado: **R$ 0,01**.
 *   Desconto especial: **10%** sobre o valor total ($Total \times 0.9$).
 
 ### Mapeamento de Múltiplas Entradas Analógicas
@@ -65,44 +60,25 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
     *   `VCC` -> 5V | `GND` -> GND
 *   **Potenciômetro 1 (Dias):** Cursor no pino analógico `A0`
 *   **Potenciômetro 2 (Distância):** Cursor no pino analógico `A1`
-*   **Chave Slide (Seletor de Categoria):** Pino central conectado ao pino digital **9** (utilizando pull-up interno: `INPUT_PULLUP`). Outro pino ao GND.
 
 ---
 
 ## 4. O Desafio (Mão na Massa)
 1.  **Ponto de Partida:** Abra o arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/tinkercad/aluguel_carro/aluguel_carro.ino).
-2.  **Tarefa Intermediária:** Complete a lógica do cálculo e a fiação no simulador. Realize a apresentação no LCD no seguinte padrão de texto (mesmo com flicker):
+2.  **Tarefa Intermediária:** Complete a lógica do cálculo no simulador. Realize a apresentação no LCD no seguinte padrão de texto (mesmo com flicker):
     ```text
-    T:12d K:1000 POP
+    T:12d D:1000km
     Total: R$ 306.00
     ```
-3.  **Tarefa Final (Desafio):** 
-    *   Implemente a fiação da chave slide e a lógica condicional para mudar as tarifas (POP vs SUV).
-    *   Elimine a oscilação do display: as etiquetas fixas (`T:`, `d K:`, `Total: R$`) devem ser escritas somente no `setup()`. A escrita dinâmica no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia` **ou** `categoria != ultimaCategoria`.
+3.  **Tarefa Final (Desafio):** Elimine a oscilação do display: as etiquetas fixas (`T:`, `d D:`, `Total: R$`) devem ser escritas somente no `setup()`. A escrita dinâmica no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia`.
 
 ---
 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Leitura simultânea das duas faixas de dados e cálculo matemático correto exibido no LCD.
-2.  **Etapa Final:** Controle de tarifas funcional via chave slide mudando o valor da diária, taxa por km e rótulo (`POP`/`SUV`), com visualização suave e sem flicker no display.
+2.  **Etapa Final:** Cálculo com visualização suave e sem flicker no display do Tinkercad.
 3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/tinkercad/aluguel_carro/aluguel_carro.ino).
-4.  **Explicação Oral:** Explicação de como a chave slide altera as constantes da equação de processamento e a lógica condicional complexa de atualização (`||`).
-
----
-
-## 6. Conexão com a Indústria (APL/RS) 🏭
-*Reflexão contextualizada para o Rio Grande do Sul:*
-No APL de Logística e Transportes de Carga (região do Porto Seco e fronteira de Uruguaiana/RS) ou no APL de Ecoturismo de Gramado e Canela, sistemas de parametrização local em painéis industriais embarcados são essenciais para configuração inicial de diárias de serviço e taxas operacionais de forma manual e rápida. A robustez de interface com displays é de extrema importância nestes sistemas industriais de campo.
-
----
-
-## 7. 🧠 Reflexão Técnica (No Código)
-Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/tinkercad/aluguel_carro/aluguel_carro.ino).
-
----
-
-## 🤖 Dica de Prompt para IA (Uso Saudável)
-> *"Estou no Experimento 2 de Arduino. Preciso programar o cálculo de aluguel de carro com diária de R$ 30,00 e R$ 0,01 por km rodado, mais 10% de desconto. Como posso implementar a leitura de dois potenciômetros (tempo e distância) no Arduino e atualizar o LCD somente se houver alteração em alguma das duas variáveis? Não me dê o código completo."*
+4.  **Explicação Oral:** Explicação da fórmula de negócio e a lógica condicional composta (`||`).
 
 ---
 
