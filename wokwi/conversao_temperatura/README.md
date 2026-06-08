@@ -37,6 +37,20 @@ No código C/C++ do Arduino, lembre-se de usar números reais (`9.0` e `5.0`) na
 
 ---
 
+### O Display LCD (HD44780) e a Origem do Flicker (Cintilação)
+Displays LCD de caracteres (como o modelo de 16 colunas e 2 linhas) possuem um controlador interno que gerencia o acendimento físico dos cristais líquidos. A comunicação com este circuito integrado auxiliar é relativamente lenta se comparada ao clock do Arduino:
+*   **O comando `LCD.clear()`:** Ao chamar a função `LCD.clear()`, o controlador interno do LCD desliga fisicamente todos os pixels e envia o cursor para a posição inicial. Essa operação exige cerca de **1,64 milissegundos** para ser finalizada no hardware.
+*   **Como o flicker acontece:** Se o programa do microcontrolador executar comandos de limpeza total ou reescrever textos fixos repetidamente dentro do `loop()`, o display passará mais tempo no processo de apagar/redesenhar pixels do que exibindo informações estáticas. Visualmente, isso é percebido como uma **tela piscando constantemente (flicker)**.
+
+### Estratégia de Software: Atualização por Filtro de Estado
+A rotina correta de controle de telas em sistemas embarcados segue os seguintes princípios:
+1.  **Escrita Estática Única (setup):** Rótulos fixos como `"TempC:      oC"` e `"TempF:      oF"` são definidos apenas uma vez durante a inicialização no `setup()`.
+2.  **Comparação de Estado (loop):** Mantemos variáveis globais para registrar a última informação desenhada (ex: `ultimoTempC`).
+3.  **Escrita Dinâmica sob Demanda:** Comparamos o valor lido atualmente com a variável de estado. O envio de dados para o display só é feito caso haja mudança real (`if (tempC != ultimoTempC)`).
+4.  **Sobrescrita de Resíduos:** Para evitar que o display exiba caracteres "fantasmas" (por exemplo, o número `10` caindo para `9` e exibindo `90` por não limpar a segunda casa decimal), posicionamos o cursor, escrevemos espaços em branco (`"    "`) para apagar o resíduo anterior e só então escrevemos o novo valor.
+
+---
+
 ## 3. Componentes e Conexões (Wokwi)
 *   **Arduino Uno R3**
 *   **Display LCD 16x2 (Ligação Paralela)**

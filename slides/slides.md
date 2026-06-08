@@ -206,6 +206,31 @@ Isso faz com que o display fique piscando de forma desconfortável.
 
 ---
 
+# Funcionamento do LCD e a Causa do Flicker
+
+Por que displays piscam e como otimizar a atualização via software?
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+### Hardware do Display (HD44780)
+*   **Comunicação Lenta:** A CPU do Arduino Uno opera a 16 MHz, mas o controlador do LCD (HD44780) é muito mais lento para processar instruções físicas.
+*   **Custo do `LCD.clear()`:** Limpar toda a tela exige que o chip interno do LCD desligue fisicamente todos os pixels. Esse ciclo de limpeza leva cerca de **1.64 ms**!
+*   **Origem do Flicker (Piscadas):** Ao limpar e reescrever a tela repetidamente centenas de vezes por segundo no `loop()`, a tela cintila pois alterna constantemente entre ligar e desligar.
+
+</div>
+<div>
+
+### Rotina de Atualização por Estado
+1.  **Labels Estáticos (setup):** Texto fixo como `"TempC: "` é impresso apenas uma vez na inicialização.
+2.  **Filtro de Estado (loop):** Use condicionais para atualizar a tela apenas quando houver alteração de valor: `if (valorAtual != ultimoValor)`.
+3.  **Limpeza Local de Resíduos:** Antes de escrever o novo valor numérico, imprima alguns espaços vazios (`"    "`) no cursor para limpar dígitos antigos órfãos (ex: apagar o `0` do `10` ao mudar para `9`).
+
+</div>
+</div>
+
+---
+
 # Solução Otimizada da Atividade 1
 
 ```cpp {all|11-19|24-26|28-44}

@@ -27,6 +27,20 @@ int distancia = map(analogRead(A1), 0, 1023, 1, 1000);
 
 ---
 
+### O Display LCD (HD44780) e a Origem do Flicker (Cintilação)
+Displays LCD de caracteres (como o modelo de 16 colunas e 2 linhas) possuem um controlador interno que gerencia o acendimento físico dos cristais líquidos. A comunicação com este circuito integrado auxiliar é relativamente lenta se comparada ao clock do Arduino:
+*   **O comando `LCD.clear()`:** Ao chamar a função `LCD.clear()`, o controlador interno do LCD desliga fisicamente todos os pixels e envia o cursor para a posição inicial. Essa operação exige cerca de **1,64 milissegundos** para ser finalizada no hardware.
+*   **Como o flicker acontece:** Se o programa do microcontrolador executar comandos de limpeza total ou reescrever os textos fixos repetidamente dentro do `loop()`, o display passará mais tempo no processo de apagar/redesenhar pixels do que exibindo informações estáticas. Visualmente, isso é percebido como uma **tela piscando constantemente (flicker)**.
+
+### Estratégia de Software: Atualização por Filtro de Estado Multi-Variável
+A rotina correta de controle de telas em sistemas embarcados segue os seguintes princípios:
+1.  **Escrita Estática Única (setup):** Rótulos fixos como `"T:   d  D:    km"` e `"Total: R$       "` são definidos apenas uma vez durante a inicialização no `setup()`.
+2.  **Comparação de Estado Composto (loop):** Mantemos variáveis globais para registrar os últimos valores exibidos (`ultimoTempo` e `ultimaDistancia`).
+3.  **Escrita Dinâmica sob Demanda com Operador Lógico `||`:** Comparamos os valores atuais com os anteriores. O envio de dados para o display só é feito se o tempo **ou** a distância sofrerem alteração (`if (tempo != ultimoTempo || distancia != ultimaDistancia)`).
+4.  **Sobrescrita de Resíduos:** Para evitar que o display exiba caracteres "fantasmas" (por exemplo, a quilometragem cair de `1000` para `9` e exibir `9000` por não limpar as casas decimais extras), posicionamos o cursor, escrevemos espaços em branco (`"    "`) para apagar o resíduo anterior e só então escrevemos o novo valor.
+
+---
+
 ## 3. Componentes e Conexões (Wokwi)
 *   **Arduino Uno R3**
 *   **Display LCD 16x2 (Ligação Paralela)**
