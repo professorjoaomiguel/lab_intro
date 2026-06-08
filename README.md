@@ -16,6 +16,7 @@ Esta trilha utiliza o simulador online **Wokwi Web** e traz implementações mod
     *   `diagram.json`: O arquivo de configuração do circuito. Basta colar na aba `diagram.json` do Wokwi para carregar os componentes automaticamente.
     *   `[nome].ino`: O código inicial (template com marcações `# TODO`) para começar sua programação.
 *   **Projetos:**
+    0.  [Experimento 00: Primeiro Contato com o Wokwi Web (O LED do Painel)](file:///C:/GitHub/lab_intro/wokwi/00_introducao_wokwi/)
     1.  [Experimento 01: Conversão de Temperatura com LCD e Alarme](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/)
     2.  [Experimento 02: Aluguel de Carro com LCD e Seleção de Categoria](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/)
     3.  [Experimento 03: Telemetria de Combustível com Barra Gráfica (LCD 20x4)](file:///C:/GitHub/lab_intro/wokwi/telemetria_combustivel/)
@@ -62,6 +63,7 @@ lab_intro/
 │   └─ aluguel_carro/           # README clássico + Template original
 │
 └─ wokwi/                       # Projetos Renovados Wokwi (Simulação Web)
+    ├─ 00_introducao_wokwi/     # Tutorial de interface e primeiro contato
     ├─ conversao_temperatura/   # Esquema, roteiro e código renovados
     ├─ aluguel_carro/           # Esquema, roteiro e código renovados
     └─ telemetria_combustivel/  # Esquema, roteiro e código renovados
