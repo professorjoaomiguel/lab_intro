@@ -99,7 +99,7 @@ No `loop()`, adicione a lógica: se o volume do tanque for **menor que 5.0 Litro
 > 2. Gire o sensor até o tanque ficar abaixo de 5.0 Litros. O LED de emergência acende no painel e a tela muda dinamicamente exibindo `!RESERVA!` no lugar do rótulo padrão?
 > *   *Espetacular!* Seu computador de bordo híbrido de telemetria VoltLog está totalmente operacional e homologado. Preencha a **Reflexão Técnica** no cabeçalho do arquivo `.ino` e apresente ao professor!
 
-> **💡 Desafio de Exploração (Faça por conta própria!):**
+> **💡 Altere, teste e veja o que acontece!**
 > Que tal alterar a sensibilidade dos alarmes do tanque? Mude o valor de segurança da reserva de `5.0` Litros para `8.0` Litros no seu código. Simule e esvazie o tanque.
 > *   **O LED vermelho e o aviso dinâmico na tela dispararam antes, quando o tanque atingiu 8 Litros?**
 > *   *Excelente!* Você percebeu como alterar constantes de software é o segredo para calibrar alarmes físicos em hardware real!

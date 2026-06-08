@@ -94,7 +94,7 @@ No `setup()`, configure os pinos dos LEDs vermelho e verde como saídas (`OUTPUT
 > 3. Retorne a temperatura para menos de 40 °C. O sistema restaura o estado seguro?
 > *   *Sucesso total!* Você concluiu o desafio final do Módulo Térmico de Baterias da VoltLog. Preencha a **Reflexão Técnica** no cabeçalho do arquivo `.ino` e chame o professor para avaliar seu projeto!
 
-> **💡 Desafio de Exploração (Faça por conta própria!):**
+> **💡 Altere, teste e veja o que acontece!**
 > Quer ver o poder da programação em suas mãos? Experimente alterar o limite de temperatura de segurança de `40` para `43` (ou qualquer outro valor de sua escolha) diretamente no seu código. Inicie a simulação novamente.
 > *   **O LED vermelho agora só acende quando ultrapassa esse novo limite?**
 > *   *Percebeu como apenas uma mudança simples no código altera completamente o comportamento físico do circuito?*
