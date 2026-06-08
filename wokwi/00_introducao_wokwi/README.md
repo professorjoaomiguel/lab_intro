@@ -122,6 +122,32 @@ Podemos mudar as propriedades físicas dos componentes diretamente no arquivo de
 > *   **O LED físico piscando na tela mudou da cor vermelha para a cor azul?**
 > *   *Parabéns!* Você aprendeu a alterar propriedades físicas de componentes virtuais diretamente no arquivo JSON.
 
+### Passo 7: Praticando no Editor Visual (Adicionar e Customizar Componentes)
+
+Agora vamos mexer no hardware usando as mãos (virtualmente) e atalhos rápidos! Vamos adicionar um novo LED ao nosso circuito para praticar:
+1. Pare a simulação clicando em **Stop** (se ela estiver rodando).
+2. Clique em qualquer área em branco do painel da direita (o painel de circuitos) para focar nele.
+3. Pressione a tecla **`A`** no seu teclado. O menu de seleção de componentes surgirá na tela.
+4. Digite **`LED`** na barra de pesquisa e selecione o componente **LED** comum. Ele aparecerá no centro do painel.
+5. Arraste esse novo LED para uma posição vazia próxima ao Arduino.
+6. Com o LED selecionado (ele ficará com um contorno tracejado azul):
+   * Pressione a tecla **`R`** algumas vezes. *Observe como ele gira 90 graus a cada clique!* Isso ajuda muito a alinhar resistores e outros componentes.
+   * Pressione a tecla **`D`** uma vez. *Um segundo LED idêntico surgirá ao lado dele!* (Você pode deletar este LED extra clicando nele e pressionando a tecla **`Delete`**).
+7. Vamos conectar o LED original:
+   * Coloque o mouse sobre a perna esquerda do LED (chamada *Cathode* ou terminal negativo).
+   * Clique nela e depois clique em qualquer pino cinza escrito **`GND`** no Arduino Uno. Um fio de ligação verde ou preto será gerado automaticamente.
+   * Coloque o mouse sobre a perna direita do LED (chamada *Anode* ou terminal positivo).
+   * Clique nela e depois clique no pino **`12`** do Arduino Uno.
+8. Customizando as cores dos fios com atalhos de teclado:
+   * Clique em cima do fio que você conectou ao pino 12 para selecioná-lo.
+   * Com o fio selecionado, pressione a tecla **`2`** no seu teclado. *O fio mudará de cor instantaneamente para Vermelho!*
+   * Agora selecione o fio conectado ao GND e pressione a tecla **`0`** para pintá-lo de **Preto** (o padrão de circuitos eletrônicos para cabos terra).
+
+> **🧪 Teste e Verifique:**
+> *   **Você conseguiu adicionar, rotacionar e conectar o LED usando apenas as teclas do teclado e o mouse?**
+> *   **Os fios mudaram de cor ao pressionar `2` e `0`?**
+> *   *Perfeito!* Você acaba de dominar as ferramentas visuais do simulador de circuitos. Agora o desenho de qualquer circuito será incrivelmente ágil!
+
 ---
 
 ## 🛠️ Superpoderes da Interface do Wokwi (Ferramentas Extras)
@@ -149,7 +175,7 @@ Desenhar circuitos fica muito mais rápido se você dominar estas técnicas:
 * **Rotacionar Componente:** Selecione um componente e pressione `R` para girá-lo 90 graus.
 * **Duplicar Componente:** Pressione `D` para clonar o componente selecionado rapidamente.
 * **Apagar Componentes ou Fios:** Selecione a peça e pressione `Delete` (ou dê um clique duplo em um fio para removê-lo).
-* **Cores de Fios Instantâneas:** Enquanto arrasta um novo fio ou com um fio selecionado, pressione as teclas numéricas de `0` a `9` ou as letras `C` (Ciano), `L` (Lima), `M` (Magenta), `P` (Roxo/Purple) e `Y` (Amarelo) para mudar a cor na hora. Ex: `0` para Preto (GND), `2` para Vermelho (VCC).
+* **Cores de Fios Instantâneas:** Enquanto arrasta um novo fio ou com um fio selecionado, pressione las teclas numéricas de `0` a `9` ou as letras `C` (Ciano), `L` (Lima), `M` (Magenta), `P` (Roxo/Purple) e `Y` (Amarelo) para mudar a cor na hora. Ex: `0` para Preto (GND), `2` para Vermelho (VCC).
 * **Grade e Réguas:** Pressione `G` para exibir a grade milimétrica e réguas de medição física. Segure `Shift` ao arrastar um componente para desativar a grade temporariamente, ou `Ctrl` / `Alt` para usar uma grade ultrafina.
 * **Copiar e Colar Circuitos:** Segurando a tecla `Shift`, clique em múltiplos componentes. Copie com `Ctrl + C` (o circuito é copiado em JSON para sua área de transferência, incluindo os fios internos!) e cole com `Ctrl + V` em qualquer outro projeto do Wokwi!
 * Para entender todos os recursos de montagem visual, consulte: [Wokwi Diagram Editor Guide](https://docs.wokwi.com/guides/diagram-editor).
@@ -162,7 +188,7 @@ Como vimos, a comunicação serial envia bits fisicamente pelo cabo TX:
 
 ---
 
-### Passo 7: Como Salvar e Entregar o Link
+### Passo 8: Como Salvar e Entregar o Link
 Ao final de cada aula prática, você deve enviar o link da sua simulação para avaliação do professor no Classroom. Veja como é fácil:
 1. No menu superior da tela do Wokwi, clique no botão **Save**.
 2. O Wokwi salvará o projeto na sua conta e a barra de endereços do seu navegador mudará para uma URL única (exemplo: `https://wokwi.com/projects/400039281...`).
@@ -177,7 +203,8 @@ Ao final de cada aula prática, você deve enviar o link da sua simulação para
 3.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
 4.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
 5.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
-6.  [ ] Salvou o projeto e guardou o link de compartilhamento.
+6.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
+7.  [ ] Salvou o projeto e guardou o link de compartilhamento.
 
 *Você concluiu o Experimento Zero com sucesso! Agora você sabe como a informação corre em fios elétricos e como operar o simulador. Você está pronto para iniciar as atividades práticas da VoltLog!*
 
