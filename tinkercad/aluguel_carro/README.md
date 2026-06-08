@@ -84,3 +84,12 @@ Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [alu
 
 ## 🤖 Dica de Prompt para IA (Uso Saudável)
 > *"Estou no Experimento 2 de Arduino. Preciso programar o cálculo de aluguel de carro com diária de R$ 30,00 e R$ 0,01 por km rodado, mais 10% de desconto. Como posso implementar a leitura de dois potenciômetros (tempo e distância) no Arduino e atualizar o LCD somente se houver alteração em alguma das duas variáveis? Não me dê o código completo."*
+
+---
+
+## 8. Referências e Documentação Oficial
+Para aprofundar seu conhecimento sobre a sintaxe, hardware e funções utilizadas, consulte os seguintes links no Portal do Arduino:
+-   [Documentação da Biblioteca LiquidCrystal](https://www.arduino.cc/reference/en/libraries/liquidcrystal/) — Descrição geral das chamadas de métodos para displays de cristal líquido.
+-   [Referência da Função map()](https://www.arduino.cc/reference/pt/language/functions/math/map/) — Sintaxe matemática do mapeamento proporcional de valores.
+-   [Referência da Função analogRead()](https://www.arduino.cc/reference/pt/language/functions/analog-io/analogread/) — Leitura dos canais conversores de sinal analógico para digital (ADC).
+-   [Página de Referência Geral da Linguagem (Português)](https://www.arduino.cc/reference/pt/) — Dicionário de comandos, estruturas de repetição e tipos de variáveis em C++.
