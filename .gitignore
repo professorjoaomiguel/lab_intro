@@ -14,7 +14,14 @@
 
 # Build output
 build/
+dist/
+
+# Node / Slidev
+node_modules/
+.slidev/
+.vite/
 
 # Misc
 .DS_Store
 Thumbs.db
+
