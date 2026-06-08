@@ -92,6 +92,11 @@ No `setup()`, configure o pino digital da chave slide (pino 9) como entrada util
 > 3. O texto dinâmico `[POP]` mudou para `[SUV]` sem bagunçar o layout?
 > *   *Incrível!* Seu computador de bordo dinâmico de Car Sharing da VoltLog está completo. Preencha a **Reflexão Técnica** no cabeçalho do código e chame o professor para avaliar!
 
+> **💡 Desafio de Exploração (Faça por conta própria!):**
+> Que tal recalibrar o modelo de negócios? Experimente alterar o preço da diária do modelo SUV de `80` para `100` (ou a taxa do Km de `0.05` para `0.10`) no código. Rode a simulação e mude a chave seletora.
+> *   **O painel recalculou as diárias e o valor total dinamicamente na tela?**
+> *   *Sensacional!* Você provou que seu software é flexível e que mudar parâmetros de tarifação no código altera imediatamente as contas calculadas pelo veículo!
+
 ---
 
 © 2026 João Miguel Lac Roehe – **Faculdade de Tecnologia SENAI Porto Alegre**
