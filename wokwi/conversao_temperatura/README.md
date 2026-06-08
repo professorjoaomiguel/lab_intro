@@ -34,6 +34,7 @@ Siga os passos abaixo, teste o circuito a cada etapa e comemore suas conquistas!
 1. Acesse [wokwi.com/projects/new/arduino-uno](https://wokwi.com/projects/new/arduino-uno).
 2. Abra a aba **`diagram.json`** no simulador, apague o conteúdo e cole o código do arquivo local [diagram.json](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/diagram.json). *O circuito surgirá conectado!*
 3. Abra a aba **`sketch.ino`** e cole o código do arquivo local [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino).
+4. No painel de arquivos da esquerda no Wokwi, clique em **New File**, crie o arquivo **`README.md`** e cole todo o conteúdo deste roteiro local. Assim você poderá ler as instruções lado a lado com o circuito e o código!
 
 ---
 
