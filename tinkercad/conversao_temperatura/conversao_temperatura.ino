@@ -3,7 +3,7 @@
 // Professor: João Miguel Lac Roehe
 //
 // Atividade 1: Conversão de Temperatura (Celsius para Fahrenheit) com display LCD
-// Solução otimizada para evitar oscilação (flicker) no display LCD.
+// Simulação otimizada para o Wokwi.
 
 #include <LiquidCrystal.h>
 
@@ -11,13 +11,18 @@
 // LiquidCrystal(rs, enable, d4, d5, d6, d7)
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-int ultimoTempC = -1; // Armazena a última temperatura para atualizar apenas quando houver mudança
+const int pinoVermelho = 7;
+const int pinoVerde = 8;
+
+int ultimoTempC = -1;
 
 void setup() {
-  // Configura o display LCD com 16 colunas e 2 linhas
   LCD.begin(16, 2);
   
-  // Imprime os textos estáticos (labels) que não precisam ser limpos e reescritos no loop
+  pinMode(pinoVermelho, OUTPUT);
+  pinMode(pinoVerde, OUTPUT);
+  
+  // Imprime os textos estáticos
   LCD.setCursor(0, 0);
   LCD.print("TempC:      oC");
   LCD.setCursor(0, 1);
@@ -25,32 +30,43 @@ void setup() {
 }
 
 void loop() {
-  // Lê a entrada analógica A0 conectada ao potenciômetro (0 a 1023)
+  // Lê o potenciômetro em A0 (0 a 1023)
   int potenciometro = analogRead(A0);
   
-  // Mapeia a leitura analógica para a faixa de temperatura desejada (0 a 60 graus Celsius)
+  // Mapeia a leitura para 0 a 60 graus Celsius
   int tempC = map(potenciometro, 0, 1023, 0, 60);
   
-  // Só atualiza o LCD se houver mudança de valor (evita o efeito de piscar / flicker)
+  // Só atualiza o LCD se houver mudança
   if (tempC != ultimoTempC) {
-    // Calcula a conversão de Celsius para Fahrenheit: F = C * 1.8 + 32
     float tempF = (9.0 / 5.0) * tempC + 32.0;
     
-    // Atualiza a temperatura em Celsius no LCD (coluna 7, linha 0)
+    // Celsius
     LCD.setCursor(7, 0);
-    LCD.print("    "); // Limpa o espaço reservado para o valor antigo
+    LCD.print("    ");
     LCD.setCursor(7, 0);
     LCD.print(tempC);
     
-    // Atualiza a temperatura em Fahrenheit no LCD (coluna 7, linha 1)
+    // Fahrenheit
     LCD.setCursor(7, 1);
-    LCD.print("      "); // Limpa o espaço reservado para o valor antigo
+    LCD.print("      ");
     LCD.setCursor(7, 1);
-    LCD.print(tempF, 1); // Mostra o valor com 1 casa decimal
+    LCD.print(tempF, 1);
     
-    // Atualiza a referência
+    // Controle de Alarme e Status (Limiar de 40 °C)
+    if (tempC >= 40) {
+      digitalWrite(pinoVermelho, HIGH);
+      digitalWrite(pinoVerde, LOW);
+      LCD.setCursor(13, 0);
+      LCD.print("AL"); // Alerta
+    } else {
+      digitalWrite(pinoVermelho, LOW);
+      digitalWrite(pinoVerde, HIGH);
+      LCD.setCursor(13, 0);
+      LCD.print("OK"); // Normal
+    }
+    
     ultimoTempC = tempC;
   }
   
-  delay(100); // Pequeno atraso para suavizar as leituras analógicas
+  delay(100);
 }

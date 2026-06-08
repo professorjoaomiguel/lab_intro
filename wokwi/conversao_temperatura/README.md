@@ -2,7 +2,9 @@
 
 ## 1. Objetivos de Aprendizagem
 *   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 16x2.
-*   **Nível Final (Desafio):** Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
+*   **Nível Final (Desafio):** 
+    1.  Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
+    2.  Implementar controle de estado visual (Alerta de Temperatura): se a temperatura for maior ou igual a $40^{\circ}\text{C}$, liga o LED Vermelho (Pino 7), desliga o LED Verde (Pino 8) e escreve `ALERTA` no LCD. Caso contrário (temperatura normal), mantém o LED Verde (Pino 8) ligado, o LED Vermelho desligado e escreve `OK` no LCD.
 
 ---
 
@@ -54,31 +56,29 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 ## 3. Componentes e Conexões (Wokwi)
 *   **Arduino Uno R3**
 *   **Display LCD 16x2 (Ligação Paralela)**
-    *   `RS` -> Pino 12
-    *   `E` -> Pino 11
-    *   `D4` -> Pino 5
-    *   `D5` -> Pino 4
-    *   `D6` -> Pino 3
-    *   `D7` -> Pino 2
+    *   `RS` -> Pino 12 | `E` -> Pino 11
+    *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
-*   **Potenciômetro**
-    *   Terminais externos -> 5V e GND
-    *   Terminal central (sinal) -> Pino analógico `A0`
+*   **Potenciômetro:** Cursor no pino analógico `A0`
+*   **LED Vermelho (Alerta Temp Alta):** Conectado no pino digital 7 (com resistor de 220 ohms)
+*   **LED Verde (Status Normal):** Conectado no pino digital 8 (com resistor de 220 ohms)
 
 ---
 
 ## 4. O Desafio (Mão na Massa)
 1.  **Ponto de Partida:** Abra o arquivo [conversao_temperatura_template.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura_template.ino).
 2.  **Tarefa Intermediária:** Complete o código nas seções `# TODO` para realizar as leituras analógicas e imprimir no LCD. A tela pode piscar nesta etapa.
-3.  **Tarefa Final (Desafio):** Implemente a lógica de detecção de mudança de estado. Imprima as etiquetas fixas no `setup()` e só atualize os valores no `loop()` se a temperatura atual for diferente da temperatura anterior.
+3.  **Tarefa Final (Desafio):** 
+    *   Implemente a lógica de no-flicker (redesenho dinâmico somente sob variação).
+    *   Implemente a lógica de controle de estado: se a temperatura atingir $40^{\circ}\text{C}$ ou mais, acione o LED vermelho, desligue o verde e mostre `ALERTA` no LCD. Caso contrário, mantenha o LED verde aceso, o vermelho apagado e exiba `OK` no LCD.
 
 ---
 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Temperatura calculada e exibida no display.
-2.  **Etapa Final:** Circuito operando sem piscar a tela ao alterar a posição do potenciômetro.
+2.  **Etapa Final:** Circuito operando sem piscar a tela, com controle de status visual de LEDs e exibição de `OK`/`ALERTA` no LCD a partir de 40 °C.
 3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no código-fonte.
-4.  **Explicação Oral:** Capacidade de explicar as conexões físicas e a lógica matemática do mapeamento e conversão.
+4.  **Explicação Oral:** Capacidade de explicar as conexões físicas, a lógica matemática do mapeamento e a lógica de condicionais para alarmes.
 
 ---
 

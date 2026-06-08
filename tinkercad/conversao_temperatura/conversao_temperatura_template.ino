@@ -27,12 +27,18 @@
 // Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-// TODO: Defina aqui as variáveis globais de estado necessárias para a Etapa 2
+// TODO: Defina as variáveis globais de estado necessárias para a Etapa 2
 int ultimoTempC = -1; 
+
+// TODO: Defina os pinos para os LEDs de alarme (Vermelho no 7 e Verde no 8)
+int pinoVermelho = 7;
+int pinoVerde = 8;
 
 void setup() {
   // Inicializa o LCD de 16 colunas e 2 linhas
   LCD.begin(16, 2);
+  
+  // TODO: Configure os pinos dos LEDs como OUTPUT
   
   // TODO (Etapa 2): Escreva os rótulos estáticos no display de uma vez só
   // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
@@ -48,7 +54,7 @@ void loop() {
   int tempC = 0; 
 
   // TODO (Etapa 2): Estruture um bloco condicional 'if' para que a atualização
-  // do LCD ocorra apenas se o valor de 'tempC' for diferente de 'ultimoTempC'.
+  // do LCD e dos LEDs ocorra apenas se o valor de 'tempC' for diferente de 'ultimoTempC'.
   // Para a Etapa 1, você pode ignorar o 'if' e escrever diretamente.
   
   // {
@@ -58,6 +64,10 @@ void loop() {
     
     // TODO (Etapa 1): Posicione o cursor e exiba o valor de Celsius no LCD
     // TODO (Etapa 1): Posicione o cursor e exiba o valor de Fahrenheit no LCD
+    
+    // TODO (Etapa 2): Controle dos LEDs e Status (Limiar de 40 °C)
+    // Se tempC >= 40: Liga Vermelho, desliga Verde, escreve "AL" no LCD (coluna 13, linha 0)
+    // Senão: Liga Verde, desliga Vermelho, escreve "OK" no LCD (coluna 13, linha 0)
     
     // TODO (Etapa 2): Lembre-se de limpar com espaços ("    ") a posição numérica
     // antes de reescrever o novo valor, para evitar resíduos de números anteriores.

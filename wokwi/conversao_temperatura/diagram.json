@@ -5,7 +5,11 @@
   "parts": [
     { "type": "wokwi-arduino-uno", "id": "uno", "top": 120, "left": 0 },
     { "type": "wokwi-lcd1602", "id": "lcd", "top": -120, "left": -20 },
-    { "type": "wokwi-potentiometer", "id": "pot", "top": 150, "left": -250 }
+    { "type": "wokwi-potentiometer", "id": "pot", "top": 150, "left": -250 },
+    { "type": "wokwi-led", "id": "led_red", "top": 140, "left": 200, "attrs": { "color": "red", "label": "Temp Alta" } },
+    { "type": "wokwi-led", "id": "led_green", "top": 240, "left": 200, "attrs": { "color": "green", "label": "Temp Normal" } },
+    { "type": "wokwi-resistor", "id": "r_red", "top": 180, "left": 150, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r_green", "top": 280, "left": 150, "attrs": { "value": "220" } }
   ],
   "connections": [
     [ "uno:GND.1", "lcd:GND", "black", [] ],
@@ -17,9 +21,18 @@
     [ "uno:4", "lcd:D5", "blue", [] ],
     [ "uno:3", "lcd:D6", "blue", [] ],
     [ "uno:2", "lcd:D7", "blue", [] ],
+    
     [ "uno:GND.3", "pot:GND", "black", [] ],
     [ "uno:5V", "pot:VCC", "red", [] ],
-    [ "uno:A0", "pot:SIG", "green", [] ]
+    [ "uno:A0", "pot:SIG", "green", [] ],
+    
+    [ "uno:7", "r_red:1", "green", [] ],
+    [ "r_red:2", "led_red:A", "red", [] ],
+    [ "uno:GND.3", "led_red:K", "black", [] ],
+    
+    [ "uno:8", "r_green:1", "green", [] ],
+    [ "r_green:2", "led_green:A", "red", [] ],
+    [ "uno:GND.3", "led_green:K", "black", [] ]
   ],
   "dependencies": {}
 }

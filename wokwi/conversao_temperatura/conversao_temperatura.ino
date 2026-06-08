@@ -11,10 +11,16 @@
 // LiquidCrystal(rs, enable, d4, d5, d6, d7)
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
+const int pinoVermelho = 7;
+const int pinoVerde = 8;
+
 int ultimoTempC = -1;
 
 void setup() {
   LCD.begin(16, 2);
+  
+  pinMode(pinoVermelho, OUTPUT);
+  pinMode(pinoVerde, OUTPUT);
   
   // Imprime os textos estáticos
   LCD.setCursor(0, 0);
@@ -45,6 +51,19 @@ void loop() {
     LCD.print("      ");
     LCD.setCursor(7, 1);
     LCD.print(tempF, 1);
+    
+    // Controle de Alarme e Status (Limiar de 40 °C)
+    if (tempC >= 40) {
+      digitalWrite(pinoVermelho, HIGH);
+      digitalWrite(pinoVerde, LOW);
+      LCD.setCursor(13, 0);
+      LCD.print("AL"); // Alerta
+    } else {
+      digitalWrite(pinoVermelho, LOW);
+      digitalWrite(pinoVerde, HIGH);
+      LCD.setCursor(13, 0);
+      LCD.print("OK"); // Normal
+    }
     
     ultimoTempC = tempC;
   }

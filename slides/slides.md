@@ -233,13 +233,18 @@ Por que displays piscam e como otimizar a atualização via software?
 
 # Solução Otimizada da Atividade 1
 
-```cpp {all|11-19|24-26|28-44}
+```cpp {all|3-4|7-9|27-38}
 #include <LiquidCrystal.h>
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
+
+const int pinoVermelho = 7;
+const int pinoVerde = 8;
 int ultimoTempC = -1; // Guarda o valor anterior para evitar reescrita constante
 
 void setup() {
   LCD.begin(16, 2);
+  pinMode(pinoVermelho, OUTPUT);
+  pinMode(pinoVerde, OUTPUT);
   
   // Imprime os rótulos fixos uma única vez
   LCD.setCursor(0, 0);
@@ -264,6 +269,19 @@ void loop() {
     LCD.print("      "); // Limpa o número anterior
     LCD.setCursor(7, 1);
     LCD.print(tempF, 1); // Exibe com 1 casa decimal
+    
+    // Controle de Alarme e Status (Limiar de 40 °C)
+    if (tempC >= 40) {
+      digitalWrite(pinoVermelho, HIGH);
+      digitalWrite(pinoVerde, LOW);
+      LCD.setCursor(13, 0);
+      LCD.print("AL"); // Alerta
+    } else {
+      digitalWrite(pinoVermelho, LOW);
+      digitalWrite(pinoVerde, HIGH);
+      LCD.setCursor(13, 0);
+      LCD.print("OK"); // Normal
+    }
     
     ultimoTempC = tempC;
   }
