@@ -86,7 +86,16 @@ Siga as etapas abaixo para ligar seu circuito pela primeira vez!
 
 ---
 
-### Passo 4: Rodar a Simulação (A Primeira Vitória!)
+### Passo 4: Trazer o Roteiro para o Simulador (Leitura Lado a Lado)
+Para poder ler estas instruções de forma integrada diretamente no simulador:
+1. No painel de arquivos da esquerda no Wokwi Web, clique no botão **New File** (ícone de papel com sinal de mais).
+2. Digite o nome exatamente como **`README.md`** e pressione Enter.
+3. No seu computador local, abra este arquivo [README.md](file:///C:/GitHub/lab_intro/wokwi/00_introducao_wokwi/README.md) e copie todo o seu texto (Ctrl+A e Ctrl+C).
+4. No Wokwi Web, cole o texto na aba `README.md` criada. O simulador mostrará o roteiro formatado diretamente na tela ao lado do circuito e código!
+
+---
+
+### Passo 5: Rodar a Simulação (A Primeira Vitória!)
 1. No painel de circuito da direita, procure pelo **botão redondo verde (Play)** com a palavra *Start Simulation* e clique nele.
 2. *Observe o circuito:* **O LED vermelho conectado ao Arduino começou a piscar lentamente a cada 1 segundo?**
 3. *Observe o painel inferior:* **Uma aba chamada "Serial Monitor" abriu exibindo as mensagens de "LED LIGADO" e "LED DESLIGADO" em tempo real?**
@@ -96,7 +105,7 @@ Siga as etapas abaixo para ligar seu circuito pela primeira vez!
 
 ---
 
-### Passo 5: Modificar o Código (Entendendo o Software)
+### Passo 6: Modificar o Código (Entendendo o Software)
 A programação altera o comportamento físico do hardware. Vamos alterar a velocidade da piscada:
 1. Pare a simulação clicando no botão **Stop (vermelho)**.
 2. No código da aba `sketch.ino`, procure pelas linhas que contêm `delay(1000);`. O número `1000` significa milissegundos (ou seja, 1 segundo).
@@ -110,7 +119,7 @@ A programação altera o comportamento físico do hardware. Vamos alterar a velo
 
 ---
 
-### Passo 6: Modificar o Circuito (Entendendo o Hardware)
+### Passo 7: Modificar o Circuito (Entendendo o Hardware)
 Podemos mudar as propriedades físicas dos componentes diretamente no arquivo de configuração do hardware. Vamos mudar a cor do LED:
 1. Pare a simulação.
 2. No painel esquerdo, clique na aba **`diagram.json`**.
@@ -122,7 +131,7 @@ Podemos mudar as propriedades físicas dos componentes diretamente no arquivo de
 > *   **O LED físico piscando na tela mudou da cor vermelha para a cor azul?**
 > *   *Parabéns!* Você aprendeu a alterar propriedades físicas de componentes virtuais diretamente no arquivo JSON.
 
-### Passo 7: Praticando no Editor Visual (Adicionar e Customizar Componentes)
+### Passo 8: Praticando no Editor Visual (Adicionar e Customizar Componentes)
 
 Agora vamos mexer no hardware usando as mãos (virtualmente) e atalhos rápidos! Vamos adicionar um novo LED ao nosso circuito para praticar:
 1. Pare a simulação clicando em **Stop** (se ela estiver rodando).
@@ -188,7 +197,7 @@ Como vimos, a comunicação serial envia bits fisicamente pelo cabo TX:
 
 ---
 
-### Passo 8: Como Salvar e Entregar o Link
+### Passo 9: Como Salvar e Entregar o Link
 Ao final de cada aula prática, você deve enviar o link da sua simulação para avaliação do professor no Classroom. Veja como é fácil:
 1. No menu superior da tela do Wokwi, clique no botão **Save**.
 2. O Wokwi salvará o projeto na sua conta e a barra de endereços do seu navegador mudará para uma URL única (exemplo: `https://wokwi.com/projects/400039281...`).
@@ -199,12 +208,13 @@ Ao final de cada aula prática, você deve enviar o link da sua simulação para
 
 ## ✅ Checklist de Conclusão da Atividade
 1.  [ ] Criou conta no Wokwi Web.
-2.  [ ] Carregou o circuito (`diagram.json`) e o código base (`sketch.ino`).
-3.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
-4.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
-5.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
-6.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
-7.  [ ] Salvou o projeto e guardou o link de compartilhamento.
+2.  [ ] Criou o arquivo `README.md` no simulador e colou o roteiro para leitura integrada lado a lado.
+3.  [ ] Carregou o circuito (`diagram.json`) e o código base (`sketch.ino`).
+4.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
+5.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
+6.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
+7.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
+8.  [ ] Salvou o projeto e guardou o link de compartilhamento.
 
 *Você concluiu o Experimento Zero com sucesso! Agora você sabe como a informação corre em fios elétricos e como operar o simulador. Você está pronto para iniciar as atividades práticas da VoltLog!*
 
