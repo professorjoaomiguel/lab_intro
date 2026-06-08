@@ -126,18 +126,39 @@ Podemos mudar as propriedades físicas dos componentes diretamente no arquivo de
 
 ## 🛠️ Superpoderes da Interface do Wokwi (Ferramentas Extras)
 
-À medida que as aulas avançam, você precisará usar outros recursos do Wokwi. Veja onde encontrá-los:
+À medida que as aulas avançam, você precisará usar outros recursos do Wokwi. Veja como turbinar seu fluxo de trabalho:
 
 ### 1. Library Manager (Gerenciador de Bibliotecas)
-Se o projeto precisar de um componente inteligente (como uma tela de LCD), você precisará instalar a biblioteca dele.
-*   Na barra de ferramentas lateral esquerda do Wokwi Web, clique no **ícone de livrinhos** (Library Manager).
-*   Clique no botão **+ Add library**, digite o nome (exemplo: `LiquidCrystal`) e selecione-a para instalar no seu projeto instantaneamente!
+Se o projeto precisar de um componente inteligente (como uma tela de LCD), você precisará instalar a biblioteca correspondente:
+* Na barra de ferramentas lateral esquerda do Wokwi Web, clique no **ícone de livrinhos** (Library Manager).
+* Clique em **+ Add library**, digite o nome (exemplo: `LiquidCrystal`) e selecione-a para instalar no seu projeto instantaneamente!
 
-### 2. Atalhos de Teclado Úteis (Produtividade)
-Clique na área de simulação da direita e experimente usar o teclado:
-*   Pressione a tecla **`R`** após selecionar um componente para rotacioná-lo 90 graus (útil na hora de organizar resistores e LEDs).
-*   Segure a tecla **`Ctrl`** e passe o mouse por cima dos pinos do Arduino Uno para ver etiquetas flutuantes explicando a função exata de cada pino.
-*   Pressione a tecla **`?`** para ver o manual completo de atalhos e comandos na tela.
+### 2. Atalhos de Teclado do Editor (Software)
+Escrever código diretamente na web fica muito mais prático com os atalhos integrados:
+* **Autoformatar Código:** Pressione `Alt + Shift + F` (Windows/Linux) ou `⌥ + ⇧ + F` (Mac) para identar e arrumar a estrutura do código automaticamente.
+* **Autocompletar Código:** Pressione `Ctrl + Space` para abrir a caixa de sugestões e autocompletar comandos do Arduino.
+* **Comentar/Descomentar Linha:** Selecione a linha ou bloco e pressione `Ctrl + /` (Windows/Linux) ou `⌘ + /` (Mac).
+* **Iniciar Simulação:** Pressione `Ctrl + Enter` (Windows/Linux) ou `⌘ + Enter` (Mac) para rodar o circuito sem precisar clicar em nada.
+* **Salvar Projeto:** Pressione `Ctrl + S` (Windows/Linux) ou `⌘ + S` (Mac).
+* **Paleta de Comandos:** Pressione `F1` para buscar qualquer funcionalidade interna do editor de código.
+* Para ver a lista completa de atalhos de programação, consulte: [Editor Keyboard Shortcuts](https://docs.wokwi.com/keyboard-shortcuts).
+
+### 3. Segredos do Editor de Diagramas (Hardware)
+Desenhar circuitos fica muito mais rápido se você dominar estas técnicas:
+* **Adicionar Componente:** Pressione a tecla `A` com a área de circuito em foco para abrir o menu de componentes.
+* **Rotacionar Componente:** Selecione um componente e pressione `R` para girá-lo 90 graus.
+* **Duplicar Componente:** Pressione `D` para clonar o componente selecionado rapidamente.
+* **Apagar Componentes ou Fios:** Selecione a peça e pressione `Delete` (ou dê um clique duplo em um fio para removê-lo).
+* **Cores de Fios Instantâneas:** Enquanto arrasta um novo fio ou com um fio selecionado, pressione as teclas numéricas de `0` a `9` ou as letras `C` (Ciano), `L` (Lima), `M` (Magenta), `P` (Roxo/Purple) e `Y` (Amarelo) para mudar a cor na hora. Ex: `0` para Preto (GND), `2` para Vermelho (VCC).
+* **Grade e Réguas:** Pressione `G` para exibir a grade milimétrica e réguas de medição física. Segure `Shift` ao arrastar um componente para desativar a grade temporariamente, ou `Ctrl` / `Alt` para usar uma grade ultrafina.
+* **Copiar e Colar Circuitos:** Segurando a tecla `Shift`, clique em múltiplos componentes. Copie com `Ctrl + C` (o circuito é copiado em JSON para sua área de transferência, incluindo os fios internos!) e cole com `Ctrl + V` em qualquer outro projeto do Wokwi!
+* Para entender todos os recursos de montagem visual, consulte: [Wokwi Diagram Editor Guide](https://docs.wokwi.com/guides/diagram-editor).
+
+### 4. Dicas Avançadas do Monitor Serial
+Como vimos, a comunicação serial envia bits fisicamente pelo cabo TX:
+* **Abertura Inteligente:** Por padrão, o console inferior abre sozinho apenas após o Arduino enviar a primeira linha de texto. Se quiser que ele fique sempre aberto ou inicie como um Plotter Gráfico, você pode editar a seção `"serialMonitor"` no arquivo [diagram.json](file:///C:/GitHub/lab_intro/wokwi/00_introducao_wokwi/diagram.json).
+* **Suporte a Cores:** Você pode imprimir mensagens com cores diferentes (como alertas vermelhos ou logs verdes) usando códigos ANSI especiais se habilitar o modo terminal no [diagram.json](file:///C:/GitHub/lab_intro/wokwi/00_introducao_wokwi/diagram.json).
+* Para detalhes de configuração do console e envio de comandos para o Arduino, consulte: [Wokwi Serial Monitor Guide](https://docs.wokwi.com/guides/serial-monitor).
 
 ---
 
