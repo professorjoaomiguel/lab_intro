@@ -2,7 +2,8 @@
 // Disciplina: Programação Básica
 // Experimento 00: Primeiro Contato com o Wokwi Web (O LED do Painel)
 // 
-// Aluno: _____________________________________ Data: ___/___/_____
+// IMPORTANTE: Preencha seu nome e a data de realização abaixo:
+// Aluno: <PREENCHA SEU NOME COMPLETO AQUI>  Data: DD/MM/AAAA
 
 // -----------------------------------------------------------------------------
 // APRESENTAÇÃO E DIRETRIZES:
