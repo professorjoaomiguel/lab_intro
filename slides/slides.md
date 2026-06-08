@@ -381,6 +381,67 @@ void loop() {
 ```
 
 ---
+
+# Novo Projeto: Telemetria e Autonomia de Combustível
+
+Ampliando a IHM local com display LCD 20x4 e múltiplas variáveis
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+### Requisitos Técnicos
+*   **LCD 20x4 (HD44780):** Inicializado com `LCD.begin(20, 4)`. Oferece 4 linhas de 20 colunas.
+*   **Entradas Analógicas:**
+    *   Volume Restante (A0): $0$ a $50$ Litros.
+    *   Consumo Instantâneo (A1): $0$ a $20$ L/h.
+*   **Tratamento de Exceção (Divisão por Zero):**
+    *   $\text{Autonomia} = \text{Volume} / \text{Consumo}$
+    *   Se o consumo for menor que $0.1$ L/h, a divisão direta causaria travamento lógico ou erro. O software exibe `INF` (infinito).
+
+</div>
+<div>
+
+### Elementos Avançados de Interface
+*   **LED de Reserva:** Um LED vermelho no pino 7 acende e pisca o aviso `!RESERVA!` no LCD se o volume for menor que $5$ Litros.
+*   **Barra de Progresso Dinâmica:** Uma representação em bloco preenchido (`char(255)`) com base na porcentagem de preenchimento do tanque:
+    `Barra: [██████    ] 60%`
+*   **Filtro de Estado:** Atualização sob variação do percentual ou do consumo para evitar flicker no LCD 20x4.
+
+</div>
+</div>
+
+---
+
+# Estrutura do Código: Telemetria de Combustível
+
+```cpp {all|1-4|6-10|11-20|22-26}
+// ... Dentro do loop() após ler entradas mapeadas como float ...
+float percentual = (volume / 50.0) * 100.0;
+int percentualInt = (int)percentual;
+int consumoInt = (int)(consumo * 10.0);
+
+if (percentualInt != ultimoPercentual || consumoInt != ultimoConsumoInt) {
+  // 1. Evita divisão por zero
+  float autonomia = (consumo < 0.1) ? 0.0 : (volume / consumo);
+  
+  // 2. Loop de desenho da Barra de Progresso (Linha 2)
+  LCD.setCursor(0, 2);
+  LCD.print("Barra: [");
+  int blocos = percentualInt / 10;
+  for (int i = 0; i < 10; i++) {
+    if (i < blocos) LCD.write(255); // Bloco cheio (ASCII 255)
+    else LCD.print(" ");           // Espaço vazio
+  }
+  LCD.print("] "); LCD.print(percentualInt); LCD.print("%");
+  
+  // 3. Exibe Autonomia (ou Alerta de Reserva)
+  // ...
+  ultimoPercentual = percentualInt;
+  ultimoConsumoInt = consumoInt;
+}
+```
+
+---
 layout: center
 class: text-center
 ---

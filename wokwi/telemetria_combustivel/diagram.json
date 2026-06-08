@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "author": "João Miguel Lac Roehe",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 180, "left": 0 },
+    { "type": "wokwi-lcd2004", "id": "lcd", "top": -120, "left": -50 },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 200, "left": -250, "attrs": { "label": "Nivel Combustivel" } },
+    { "type": "wokwi-potentiometer", "id": "pot2", "top": 320, "left": -250, "attrs": { "label": "Consumo L/h" } },
+    { "type": "wokwi-led", "id": "led", "top": 150, "left": 220, "attrs": { "color": "red", "label": "Alerta Reserva" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 190, "left": 170, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    [ "uno:GND.1", "lcd:GND", "black", [] ],
+    [ "uno:5V", "lcd:VCC", "red", [] ],
+    [ "uno:12", "lcd:RS", "blue", [] ],
+    [ "uno:GND.2", "lcd:RW", "black", [] ],
+    [ "uno:11", "lcd:E", "blue", [] ],
+    [ "uno:5", "lcd:D4", "blue", [] ],
+    [ "uno:4", "lcd:D5", "blue", [] ],
+    [ "uno:3", "lcd:D6", "blue", [] ],
+    [ "uno:2", "lcd:D7", "blue", [] ],
+    
+    [ "uno:GND.3", "pot1:GND", "black", [] ],
+    [ "uno:5V", "pot1:VCC", "red", [] ],
+    [ "uno:A0", "pot1:SIG", "green", [] ],
+    
+    [ "uno:GND.3", "pot2:GND", "black", [] ],
+    [ "uno:5V", "pot2:VCC", "red", [] ],
+    [ "uno:A1", "pot2:SIG", "yellow", [] ],
+    
+    [ "uno:7", "r1:1", "green", [] ],
+    [ "r1:2", "led:A", "red", [] ],
+    [ "uno:GND.3", "led:K", "black", [] ]
+  ],
+  "dependencies": {}
+}
