@@ -36,16 +36,8 @@
 // -----------------------------------------------------------------------------
 //
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
-// 1. O que acontece com o software se tentarmos dividir por zero no cálculo de 
-//    autonomia? Como o condicional 'if' de proteção resolve essa falha crítica?
-// 2. Qual a vantagem ergonômica de exibir uma barra de progresso visual em um 
-//    painel de telemetria de um veículo em movimento, em comparação com apenas números?
-// 3. Ao fazer o desafio opcional (mudar o limite da reserva de 5.0L para 8.0L), 
-//    quais linhas do código você precisou modificar e o que mudou no disparo físico do alarme?
-//
-// Resposta: ___________________________________________________________________
-// _____________________________________________________________________________
-// _____________________________________________________________________________
+// As perguntas desta atividade devem ser respondidas no arquivo 'folha_respostas.md'.
+// Preencha suas respostas lá e garanta que o arquivo esteja na entrega final.
 
 #include <LiquidCrystal.h>
 

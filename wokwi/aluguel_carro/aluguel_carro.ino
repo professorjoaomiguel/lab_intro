@@ -36,17 +36,9 @@
 // -----------------------------------------------------------------------------
 //
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
-// 1. Por que o cálculo de ponto flutuante (uso do tipo 'float') deve ser feito com
-//    cuidado no Arduino Uno (microcontrolador de 8 bits AVR) em comparação com
-//    operações matemáticas com inteiros?
-// 2. Como a condição composta '||' (OR) ajuda a atualizar o LCD apenas quando
-//    houver mudança real em um dos dois potenciômetros?
-// 3. Ao fazer o desafio opcional (mudar diária SUV para 100 ou Km para 0.10), 
-//    como você alterou o código e como isso se refletiu no cálculo do custo final?
+// As perguntas desta atividade devem ser respondidas no arquivo 'folha_respostas.md'.
+// Preencha suas respostas lá e garanta que o arquivo esteja na entrega final.
 //
-// Resposta: ___________________________________________________________________
-// _____________________________________________________________________________
-// _____________________________________________________________________________
 
 #include <LiquidCrystal.h>
 

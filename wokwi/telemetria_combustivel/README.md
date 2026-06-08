@@ -97,12 +97,32 @@ No `loop()`, adicione a lógica: se o volume do tanque for **menor que 5.0 Litro
 > Execute o teste final de integridade da telemetria da VoltLog:
 > 1. Regule o potenciômetro do tanque para um valor seguro (ex: 20 Litros). A barra deve estar parcialmente preenchida, o LED vermelho apagado e a linha 3 exibindo a autonomia.
 > 2. Gire o sensor até o tanque ficar abaixo de 5.0 Litros. O LED de emergência acende no painel e a tela muda dinamicamente exibindo `!RESERVA!` no lugar do rótulo padrão?
-> *   *Espetacular!* Seu computador de bordo híbrido de telemetria VoltLog está totalmente operacional e homologado. Preencha a **Reflexão Técnica** no cabeçalho do arquivo `.ino` e apresente ao professor!
+> *   *Espetacular!* Seu computador de bordo híbrido de telemetria VoltLog está totalmente operacional e homologado!
 
 > **💡 Altere, teste e veja o que acontece!**
 > Que tal alterar a sensibilidade dos alarmes do tanque? Mude o valor de segurança da reserva de `5.0` Litros para `8.0` Litros no seu código. Simule e esvazie o tanque.
 > *   **O LED vermelho e o aviso dinâmico na tela dispararam antes, quando o tanque atingiu 8 Litros?**
 > *   *Excelente!* Você percebeu como alterar constantes de software é o segredo para calibrar alarmes físicos em hardware real!
+
+---
+
+## 🏁 Como Salvar e Entregar a Atividade
+
+Você possui duas opções para entregar a sua atividade prática no Classroom. Escolha uma delas conforme a orientação do professor:
+
+*   **Opção 1: Enviar o Link do Wokwi (Recomendado):**
+    1. No menu superior da tela do Wokwi Web, clique em **Save**.
+    2. Clique no botão **Share** no topo da tela e copie a URL única gerada.
+    3. Cole este link na entrega da sua atividade no Classroom.
+*   **Opção 2: Enviar os Arquivos Individuais:**
+    1. Clique em **Download Project** no menu do Wokwi (isso baixará um arquivo compactado `.zip`).
+    2. **IMPORTANTE: NÃO envie o arquivo .zip no Classroom.** Extraia a pasta compactada no seu computador.
+    3. Faça o upload de cada um dos arquivos individuais extraídos (`telemetria_combustivel.ino`, `diagram.json`, `README.md` e `folha_respostas.md`) diretamente na entrega da atividade.
+
+> [!IMPORTANT]
+> Antes de entregar, certifique-se de:
+> * Preencher seu **Nome** e **Data** no cabeçalho do código (`telemetria_combustivel.ino`).
+> * Criar o arquivo **`folha_respostas.md`** no simulador e responder a todas as perguntas de Reflexão Técnica nele.
 
 ---
 

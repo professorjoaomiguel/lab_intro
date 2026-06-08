@@ -38,15 +38,8 @@
 // -----------------------------------------------------------------------------
 //
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
-// 1. Por que atualizar o display LCD continuamente a cada iteração do loop() causa 
-//    o efeito visual de piscada (flicker)? 
-// 2. Como a variável global de estado (como 'ultimoTempC') resolve esse problema?
-// 3. Após realizar o desafio opcional (mudar o limite de alerta de 40 °C para 43 °C), 
-//    explique qual linha de código você precisou alterar e o que mudou no circuito físico.
-//
-// Resposta: ___________________________________________________________________
-// _____________________________________________________________________________
-// _____________________________________________________________________________
+// As perguntas desta atividade devem ser respondidas no arquivo 'folha_respostas.md'.
+// Preencha suas respostas lá e garanta que o arquivo esteja na entrega final.
 
 #include <LiquidCrystal.h>
 

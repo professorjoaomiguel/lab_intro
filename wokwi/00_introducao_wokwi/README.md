@@ -197,24 +197,36 @@ Como vimos, a comunicação serial envia bits fisicamente pelo cabo TX:
 
 ---
 
-### Passo 9: Como Salvar e Entregar o Link
-Ao final de cada aula prática, você deve enviar o link da sua simulação para avaliação do professor no Classroom. Veja como é fácil:
-1. No menu superior da tela do Wokwi, clique no botão **Save**.
-2. O Wokwi salvará o projeto na sua conta e a barra de endereços do seu navegador mudará para uma URL única (exemplo: `https://wokwi.com/projects/400039281...`).
-3. Clique no botão **Share** no topo da tela e copie a URL gerada (ou copie direto da barra de endereço).
-4. Cole este link na entrega da sua atividade!
+### Passo 9: Como Salvar e Entregar a Atividade
+
+Você possui duas opções para entregar a sua atividade prática no Classroom. Escolha uma delas conforme a orientação do professor:
+
+*   **Opção 1: Enviar o Link do Wokwi (Recomendado):**
+    1. No menu superior da tela do Wokwi Web, clique no botão **Save**.
+    2. Clique no botão **Share** no topo da tela e copie a URL única gerada (ou copie direto da barra de endereço).
+    3. Cole este link na entrega da sua atividade no Classroom.
+*   **Opção 2: Enviar os Arquivos Individuais:**
+    1. Clique em **Download Project** no menu do Wokwi (isso baixará um arquivo compactado `.zip`).
+    2. **IMPORTANTE: NÃO envie o arquivo .zip no Classroom.** Extraia a pasta compactada no seu computador.
+    3. Faça o upload de cada um dos arquivos individuais extraídos (`sketch.ino`, `diagram.json`, `README.md` e `folha_respostas.md`) diretamente na entrega da atividade.
+
+> [!IMPORTANT]
+> Antes de entregar, certifique-se de:
+> * Preencher seu **Nome** e **Data** no cabeçalho do código (`00_introducao_wokwi.ino`).
+> * Responder às perguntas obrigatórias no arquivo **`folha_respostas.md`** (veja as instruções de criação no checklist abaixo).
 
 ---
 
 ## ✅ Checklist de Conclusão da Atividade
 1.  [ ] Criou conta no Wokwi Web.
 2.  [ ] Criou o arquivo `README.md` no simulador e colou o roteiro para leitura integrada lado a lado.
-3.  [ ] Carregou o circuito (`diagram.json`) e o código base (`sketch.ino`).
-4.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
-5.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
-6.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
-7.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
-8.  [ ] Salvou o projeto e guardou o link de compartilhamento.
+3.  [ ] Criou o arquivo `folha_respostas.md` no simulador e respondeu às reflexões rápidas.
+4.  [ ] Carregou o circuito (`diagram.json`) e o código base (`sketch.ino`).
+5.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
+6.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
+7.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
+8.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
+9.  [ ] Salvou o projeto, fez o download dos arquivos individuais (ou copiou o link) e entregou.
 
 *Você concluiu o Experimento Zero com sucesso! Agora você sabe como a informação corre em fios elétricos e como operar o simulador. Você está pronto para iniciar as atividades práticas da VoltLog!*
 

@@ -92,12 +92,32 @@ No `setup()`, configure os pinos dos LEDs vermelho e verde como saídas (`OUTPUT
 > 1. Coloque a temperatura em 35 °C. O LED verde deve estar aceso e a tela mostrando `OK`.
 > 2. Gire o potenciômetro para passar de 40 °C. O LED verde deve apagar instantaneamente, o LED vermelho acender e a tela exibir `ALERTA`.
 > 3. Retorne a temperatura para menos de 40 °C. O sistema restaura o estado seguro?
-> *   *Sucesso total!* Você concluiu o desafio final do Módulo Térmico de Baterias da VoltLog. Preencha a **Reflexão Técnica** no cabeçalho do arquivo `.ino` e chame o professor para avaliar seu projeto!
+> *   *Sucesso total!* Você concluiu o desafio final do Módulo Térmico de Baterias da VoltLog!
 
 > **💡 Altere, teste e veja o que acontece!**
 > Quer ver o poder da programação em suas mãos? Experimente alterar o limite de temperatura de segurança de `40` para `43` (ou qualquer outro valor de sua escolha) diretamente no seu código. Inicie a simulação novamente.
 > *   **O LED vermelho agora só acende quando ultrapassa esse novo limite?**
 > *   *Percebeu como apenas uma mudança simples no código altera completamente o comportamento físico do circuito?*
+
+---
+
+## 🏁 Como Salvar e Entregar a Atividade
+
+Você possui duas opções para entregar a sua atividade prática no Classroom. Escolha uma delas conforme a orientação do professor:
+
+*   **Opção 1: Enviar o Link do Wokwi (Recomendado):**
+    1. No menu superior da tela do Wokwi Web, clique em **Save**.
+    2. Clique no botão **Share** no topo da tela e copie a URL única gerada.
+    3. Cole este link na entrega da sua atividade no Classroom.
+*   **Opção 2: Enviar os Arquivos Individuais:**
+    1. Clique em **Download Project** no menu do Wokwi (isso baixará um arquivo compactado `.zip`).
+    2. **IMPORTANTE: NÃO envie o arquivo .zip no Classroom.** Extraia a pasta compactada no seu computador.
+    3. Faça o upload de cada um dos arquivos individuais extraídos (`conversao_temperatura.ino`, `diagram.json`, `README.md` e `folha_respostas.md`) diretamente na entrega da atividade.
+
+> [!IMPORTANT]
+> Antes de entregar, certifique-se de:
+> * Preencher seu **Nome** e **Data** no cabeçalho do código (`conversao_temperatura.ino`).
+> * Criar o arquivo **`folha_respostas.md`** no simulador e responder a todas as perguntas de Reflexão Técnica nele.
 
 ---
 

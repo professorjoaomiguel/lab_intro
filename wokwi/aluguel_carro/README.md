@@ -90,12 +90,32 @@ No `setup()`, configure o pino digital da chave slide (pino 9) como entrada util
 > 1. Defina 10 dias e 100 km rodados. Com a chave em Popular (`POP`), o custo deve ser R$ 270,90.
 > 2. Mude a chave para a direita (`SUV`). O painel altera instantaneamente as diárias e atualiza o custo para R$ 724,50?
 > 3. O texto dinâmico `[POP]` mudou para `[SUV]` sem bagunçar o layout?
-> *   *Incrível!* Seu computador de bordo dinâmico de Car Sharing da VoltLog está completo. Preencha a **Reflexão Técnica** no cabeçalho do código e chame o professor para avaliar!
+> *   *Incrível!* Seu computador de bordo dinâmico de Car Sharing da VoltLog está completo!
 
 > **💡 Altere, teste e veja o que acontece!**
 > Que tal recalibrar o modelo de negócios? Experimente alterar o preço da diária do modelo SUV de `80` para `100` (ou a taxa do Km de `0.05` para `0.10`) no código. Rode a simulação e mude a chave seletora.
 > *   **O painel recalculou as diárias e o valor total dinamicamente na tela?**
 > *   *Sensacional!* Você provou que seu software é flexível e que mudar parâmetros de tarifação no código altera imediatamente as contas calculadas pelo veículo!
+
+---
+
+## 🏁 Como Salvar e Entregar a Atividade
+
+Você possui duas opções para entregar a sua atividade prática no Classroom. Escolha uma delas conforme a orientação do professor:
+
+*   **Opção 1: Enviar o Link do Wokwi (Recomendado):**
+    1. No menu superior da tela do Wokwi Web, clique em **Save**.
+    2. Clique no botão **Share** no topo da tela e copie a URL única gerada.
+    3. Cole este link na entrega da sua atividade no Classroom.
+*   **Opção 2: Enviar os Arquivos Individuais:**
+    1. Clique em **Download Project** no menu do Wokwi (isso baixará um arquivo compactado `.zip`).
+    2. **IMPORTANTE: NÃO envie o arquivo .zip no Classroom.** Extraia a pasta compactada no seu computador.
+    3. Faça o upload de cada um dos arquivos individuais extraídos (`aluguel_carro.ino`, `diagram.json`, `README.md` e `folha_respostas.md`) diretamente na entrega da atividade.
+
+> [!IMPORTANT]
+> Antes de entregar, certifique-se de:
+> * Preencher seu **Nome** e **Data** no cabeçalho do código (`aluguel_carro.ino`).
+> * Criar o arquivo **`folha_respostas.md`** no simulador e responder a todas as perguntas de Reflexão Técnica nele.
 
 ---
 
