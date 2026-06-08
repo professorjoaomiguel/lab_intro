@@ -37,22 +37,18 @@
 //   4. Limpe o espaço numérico com espaços em branco ("    ") antes de imprimir
 //      novos números para evitar resíduos numéricos antigos na tela.
 // -----------------------------------------------------------------------------
-//
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
 // As perguntas desta atividade devem ser respondidas no arquivo 'folha_respostas.md'.
 // Preencha suas respostas lá e garanta que o arquivo esteja na entrega final.
+// -----------------------------------------------------------------------------
 
 #include <LiquidCrystal.h>
 
 // Inicializa o display LCD nos pinos do Arduino: RS, Enable, D4, D5, D6, D7
 LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 
-// TODO: Defina as variáveis globais de estado necessárias para a Etapa 2.
-// Elas armazenam o último valor impresso para podermos fazer comparações.
+// Variáveis globais de estado (usadas na Etapa 2)
 int ultimoTempC = -1; 
-
-// TODO: Defina os pinos correspondentes para os LEDs vermelho (alarme) e verde (seguro).
-// Conectamos o LED Vermelho no pino digital 7 e o LED Verde no pino digital 8.
 int pinoVermelho = 7;
 int pinoVerde = 8;
 
@@ -60,13 +56,19 @@ void setup() {
   // Inicializa o LCD configurando a resolução para 20 colunas e 4 linhas
   LCD.begin(20, 4);
   
-  // TODO: Configure os pinos digitais dos LEDs de alarme como saídas.
-  // Dica de pesquisa: use a função 'pinMode(pino, modo)' com o modo 'OUTPUT'.
+  // Configure os pinos digitais dos LEDs de alarme como saídas.
+  pinMode(pinoVermelho, OUTPUT);
+  pinMode(pinoVerde, OUTPUT);
   
-  // TODO (Etapa 2): Escreva os rótulos fixos (labels) que nunca mudam no display.
-  // Escrevê-los aqui garante que eles não sejam apagados e reescritos no loop().
-  // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
-  // Exemplo:
+  // Liga o LED Verde e apaga o LED Vermelho por padrão ao ligar o painel
+  digitalWrite(pinoVerde, HIGH);
+  digitalWrite(pinoVermelho, LOW);
+  
+  // ---------------------------------------------------------------------------
+  // [INSTRUÇÃO ETAPA 2: Display Sem Tremulação (No-Flicker)]
+  // Escrever textos estáticos no setup() evita que a tela pisque a cada ciclo.
+  // TODO: Ao implementar a Etapa 2, descomente as 8 linhas abaixo:
+  // ---------------------------------------------------------------------------
   // LCD.setCursor(0, 0);
   // LCD.print("PAINEL DE TEMPERATURA");
   // LCD.setCursor(0, 1);
@@ -78,45 +80,91 @@ void setup() {
 }
 
 void loop() {
-  // TODO: Realize a leitura analógica do sensor de temperatura (A0).
-  // Dica de pesquisa: use a função 'analogRead(pino)'. Ela retorna um inteiro de 0 a 1023.
-  int potenciometro = 0; 
+  // 1. Leitura analógica do potenciômetro (sensor de temperatura no pino A0)
+  int potenciometro = analogRead(A0); 
   
-  // TODO: Converta o valor bruto lido para graus Celsius (escala de 0 a 60).
-  // Dica de pesquisa: use a função 'map(valor, deMin, deMax, paraMin, paraMax)'.
-  int tempC = 0; 
+  // 2. Mapeamento de escala: converte a leitura analógica (0-1023) para Celsius (0-60)
+  int tempC = map(potenciometro, 0, 1023, 0, 60); 
 
-  // TODO (Etapa 2): Implemente o Filtro de Estado.
-  // Crie uma estrutura condicional 'if (tempC != ultimoTempC)' para envelopar os cálculos,
-  // escrita no display e acionamento de LEDs. Isso otimiza o uso da CPU e previne o flicker.
-  // (Para validar a Etapa 1, você pode fazer sem este 'if').
+  // 3. Conversão física: calcula a temperatura correspondente em Fahrenheit
+  float tempF = tempC * 1.8 + 32.0;
+
+  // ===========================================================================
+  // [CÓDIGO ATIVO] ETAPA 1: PAINEL SIMPLES (COM TREMULAÇÃO / FLICKER)
+  // Este bloco funciona imediatamente ao iniciar o simulador. Ele limpa e
+  // reescreve todo o LCD a cada 100ms, fazendo a tela piscar.
+  // ---------------------------------------------------------------------------
+  // TODO: Quando for fazer a Etapa 2 (Módulo Sem Tremulação e com Alertas):
+  // Comente as linhas da Etapa 1 abaixo (coloque '//' no início de cada linha).
+  // ===========================================================================
   
-  // {
-    // TODO: Calcule a conversão matemática de Celsius para Fahrenheit.
-    // Fórmula física: Fahrenheit = Celsius * (9.0 / 5.0) + 32.0.
-    // ATENÇÃO: use '9.0' e '5.0' para indicar números de ponto flutuante, evitando divisão inteira.
-    float tempF = 0.0;
-    
-    // TODO (Etapa 1): Posicione o cursor e exiba o valor de Celsius na Linha 1 (coluna 13).
-    // Dica: Use LCD.setCursor(coluna, linha) para ir até o local correto.
-    // Lembre-se (Etapa 2) de imprimir espaços em branco ("   ") para limpar resíduos antigos.
-    
-    // TODO (Etapa 1): Posicione o cursor e exiba o valor de Fahrenheit na Linha 2 (coluna 13).
-    // Dica: LCD.print(tempF, 1) exibe o valor float com apenas 1 casa decimal.
-    
-    // TODO (Etapa 2): Controle dos LEDs de Alarme e Status no LCD baseado no limiar de 40 °C.
-    // Dica de pesquisa: use 'digitalWrite(pino, estado)' com 'HIGH' e 'LOW'.
-    // - Se a temperatura atual for igual ou maior que 40 °C:
-    //   -> Acenda o LED Vermelho e apague o LED Verde.
-    //   -> Vá até a coluna 8 da linha 3 e imprima "ALERTA".
-    // - Caso contrário (menor que 40 °C):
-    //   -> Apague o LED Vermelho e acenda o LED Verde.
-    //   -> Vá até a coluna 8 da linha 3 e imprima "OK" seguido de espaços para limpar.
-    
-    // TODO (Etapa 2): Atualize a variável de controle de estado anterior.
-    // Isso garante que no próximo ciclo a comparação condicional funcione.
-    
-  // }
+  LCD.clear();
   
-  delay(100); // Pequena pausa (100ms) para estabilização de leitura do sensor
+  LCD.setCursor(0, 0);
+  LCD.print("PAINEL DE TEMPERATURA");
+  
+  LCD.setCursor(0, 1);
+  LCD.print("Celsius: ");
+  LCD.print(tempC);
+  LCD.print(" oC");
+  
+  LCD.setCursor(0, 2);
+  LCD.print("Fahrenheit: ");
+  LCD.print(tempF, 1);
+  LCD.print(" oF");
+  
+  LCD.setCursor(0, 3);
+  LCD.print("Status: OK");
+
+  // ===========================================================================
+  // [CÓDIGO INATIVO] ETAPA 2: PAINEL PROFISSIONAL (NO-FLICKER E ALARME DE LED)
+  // ---------------------------------------------------------------------------
+  // TODO: Para ativar o painel profissional sem flicker e com os LEDs ativos:
+  // 1. Remova as marcas de comentário de bloco (/* e */) das linhas abaixo.
+  // 2. Complete o código onde há marcações "COMPLETE AQUI".
+  // ===========================================================================
+  
+  /*
+  if (tempC != ultimoTempC) {
+    
+    // Atualiza Celsius na coluna 13, linha 1 (limpando resíduos antigos)
+    LCD.setCursor(13, 1);
+    LCD.print("   "); 
+    LCD.setCursor(13, 1);
+    LCD.print(tempC);
+    
+    // Atualiza Fahrenheit na coluna 13, linha 2 (limpando resíduos antigos)
+    LCD.setCursor(13, 2);
+    LCD.print("     "); 
+    LCD.setCursor(13, 2);
+    LCD.print(tempF, 1);
+    
+    // Lógica do Alarme de Temperatura (Limite: 40 °C)
+    if (tempC >= 40) {
+      // Bateria quente! Acende o vermelho e apaga o verde.
+      digitalWrite(pinoVermelho, HIGH);
+      // TODO: Apague o LED verde enviando sinal LOW nele:
+      // digitalWrite(pinoVerde, ...); // <-- COMPLETE AQUI
+      
+      // Imprime "ALERTA" na coluna 8, linha 3
+      LCD.setCursor(8, 3);
+      LCD.print("ALERTA");
+    } 
+    else {
+      // Temperatura segura! Apaga o vermelho e acende o verde.
+      // TODO: Apague o LED vermelho enviando sinal LOW nele:
+      // digitalWrite(pinoVermelho, ...); // <-- COMPLETE AQUI
+      digitalWrite(pinoVerde, HIGH);
+      
+      // Imprime "OK    " na coluna 8, linha 3 (espaços em branco apagam a palavra ALERTA anterior)
+      LCD.setCursor(8, 3);
+      LCD.print("OK    ");
+    }
+    
+    // Atualiza o estado anterior para a próxima comparação
+    ultimoTempC = tempC;
+  }
+  */
+
+  delay(100); // Pausa de estabilidade
 }

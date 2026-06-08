@@ -17,7 +17,7 @@
 //   1. Configure o pino do LED físico de alerta de reserva (Pino 7) como OUTPUT.
 //   2. Leia o sensor de nível A0 e converta para Volume (faixa de 0.0 a 50.0 Litros).
 //   3. Leia o sensor de fluxo A1 e converta para Consumo (faixa de 0.0 a 20.0 L/h).
-//   4. Calcule a autonomia (Volume / Consumo). 
+//   4. Calcule a autonomia (Volume / Consumo).
 //      ATENÇÃO: proteja o código contra divisão por zero (caso consumo < 0.1 L/h,
 //      situação em que o utilitário está rodando 100% no motor elétrico).
 //   5. Exiba os valores numéricos de litros, consumo e autonomia no LCD 20x4.
@@ -39,6 +39,7 @@
 // 🧠 REFLEXÃO TÉCNICA (Obrigatório):
 // As perguntas desta atividade devem ser respondidas no arquivo 'folha_respostas.md'.
 // Preencha suas respostas lá e garanta que o arquivo esteja na entrega final.
+// -----------------------------------------------------------------------------
 
 #include <LiquidCrystal.h>
 
@@ -48,74 +49,160 @@ LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 // Pino do LED vermelho indicador de combustível em reserva
 int pinoAlerta = 7;
 
-// TODO: Defina as variáveis globais de estado para reter o último percentual do tanque e 
-// o último consumo (em formato inteiro) exibidos. Elas impedem redesenhos constantes no loop().
+// Variáveis globais de estado para o Filtro de Estado (Etapa 2)
 int ultimoPercentual = -1;
 int ultimoConsumoInt = -1;
 
 void setup() {
   // Inicializa o LCD de 20 colunas por 4 linhas
   LCD.begin(20, 4);
-  
-  // TODO: Configure o pino do LED de alerta como saída (OUTPUT)
-  
-  // TODO (Etapa 2): Desenhe a moldura estática inicial no display de uma única vez no setup().
-  // Linha 0 (Cursor 0,0) -> "PAINEL DE TELEMETRIA"
-  // Linha 1 (Cursor 0,1) -> "Tanque:     L"
-  // Linha 3 (Cursor 0,3) -> "Autonomia:        h"
+
+  // Configura o LED de alerta como saída e garante que começa apagado
+  pinMode(pinoAlerta, OUTPUT);
+  digitalWrite(pinoAlerta, LOW);
+
+  // ---------------------------------------------------------------------------
+  // [INSTRUÇÃO ETAPA 2: Layout Fixo No-Flicker]
+  // Escrever os textos fixos aqui evita que pisquem a cada ciclo do loop().
+  // TODO: Ao implementar a Etapa 2, descomente as 6 linhas abaixo:
+  // ---------------------------------------------------------------------------
+  // LCD.setCursor(0, 0);
+  // LCD.print("PAINEL DE TELEMETRIA");
+  // LCD.setCursor(0, 1);
+  // LCD.print("Tanque:     L");
+  // LCD.setCursor(0, 3);
+  // LCD.print("Autonomia:        h");
 }
 
 void loop() {
-  // TODO: Leia o sensor de nível (A0) e mapeie proporcionalmente para 0.0 a 50.0 litros (volume).
-  // Dica: Use cálculo em ponto flutuante: volume = (analogRead(A0) / 1023.0) * 50.0
-  float volume = 0.0; 
+  // 1. Leitura analógica do sensor de nível (A0) -> Volume em Litros (0.0 a 50.0 L)
+  float volume = (analogRead(A0) / 1023.0) * 50.0;
 
-  // TODO: Leia o sensor de consumo (A1) e mapeie proporcionalmente para 0.0 a 20.0 L/h (consumo).
-  float consumo = 0.0; 
+  // 2. Leitura analógica do sensor de fluxo (A1) -> Consumo em L/h (0.0 a 20.0 L/h)
+  float consumo = (analogRead(A1) / 1023.0) * 20.0;
 
-  // Calcule o percentual inteiro atual do tanque (0 a 100%) para uso no Filtro de Estado
+  // 3. Cálculo do percentual do tanque (0 a 100%) — usado no Filtro de Estado e na barra
   float percentual = (volume / 50.0) * 100.0;
   int percentualInt = (int)percentual;
-  
-  // Calcule o consumo como inteiro com 1 casa decimal (multiplicado por 10) para o Filtro de Estado
+
+  // Converte o consumo para inteiro com 1 casa decimal (ex: 7.3 -> 73) para o Filtro de Estado
   int consumoInt = (int)(consumo * 10.0);
 
-  // TODO (Etapa 2): Filtro de Estado. Envolva toda a atualização do LCD dentro de um bloco 'if':
-  // if (percentualInt != ultimoPercentual || consumoInt != ultimoConsumoInt)
-  
-  // {
-    // TODO: Proteção contra Divisão por Zero.
-    // Se o consumo for muito baixo (menor que 0.1 L/h, indicando uso exclusivo do motor elétrico),
-    // defina a autonomia de forma segura ou avise o sistema. Caso contrário, calcule (volume / consumo).
-    float autonomia = 0.0;
-    bool divisaoPorZero = false;
+  // 4. Proteção contra Divisão por Zero
+  //    Se consumo < 0.1 L/h, o carro está em modo 100% elétrico — não há combustível sendo consumido.
+  float autonomia = 0.0;
+  bool divisaoPorZero = false;
 
-    // TODO: Imprima o volume de combustível atualizado no LCD (Linha 1).
-    // Dica: Posicione na coluna 8 da linha 1. Imprima "     " antes para limpar o número antigo.
-    
-    // TODO: Imprima o consumo atualizado no LCD (Linha 1).
-    // Dica: Posicione na coluna 13 da linha 1. Use LCD.print(consumo, 1) e escreva "/h".
-    
-    // TODO (Etapa 2): Desenhe a Barra de Progresso textual horizontal de 10 segmentos (Linha 2).
-    // O número de blocos preenchidos será de 0 a 10 (blocos = percentualInt / 10).
-    // Utilize um loop 'for (int i = 0; i < 10; i++)' para imprimir o caractere sólido 'char(255)'
-    // nas posições correspondentes e espaços em branco " " nas posições vazias da barra.
-    // Formato final esperado: "Barra: [██████    ] 60%"
-    
-    // TODO: Imprima a autonomia calculada no LCD (Linha 3).
-    // Dica: Se for divisão por zero, imprima "INF". Caso contrário, imprima o valor real com 2 casas decimais.
-    
-    // TODO (Etapa 2): Lógica e Alerta de Reserva.
-    // - Se o volume atual for menor que 5.0 Litros:
-    //   -> Ative o pino do LED de alerta (HIGH).
-    //   -> Posicione no início da linha 3 e escreva "!RESERVA! ".
-    // - Caso contrário (normal):
-    //   -> Desative o pino do LED de alerta (LOW).
-    //   -> Posicione no início da linha 3 e restaure o rótulo "Autonomia:".
-    
-    // TODO (Etapa 2): Atualize as variáveis globais de controle de estado anterior.
-    
-  // }
-  
+  if (consumo < 0.1) {
+    divisaoPorZero = true;  // Flag de segurança ativada: evita divisão por zero
+    autonomia = 0.0;
+  } else {
+    autonomia = volume / consumo;  // Calcula: quanto tempo o tanque ainda dura (em horas)
+  }
+
+  // ===========================================================================
+  // [CÓDIGO ATIVO] ETAPA 1: PAINEL SIMPLES (COM TREMULAÇÃO / FLICKER)
+  // Este bloco funciona imediatamente ao iniciar o simulador.
+  // ---------------------------------------------------------------------------
+  // TODO: Quando for implementar a Etapa 2 (No-Flicker), comente as linhas desta
+  // seção colocando '//' no início de cada linha.
+  // ===========================================================================
+
+  LCD.clear();
+
+  LCD.setCursor(0, 0);
+  LCD.print("PAINEL DE TELEMETRIA");
+
+  LCD.setCursor(0, 1);
+  LCD.print("Tanque: ");
+  LCD.print(volume, 1);
+  LCD.print(" L");
+
+  LCD.setCursor(0, 2);
+  LCD.print("Consumo: ");
+  LCD.print(consumo, 1);
+  LCD.print(" L/h");
+
+  LCD.setCursor(0, 3);
+  if (divisaoPorZero) {
+    LCD.print("Autonomia: INF (elet)");
+  } else {
+    LCD.print("Autonomia: ");
+    LCD.print(autonomia, 1);
+    LCD.print(" h");
+  }
+
+  // Alarme de reserva ativo mesmo na Etapa 1
+  if (volume < 5.0) {
+    digitalWrite(pinoAlerta, HIGH);
+  } else {
+    digitalWrite(pinoAlerta, LOW);
+  }
+
+  // ===========================================================================
+  // [CÓDIGO INATIVO] ETAPA 2: PAINEL PROFISSIONAL (NO-FLICKER + BARRA GRÁFICA)
+  // ---------------------------------------------------------------------------
+  // TODO: Para ativar o painel profissional:
+  // 1. Remova as marcas de comentário de bloco (/* e */) das linhas abaixo.
+  // 2. Complete o código onde há marcações "COMPLETE AQUI".
+  // ===========================================================================
+
+  /*
+  if (percentualInt != ultimoPercentual || consumoInt != ultimoConsumoInt) {
+
+    // Atualiza volume na coluna 8, linha 1 (limpa resíduos com espaços)
+    LCD.setCursor(8, 1);
+    LCD.print("      ");
+    LCD.setCursor(8, 1);
+    LCD.print(volume, 1);
+
+    // Desenha a Barra de Progresso Gráfica na linha 2
+    int blocos = percentualInt / 10;  // De 0 a 10 blocos preenchidos
+    LCD.setCursor(0, 2);
+    LCD.print("Barra: [");
+    for (int i = 0; i < 10; i++) {
+      if (i < blocos) {
+        LCD.write(255);   // Bloco sólido preenchido (caractere ASCII 255)
+      } else {
+        LCD.print(" ");   // Espaço vazio
+      }
+    }
+    LCD.print("] ");
+    LCD.print(percentualInt);
+    LCD.print("%  ");
+
+    // Atualiza a autonomia na coluna 11, linha 3
+    LCD.setCursor(11, 3);
+    LCD.print("         ");
+    LCD.setCursor(11, 3);
+    if (divisaoPorZero) {
+      LCD.print("INF  ");
+    } else {
+      LCD.print(autonomia, 1);
+    }
+
+    // Lógica do LED e etiqueta de reserva
+    if (volume < 5.0) {
+      // TODO: Acenda o LED de alerta (pinoAlerta = HIGH):
+      // digitalWrite(pinoAlerta, ...);  // <-- COMPLETE AQUI
+
+      // Substitui o rótulo da linha 3 pelo aviso de emergência
+      LCD.setCursor(0, 3);
+      LCD.print("!RESERVA! ");
+    } else {
+      // TODO: Apague o LED de alerta (pinoAlerta = LOW):
+      // digitalWrite(pinoAlerta, ...);  // <-- COMPLETE AQUI
+
+      // Restaura o rótulo padrão da linha 3
+      LCD.setCursor(0, 3);
+      LCD.print("Autonomia:");
+    }
+
+    // TODO: Atualize as duas variáveis de estado anterior abaixo:
+    // ultimoPercentual = percentualInt;   // <-- COMPLETE AQUI
+    // ultimoConsumoInt = consumoInt;      // <-- COMPLETE AQUI
+  }
+  */
+
   delay(100); // Pausa do loop principal
 }

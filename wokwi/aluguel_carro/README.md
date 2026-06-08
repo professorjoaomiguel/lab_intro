@@ -1,13 +1,13 @@
 # Experimento 02: Computador de Tarifação Dinâmica - Car Sharing (VoltLog)
 
-Este guia orienta o desenvolvimento do segundo experimento prático de Arduino no simulador Wokwi Web. Siga cada passo, verifique seus resultados e comemore suas conquistas à medida que avança na programação do painel do veículo!
+Este guia orienta o desenvolvimento do segundo experimento prático de Arduino no simulador Wokwi Web. O código inicial **já funciona** — você vai observá-lo, entendê-lo e depois evoluí-lo em etapas!
 
 ---
 
 ## 🚀 Ponto de Partida: Onde você está?
 Você continua como desenvolvedor na startup de mobilidade **VoltLog**. O utilitário elétrico de entregas está equipado com:
 1.  Um circuito montado no Wokwi Web contendo um display LCD 20x4, dois potenciômetros (para simular a quantidade de dias de turno e os quilômetros rodados pelo entregador) e uma chave seletora slide (para mudar a categoria de veículo).
-2.  Um código inicial limpo em [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino) contendo as marcações `# TODO`.
+2.  O arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino) — que já vem com a **Etapa 1 funcional** para você observar e depois modificar.
 
 ---
 
@@ -36,65 +36,86 @@ Consulte a documentação oficial do Arduino se tiver dúvidas de sintaxe:
 
 ---
 
-### Passo 1: Lendo as Duas Variáveis Analógicas (Entrada)
-No `loop()`, leia o potenciômetro conectado ao pino `A0` (tempo) e converta-o de `0-1023` para a faixa de `1 a 30` dias usando `map()`. Em seguida, leia o potenciômetro conectado a `A1` (distância) e mapeie para a faixa de `1 a 1000` km.
+### Passo 1: Veja o Painel Funcionando (Partida)
 
-> **🧪 Teste e Verifique:** 
-> Insira comandos `Serial` para imprimir as variáveis `tempo` e `distancia`. Inicie a simulação e abra o monitor serial.
-> *   **Ao girar o potenciômetro 1, o valor muda de 1 a 30?**
-> *   **Ao girar o potenciômetro 2, o valor muda de 1 a 1000?**
-> *   *Excelente!* Você controlou com sucesso duas variáveis analógicas independentes. **Seu primeiro Quick Win!** (Pode remover os comandos Serial de teste).
-
----
-
-### Passo 2: A Conta Matemática (Processamento)
-Calcule o valor total da locação nas condições básicas padrão:
-*   Preço da diária: **R$ 30,00**.
-*   Preço por quilômetro rodado: **R$ 0,01**.
-*   Desconto especial: **10%** sobre o valor total ($Custo = (Dias \times 30.0 + Distancia \times 0.01) \times 0.90$).
-
----
-
-### Passo 3: Apresentando os Resultados (Saída com Flicker)
-No `setup()`, inicialize o LCD com `LCD.begin(20, 4);`. No `loop()`, limpe a tela (`LCD.clear()`) e exiba a quantidade de dias, os quilômetros rodados e o valor total a pagar no LCD.
-
-> **🧪 Teste e Verifique (Entrega Intermediária):**
-> Inicie a simulação e gire ambos os potenciômetros.
-> *   **O LCD mostra a contagem de tempo, km e o valor total correto?**
-> *   *Parabéns!* A matemática está correta e a tela atualiza as informações. A tela pisca rápido por causa do clear, mas a lógica está validada! **Você completou a Etapa Intermediária.**
-
----
-
-### Passo 4: Otimizando o Painel (Filtro de Estado Composto)
-Agora vamos eliminar a oscilação da tela para criar um painel profissional:
-1. Mova os textos fixos (`LOCADORA SAI FRENTE`, `Tempo:    dias`, `Dist:     km  [   ]`, `Total: R$ `) para o `setup()`.
-2. No `loop()`, envolva toda a escrita do LCD em um `if` composto usando o operador lógico OR (`||`):
-   `if (tempo != ultimoTempo || distancia != ultimaDistancia || categoria != ultimaCategoria)`
-3. Limpe as casas numéricas dinâmicas com espaços em branco `"   "` antes de reescrever novos valores. Atualize as variáveis globais de estado ao final do `if`.
+Clique em ▶️ **Play** para iniciar a simulação. O código já está funcionando!
 
 > **🧪 Teste e Verifique:**
-> Inicie a simulação. Gire os potenciômetros.
-> *   **A tela parou de piscar?**
-> *   **Os números variam perfeitamente sem deixar caracteres "órfãos" residuais na tela?**
-> *   *Sucesso!* Você implementou um Filtro de Estado Composto profissional.
+> Gire os dois potenciômetros e clique na chave slide para alternar entre POP e SUV.
+> *   **Os dias, km e valor total atualizam corretamente no LCD?**
+> *   **O rótulo [POP] ou [SUV] muda quando você clica na chave?**
+> *   **A tela está piscando?** Isso é normal nesta etapa — causado pelo `LCD.clear()`. Vamos resolver isso na Etapa 2.
 
 ---
 
-### Passo 5: Integrando a Categoria do Veículo (Desafio Final)
-No `setup()`, configure o pino digital da chave slide (pino 9) como entrada utilizando o resistor de pull-up interno: `pinMode(pinoChave, INPUT_PULLUP)`. No `loop()`, faça a leitura da chave (`digitalRead(pinoChave)`).
-*   Se a chave estiver em `LOW` (Popular - `POP`): Diária = R$ 30,00 | Km = R$ 0,01.
-*   Se a chave estiver em `HIGH` (Utilitário - `SUV`): Diária = R$ 80,00 | Km = R$ 0,05.
-*   Exiba o rótulo correspondente no display na coluna 15 da linha 2 (ex: `[POP]` ou `[SUV]`).
+### Passo 2: Entendendo as Duas Leituras Analógicas
 
-> **🧪 Teste e Verifique (Entrega Final):**
-> Faça o teste de aceitação final:
-> 1. Defina 10 dias e 100 km rodados. Com a chave em Popular (`POP`), o custo deve ser R$ 270,90.
-> 2. Mude a chave para a direita (`SUV`). O painel altera instantaneamente as diárias e atualiza o custo para R$ 724,50?
-> 3. O texto dinâmico `[POP]` mudou para `[SUV]` sem bagunçar o layout?
-> *   *Incrível!* Seu computador de bordo dinâmico de Car Sharing da VoltLog está completo!
+Observe nas linhas 82–87 do código:
+
+```cpp
+int tempo    = map(analogRead(A0), 0, 1023, 1, 30);
+int distancia = map(analogRead(A1), 0, 1023, 1, 1000);
+```
+
+Dois potenciômetros são lidos independentemente — cada um em um pino analógico diferente (`A0` e `A1`). A função `map()` converte a leitura bruta (0–1023) para a escala de negócio.
+
+> **🧪 Teste e Verifique:**
+> Verifique no paper: se `A0` está na metade (~512), quantos dias isso representa? E se `A1` está no máximo (1023), qual a distância?
+
+---
+
+### Passo 3: Entendendo a Lógica de Tarifação
+
+Observe nas linhas 90–102 como a categoria influencia o cálculo:
+
+```cpp
+float diaria = 30.0;    // Padrão: Popular
+float taxaKm = 0.01;
+if (categoria == HIGH) {
+    diaria = 80.0;      // SUV: diária maior
+    taxaKm = 0.05;
+}
+float valorTotal = (tempo * diaria + distancia * taxaKm) * 0.90;
+```
+
+A chave slide controla qual `if` é executado — isso altera as variáveis `diaria` e `taxaKm` antes do cálculo.
+
+> **🧪 Teste e Verifique (Entrega Intermediária):**
+> Configure 10 dias e 100 km. Com a chave em POP, o valor deve ser:
+> `(10 × 30 + 100 × 0.01) × 0.90 = R$ 270,90`
+> *   **O valor no LCD bate com o calculado?** Parabéns — a matemática está certa! **Você completou a Etapa Intermediária!**
+
+---
+
+### Passo 4: Ativando o Painel Profissional — Etapa 2 (No-Flicker)
+
+Agora vamos eliminar o *flicker* e criar um painel profissional:
+
+**A) Desativar a Etapa 1:** Adicione `//` no início de cada linha da seção `ETAPA 1` no `loop()` (o bloco que começa com `LCD.clear()` e vai até o `LCD.print(valorTotal, 2)`).
+
+**B) Ativar a Etapa 2:** Remova os comentários `/*` e `*/` que envolvem o bloco da Etapa 2.
+
+**C) Completar as três linhas que faltam na Etapa 2:**
+
+Localize os comentários `// <-- COMPLETE AQUI` dentro do bloco `if (tempo != ultimoTempo ...)` e preencha:
+
+```cpp
+ultimoTempo = tempo;          // substitui o comentário "COMPLETE AQUI"
+ultimaDistancia = distancia;  // substitui o comentário "COMPLETE AQUI"
+ultimaCategoria = categoria;  // substitui o comentário "COMPLETE AQUI"
+```
+
+**D) Ativar os textos estáticos no `setup()`:** Descomente as 8 linhas do bloco `[INSTRUÇÃO ETAPA 2]` no `setup()`, removendo o `//` do início de cada uma.
+
+> **🧪 Teste e Verifique:**
+> Inicie a simulação e gire os potenciômetros.
+> *   **A tela parou de piscar completamente?**
+> *   **Os números atualizam sem deixar resíduos de dígitos antigos na tela?**
+> *   **Ao mudar a chave para SUV, o valor recalcula instantaneamente?**
+> *   *Sucesso!* Você implementou um Filtro de Estado Composto profissional.
 
 > **💡 Altere, teste e veja o que acontece!**
-> Que tal recalibrar o modelo de negócios? Experimente alterar o preço da diária do modelo SUV de `80` para `100` (ou a taxa do Km de `0.05` para `0.10`) no código. Rode a simulação e mude a chave seletora.
+> Que tal recalibrar o modelo de negócios? Experimente alterar o preço da diária do modelo SUV de `80.0` para `100.0` (ou a taxa do Km de `0.05` para `0.10`) no código. Rode a simulação e mude a chave seletora.
 > *   **O painel recalculou as diárias e o valor total dinamicamente na tela?**
 > *   *Sensacional!* Você provou que seu software é flexível e que mudar parâmetros de tarifação no código altera imediatamente as contas calculadas pelo veículo!
 
@@ -116,7 +137,7 @@ Você possui duas opções para entregar a sua atividade prática no Classroom. 
 > [!IMPORTANT]
 > Antes de entregar, certifique-se de:
 > * Preencher seu **Nome** e **Data** no cabeçalho do código (`aluguel_carro.ino`).
-> * Criar o arquivo **`folha_respostas.md`** no simulador e responder a todas as perguntas de Reflexão Técnica nele.
+> * Responder a todas as perguntas de Reflexão Técnica no arquivo **`folha_respostas.md`**.
 
 ---
 

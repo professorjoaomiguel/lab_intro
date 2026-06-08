@@ -1,13 +1,13 @@
 # Experimento 01: Monitor Térmico das Baterias (VoltLog)
 
-Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino no simulador Wokwi Web. Ele foi projetado em pequenos passos para garantir que você valide seu progresso a cada etapa e conquiste vitórias rápidas!
+Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino no simulador Wokwi Web. O código inicial **já funciona** — você vai observá-lo, entendê-lo e depois evoluí-lo em etapas!
 
 ---
 
 ## 🚀 Ponto de Partida: Onde você está?
 Você é um desenvolvedor na startup de mobilidade **VoltLog**. O utilitário elétrico de entregas está na oficina e você tem em mãos:
 1.  Um circuito montado no Wokwi Web contendo um display LCD 20x4, um potenciômetro (que simula o sensor de temperatura do banco de baterias) e dois LEDs indicadores (verde e vermelho).
-2.  Um código inicial limpo em [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino) contendo as marcações `# TODO`.
+2.  O arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino) — que já vem com a **Etapa 1 funcional** para você observar e depois modificar.
 
 ---
 
@@ -39,61 +39,87 @@ Siga os passos abaixo, teste o circuito a cada etapa e comemore suas conquistas!
 
 ---
 
-### Passo 1: Capturando o Sinal Físico (Entrada)
-No `loop()`, implemente a leitura analógica do potenciômetro conectado no pino `A0` usando a função `analogRead()`. Salve o valor na variável `potenciometro`.
+### Passo 1: Veja o Painel Funcionando (Partida)
 
-> **🧪 Teste e Verifique:** 
-> Insira temporariamente o comando `Serial.begin(9600);` no `setup()` e `Serial.println(potenciometro);` no `loop()`. Inicie a simulação e abra o *Serial Monitor* no canto inferior. Gire o potenciômetro.
-> *   **Você viu os números variarem suavemente entre 0 e 1023?**
-> *   *Se sim, parabéns!* Você acabou de capturar uma informação do mundo físico e digitalizá-la no microcontrolador. **Sua primeira vitória!** (Pode remover os comandos Serial de teste).
-
----
-
-### Passo 2: Calibrando as Escalas (Processamento)
-Converta a leitura do potenciômetro (`0` a `1023`) para a escala de temperatura da bateria (`0` a `60` graus Celsius). Use a função `map()`.
+Clique em ▶️ **Play** para iniciar a simulação. O código já está funcionando!
 
 > **🧪 Teste e Verifique:**
-> Faça a conta no papel: se o potenciômetro estiver exatamente no meio (leitura `512`), a temperatura deve ser próxima de `30` °C. Se estiver no máximo (`1023`), deve ser `60` °C. 
-> *   *Dica de Ouro:* Para converter Celsius para Fahrenheit, aplique a fórmula: `tempF = tempC * 1.8 + 32.0;`. Use números decimais para não perder a precisão do cálculo em C++!
+> Gire o potenciômetro azul no simulador.
+> *   **Os valores de Celsius e Fahrenheit mudam no LCD?**
+> *   **A tela está piscando rapidamente?** Isso é normal nesta etapa — é o efeito *flicker* causado pelo `LCD.clear()` que apaga e reescreve tudo a cada 100ms.
+> *   *Parabéns!* O circuito está funcionando. Agora você vai entender o código e começar a evoluí-lo.
 
 ---
 
-### Passo 3: Exibindo no Painel do Carro (Saída)
-Inicialize o LCD no `setup()` com `LCD.begin(20, 4);`. No `loop()`, limpe a tela com `LCD.clear()`, use `LCD.setCursor()` para posicionar o cursor e exiba os valores de temperatura calculados.
+### Passo 2: Entendendo a Leitura Analógica
+
+Observe nas linhas 83–87 do código como a leitura funciona:
+
+```cpp
+int potenciometro = analogRead(A0);
+int tempC = map(potenciometro, 0, 1023, 0, 60);
+```
+
+O `analogRead(A0)` retorna um número entre 0 e 1023 (o Arduino possui 10 bits de resolução). A função `map()` converte essa escala para a faixa de temperatura desejada (0 a 60 °C).
+
+> **🧪 Teste e Verifique:**
+> Faça o cálculo no papel: se o potenciômetro está exatamente no meio (leitura `512`), qual deve ser a temperatura em Celsius?
+> *   *Dica:* Abra o Monitor Serial temporariamente. Adicione `Serial.begin(9600)` no `setup()` e `Serial.println(potenciometro)` no `loop()`. Confira se a leitura bate com a conta.
+
+---
+
+### Passo 3: Entendendo a Exibição no LCD (Etapa 1)
+
+Observe nas linhas 92–117 como a **Etapa 1** desenha a tela:
+
+```cpp
+LCD.clear();
+LCD.setCursor(0, 0);
+LCD.print("PAINEL DE TEMPERATURA");
+LCD.setCursor(0, 1);
+LCD.print("Celsius: ");
+LCD.print(tempC);
+...
+```
+
+O `setCursor(coluna, linha)` posiciona o cursor. O LCD tem colunas de 0 a 19 e linhas de 0 a 3. O `LCD.clear()` limpa toda a tela antes de redesenhar — essa é a causa do *flicker*.
 
 > **🧪 Teste e Verifique (Entrega Intermediária):**
-> Inicie a simulação. Gire o potenciômetro. 
-> *   **Os valores de temperatura atualizam no LCD conforme você mexe no sensor?**
-> *   **A tela está piscando rapidamente de forma incômoda?**
-> *   *Não se preocupe!* Esse efeito é o *flicker* causado pela função `LCD.clear()` rodando repetidamente. Isso prova que sua lógica matemática e conexões estão funcionando. **Você completou a Etapa Intermediária!**
+> Confirme que ao girar o potenciômetro o valor atualiza. A tela pisca — isso **comprova** que a Etapa 1 está funcional. **Você completou a Etapa Intermediária!**
 
 ---
 
-### Passo 4: Otimizando o Painel (Desafio No-Flicker)
+### Passo 4: Ativando o Painel Profissional — Etapa 2 (No-Flicker + Alarme)
+
 Agora vamos agir como engenheiros profissionais. O painel de um carro não pode piscar!
-1. Mova os textos fixos (`PAINEL DE TEMPERATURA`, `Celsius:`, `Fahrenheit:`, `Status:`) para dentro da função `setup()`. Eles devem ser escritos apenas **uma vez** na inicialização.
-2. No `loop()`, envolva toda a lógica de escrita do display em um bloco condicional: `if (tempC != ultimoTempC)`.
-3. Ao escrever o novo valor no LCD, posicione o cursor, imprima alguns espaços vazios `"   "` (para apagar os resíduos do número anterior) e depois escreva o valor atualizado. Por fim, atualize a variável `ultimoTempC = tempC;`.
+
+A **Etapa 2** já está escrita no código — mas está dentro de um bloco `/* ... */` que desativa o código. Você vai:
+
+**A) Desativar a Etapa 1:** Adicione `//` no início de cada linha da seção `ETAPA 1` (linhas 101–117), começando pelo `LCD.clear()`.
+
+**B) Ativar a Etapa 2:** Remova os comentários `/*` da linha 127 e `*/` da linha 167.
+
+**C) Completar as duas linhas que faltam na Etapa 2:**
+
+No bloco de alarme (dentro do `if/else`), localize os comentários `// <-- COMPLETE AQUI` e substitua os `...` pelos valores corretos:
+
+*   Quando a temperatura for **≥ 40°C** (bateria quente), o LED verde deve ser **apagado**:
+    ```cpp
+    digitalWrite(pinoVerde, LOW);   // substitui o "..."
+    ```
+*   Quando a temperatura for **< 40°C** (seguro), o LED vermelho deve ser **apagado**:
+    ```cpp
+    digitalWrite(pinoVermelho, LOW);  // substitui o "..."
+    ```
+
+**D) Ativar os textos estáticos no `setup()`:** Descomente as 8 linhas do bloco `[INSTRUÇÃO ETAPA 2]` no `setup()` (linhas 72–79), removendo o `//` do início de cada uma.
 
 > **🧪 Teste e Verifique:**
 > Inicie a simulação e gire o potenciômetro.
 > *   **A tela parou de piscar completamente?**
-> *   **Os valores numéricos atualizam de forma instantânea e suave?**
-> *   *Excelente!* Você dominou o conceito de Filtro de Estado em sistemas embarcados. Sua interface está profissional!
-
----
-
-### Passo 5: Ativando a Proteção e Alarme (Desafio Final)
-No `setup()`, configure os pinos dos LEDs vermelho e verde como saídas (`OUTPUT`). No `loop()`, adicione a lógica condicional de alerta de temperatura:
-*   Se a temperatura for **igual ou maior que 40 °C**: liga o LED Vermelho, desliga o LED Verde e exibe a palavra `ALERTA` na linha 3.
-*   Caso contrário: apaga o LED Vermelho, liga o LED Verde e exibe `OK` na linha 3.
-
-> **🧪 Teste e Verifique (Entrega Final):**
-> Simule e faça o teste final:
-> 1. Coloque a temperatura em 35 °C. O LED verde deve estar aceso e a tela mostrando `OK`.
-> 2. Gire o potenciômetro para passar de 40 °C. O LED verde deve apagar instantaneamente, o LED vermelho acender e a tela exibir `ALERTA`.
-> 3. Retorne a temperatura para menos de 40 °C. O sistema restaura o estado seguro?
-> *   *Sucesso total!* Você concluiu o desafio final do Módulo Térmico de Baterias da VoltLog!
+> *   **Os valores numéricos atualizam de forma suave?**
+> *   **O LED vermelho acende e "ALERTA" aparece quando passa de 40°C?**
+> *   *Excelente!* Você dominou o conceito de Filtro de Estado em sistemas embarcados!
 
 > **💡 Altere, teste e veja o que acontece!**
 > Quer ver o poder da programação em suas mãos? Experimente alterar o limite de temperatura de segurança de `40` para `43` (ou qualquer outro valor de sua escolha) diretamente no seu código. Inicie a simulação novamente.
@@ -118,7 +144,7 @@ Você possui duas opções para entregar a sua atividade prática no Classroom. 
 > [!IMPORTANT]
 > Antes de entregar, certifique-se de:
 > * Preencher seu **Nome** e **Data** no cabeçalho do código (`conversao_temperatura.ino`).
-> * Criar o arquivo **`folha_respostas.md`** no simulador e responder a todas as perguntas de Reflexão Técnica nele.
+> * Responder a todas as perguntas de Reflexão Técnica no arquivo **`folha_respostas.md`**.
 
 ---
 
