@@ -15,7 +15,7 @@ Este guia orienta o desenvolvimento do segundo experimento prático de Arduino. 
 ---
 
 ## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 16x2.
+*   **Nível Intermediário:** Implementar a lógica de leitura de duas entradas analógicas independentes, convertendo-as para as faixas de tempo ($1$ a $30$ dias) e distância ($1$ a $1000$ km). Calcular o valor final com 10% de desconto e exibi-los no LCD 20x4.
 *   **Nível Final (Desafio):** 
     1.  Integrar a detecção de mudança de estado duplo para que o LCD seja atualizado apenas sob variação em alguma das entradas, eliminando a oscilação (*flicker*) do display.
     2.  Implementar controle de categoria do veículo via hardware: use uma chave tipo slide no pino **9** (`INPUT_PULLUP`). 
@@ -62,7 +62,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 
 ## 3. Componentes e Conexões (Wokwi)
 *   **Arduino Uno R3**
-*   **Display LCD 16x2 (Ligação Paralela)**
+*   **Display LCD 20x4 (Ligação Paralela)**
     *   `RS` -> Pino 12 | `E` -> Pino 11
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
@@ -76,12 +76,14 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 1.  **Ponto de Partida:** Abra o arquivo [aluguel_carro.ino](file:///C:/GitHub/lab_intro/wokwi/aluguel_carro/aluguel_carro.ino).
 2.  **Tarefa Intermediária:** Complete a lógica do cálculo e a fiação no simulador. Realize a apresentação no LCD no seguinte padrão de texto (mesmo com flicker):
     ```text
-    T:12d K:1000 POP
+    LOCADORA SAI FRENTE
+    Tempo: 12 dias
+    Dist: 1000 km  [POP]
     Total: R$ 306.00
     ```
 3.  **Tarefa Final (Desafio):** 
     *   Implemente a fiação da chave slide e a lógica condicional para mudar as tarifas (POP vs SUV).
-    *   Elimine a oscilação do display: as etiquetas fixas (`T:`, `d K:`, `Total: R$`) devem ser escritas somente no `setup()`. A escrita dinâmica no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia` **ou** `categoria != ultimaCategoria`.
+    *   Elimine a oscilação do display: as etiquetas fixas (`LOCADORA SAI FRENTE`, `Tempo:    dias`, `Dist:     km  [   ]`, `Total: R$ `) devem ser escritas somente no `setup()`. A escrita dinâmica no `loop()` só pode ocorrer se `tempo != ultimoTempo` **ou** `distancia != ultimaDistancia` **ou** `categoria != ultimaCategoria`.
 
 ---
 

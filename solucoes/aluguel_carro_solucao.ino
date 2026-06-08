@@ -2,8 +2,8 @@
 // Disciplina: Programação Básica
 // Professor: João Miguel Lac Roehe
 //
-// Solução Completa - Atividade 2: Cálculo de Aluguel de Carro (Locadora Sai da Frente)
-// Simulação otimizada para o Wokwi.
+// Solução Completa - Atividade 2: Cálculo de Aluguel de Carro (Locadora Sai da Frente) com LCD 20x4
+// Simulação otimizada para o Wokwi Web.
 
 #include <LiquidCrystal.h>
 
@@ -18,14 +18,18 @@ int ultimaDistancia = -1;
 int ultimaCategoria = -1;
 
 void setup() {
-  LCD.begin(16, 2);
+  LCD.begin(20, 4);
   pinMode(pinoChave, INPUT_PULLUP);
   
   // Imprime os labels fixos no LCD
   LCD.setCursor(0, 0);
-  LCD.print("T:   d K:     ");
+  LCD.print("LOCADORA SAI FRENTE");
   LCD.setCursor(0, 1);
-  LCD.print("Total: R$       ");
+  LCD.print("Tempo:    dias");
+  LCD.setCursor(0, 2);
+  LCD.print("Dist:     km  [   ]");
+  LCD.setCursor(0, 3);
+  LCD.print("Total: R$ ");
 }
 
 void loop() {
@@ -46,7 +50,7 @@ void loop() {
     float taxaKm = 0.01;
     char* catLabel = "POP";
     
-    // Altera tarifas baseando-se no estado físico da chave slide
+    // Altera tarifas baseando-se no estado físico da chave slide (HIGH = SUV, LOW = Popular)
     if (categoria == HIGH) {
       diaria = 80.0;
       taxaKm = 0.05;
@@ -56,26 +60,26 @@ void loop() {
     // Cálculo do valor com 10% de desconto
     float valorTotal = (tempo * diaria + distancia * taxaKm) * 0.9;
     
-    // Atualiza o tempo no LCD (coluna 2, linha 0)
-    LCD.setCursor(2, 0);
-    LCD.print("  ");
-    LCD.setCursor(2, 0);
+    // Atualiza o tempo no LCD (coluna 7, linha 1)
+    LCD.setCursor(7, 1);
+    LCD.print("   ");
+    LCD.setCursor(7, 1);
     LCD.print(tempo);
     
-    // Atualiza a distância no LCD (coluna 8, linha 0)
-    LCD.setCursor(8, 0);
+    // Atualiza a distância no LCD (coluna 6, linha 2)
+    LCD.setCursor(6, 2);
     LCD.print("    ");
-    LCD.setCursor(8, 0);
+    LCD.setCursor(6, 2);
     LCD.print(distancia);
     
-    // Atualiza a sigla da categoria (coluna 13, linha 0)
-    LCD.setCursor(13, 0);
+    // Atualiza a sigla da categoria (coluna 15, linha 2)
+    LCD.setCursor(15, 2);
     LCD.print(catLabel);
     
-    // Atualiza o valor total no LCD (coluna 10, linha 1)
-    LCD.setCursor(10, 1);
+    // Atualiza o valor total no LCD (coluna 10, linha 3)
+    LCD.setCursor(10, 3);
     LCD.print("      ");
-    LCD.setCursor(10, 1);
+    LCD.setCursor(10, 3);
     LCD.print(valorTotal, 2);
     
     ultimoTempo = tempo;

@@ -15,7 +15,7 @@ Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino.
 ---
 
 ## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 16x2.
+*   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 20x4.
 *   **Nível Final (Desafio):** 
     1.  Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
     2.  Implementar controle de estado visual (Alerta de Temperatura): se a temperatura for maior ou igual a $40^{\circ}\text{C}$, liga o LED Vermelho (Pino 7), desliga o LED Verde (Pino 8) e escreve `ALERTA` no LCD. Caso contrário (temperatura normal), mantém o LED Verde (Pino 8) ligado, o LED Vermelho desligado e escreve `OK` no LCD.
@@ -69,7 +69,7 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 
 ## 3. Componentes e Conexões (Wokwi)
 *   **Arduino Uno R3**
-*   **Display LCD 16x2 (Ligação Paralela)**
+*   **Display LCD 20x4 (Ligação Paralela)**
     *   `RS` -> Pino 12 | `E` -> Pino 11
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
@@ -108,7 +108,7 @@ Responda à pergunta teórica obrigatória contida no cabeçalho do arquivo [con
 ---
 
 ## 🤖 Dica de Prompt para IA (Uso Saudável)
-> *"Estou no Experimento 1 de Arduino. Preciso ler um potenciômetro em A0 e mostrar Celsius e Fahrenheit em um LCD 16x2. Não me dê o código completo. Explique como usar a função map do Arduino para reescalar 0-1023 para 0-60 e como fazer a conversão matemática sem perder as casas decimais no cálculo em C++."*
+> *"Estou no Experimento 1 de Arduino. Preciso ler um potenciômetro em A0 e mostrar Celsius e Fahrenheit em um LCD 20x4. Não me dê o código completo. Explique como usar a função map do Arduino para reescalar 0-1023 para 0-60 e como fazer a conversão matemática sem perder as casas decimais no cálculo em C++."*
 
 ---
 

@@ -2,8 +2,8 @@
 // Disciplina: Programação Básica
 // Professor: João Miguel Lac Roehe
 //
-// Solução Completa - Atividade 1: Conversão de Temperatura (Celsius para Fahrenheit) com display LCD
-// Simulação otimizada para o Wokwi.
+// Solução Completa - Atividade 1: Conversão de Temperatura (Celsius para Fahrenheit) com display LCD 20x4
+// Simulação otimizada para o Wokwi Web.
 
 #include <LiquidCrystal.h>
 
@@ -17,16 +17,20 @@ const int pinoVerde = 8;
 int ultimoTempC = -1;
 
 void setup() {
-  LCD.begin(16, 2);
+  LCD.begin(20, 4);
   
   pinMode(pinoVermelho, OUTPUT);
   pinMode(pinoVerde, OUTPUT);
   
   // Imprime os textos estáticos
   LCD.setCursor(0, 0);
-  LCD.print("TempC:      oC");
+  LCD.print("PAINEL DE TEMPERATURA");
   LCD.setCursor(0, 1);
-  LCD.print("TempF:      oF");
+  LCD.print("Celsius:       oC");
+  LCD.setCursor(0, 2);
+  LCD.print("Fahrenheit:    oF");
+  LCD.setCursor(0, 3);
+  LCD.print("Status: ");
 }
 
 void loop() {
@@ -40,29 +44,29 @@ void loop() {
   if (tempC != ultimoTempC) {
     float tempF = (9.0 / 5.0) * tempC + 32.0;
     
-    // Celsius
-    LCD.setCursor(7, 0);
+    // Celsius (coluna 13, linha 1)
+    LCD.setCursor(13, 1);
     LCD.print("    ");
-    LCD.setCursor(7, 0);
+    LCD.setCursor(13, 1);
     LCD.print(tempC);
     
-    // Fahrenheit
-    LCD.setCursor(7, 1);
+    // Fahrenheit (coluna 13, linha 2)
+    LCD.setCursor(13, 2);
     LCD.print("      ");
-    LCD.setCursor(7, 1);
+    LCD.setCursor(13, 2);
     LCD.print(tempF, 1);
     
     // Controle de Alarme e Status (Limiar de 40 °C)
     if (tempC >= 40) {
       digitalWrite(pinoVermelho, HIGH);
       digitalWrite(pinoVerde, LOW);
-      LCD.setCursor(13, 0);
-      LCD.print("AL"); // Alerta
+      LCD.setCursor(8, 3);
+      LCD.print("ALERTA");
     } else {
       digitalWrite(pinoVermelho, LOW);
       digitalWrite(pinoVerde, HIGH);
-      LCD.setCursor(13, 0);
-      LCD.print("OK"); // Normal
+      LCD.setCursor(8, 3);
+      LCD.print("OK    "); // Espaços para limpar a palavra ALERTA
     }
     
     ultimoTempC = tempC;

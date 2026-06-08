@@ -1,6 +1,6 @@
 // Faculdade de Tecnologia SENAI Porto Alegre
 // Disciplina: Programação Básica
-// Experimento 02: Cálculo de Aluguel de Carro com Display LCD
+// Experimento 02: Cálculo de Aluguel de Carro com Display LCD (Wokwi 20x4)
 // 
 // Aluno: _____________________________________ Data: ___/___/_____
 //
@@ -8,24 +8,25 @@
 // APRESENTAÇÃO E DIRETRIZES:
 // O objetivo desta atividade é simular as duas entradas de um sistema de aluguel de carros
 // (Locadora "Sai da Frente") utilizando dois potenciômetros. O programa calcula o custo total
-// aplicando um desconto de 10% e exibe tudo formatado no LCD 16x2 de maneira otimizada.
+// aplicando um desconto de 10% e exibe tudo formatado no LCD 20x4 de maneira otimizada.
 //
 // ETAPAS DE DESENVOLVIMENTO:
 // - ETAPA 1 (Intermediária):
 //   1. Leia o potenciômetro 1 (A0) e converta para Tempo (1 a 30 dias).
 //   2. Leia o potenciômetro 2 (A1) e converta para Distância (1 a 1000 km).
 //   3. Calcule o valor total da locação com a fórmula:
-//      -> Custo = (Dias * 30.0 + Km * 0.01) * 0.90 (desconto de 10%)
-//   4. Imprima os valores numéricos de dias, km e o custo total no LCD no layout:
-//      T: XXd  D: XXXkm
-//      Total: R$ XXX.XX
+//      -> Custo = (Dias * Diária + Km * TaxaKm) * 0.90 (desconto de 10%)
+//   4. Imprima os valores numéricos de dias, km e o custo total no LCD no layout correspondente.
 //
 // - ETAPA 2 (Final - Desafio):
-//   1. Elimine o flicker escrevendo os rótulos de texto fixo ("T:   d  D:    km"
-//      e "Total: R$       ") uma única vez dentro do setup().
+//   1. Elimine o flicker escrevendo os rótulos de texto fixo uma única vez dentro do setup().
+//      -> Linha 0: "LOCADORA SAI FRENTE"
+//      -> Linha 1: "Tempo:    dias"
+//      -> Linha 2: "Dist:     km  [   ]"
+//      -> Linha 3: "Total: R$ "
 //   2. No loop(), implemente um Filtro de Estado duplo: atualize as saídas numéricas 
 //      do LCD apenas se o valor atual de tempo for diferente de 'ultimoTempo' 
-//      OU se a distância atual for diferente de 'ultimaDistancia' (operador lógico OR '||').
+//      OU se a distância atual for diferente de 'ultimaDistancia' OU a chave mudar.
 //   3. Limpe as casas numéricas dinâmicas com espaços em branco ("  " ou "    ") antes
 //      de imprimir para apagar dígitos órfãos residuais.
 // -----------------------------------------------------------------------------
@@ -56,8 +57,8 @@ int ultimaCategoria = -1;
 int pinoChave = 9;
 
 void setup() {
-  // Inicializa o LCD com 16 colunas e 2 linhas
-  LCD.begin(16, 2);
+  // Inicializa o LCD com 20 colunas e 4 linhas
+  LCD.begin(20, 4);
   
   // TODO: Configure o pino da chave slide como entrada utilizando resistor de pull-up interno.
   // Dica de pesquisa: use 'pinMode(pino, INPUT_PULLUP)'.
@@ -66,9 +67,13 @@ void setup() {
   // Escrever as etiquetas aqui economiza processamento e evita cintilações no LCD.
   // Dica: Use LCD.setCursor(coluna, linha) e LCD.print("texto")
   // LCD.setCursor(0, 0);
-  // LCD.print("T:   d K:     ");
+  // LCD.print("LOCADORA SAI FRENTE");
   // LCD.setCursor(0, 1);
-  // LCD.print("Total: R$       ");
+  // LCD.print("Tempo:    dias");
+  // LCD.setCursor(0, 2);
+  // LCD.print("Dist:     km  [   ]");
+  // LCD.setCursor(0, 3);
+  // LCD.print("Total: R$ ");
 }
 
 void loop() {
@@ -100,17 +105,17 @@ void loop() {
     // Fórmula de negócio: (tempo * diaria + distancia * taxaKm) * 0.90
     float valorTotal = 0.0;
     
-    // TODO: Posicione o cursor e exiba a quantidade de dias no LCD (Linha 0).
-    // Dica: Posicione na coluna 2 da linha 0. Limpe com espaços ("  ") antes de escrever.
+    // TODO: Posicione o cursor e exiba a quantidade de dias no LCD (Linha 1).
+    // Dica: Posicione na coluna 7 da linha 1. Limpe com espaços ("   ") antes de escrever.
     
-    // TODO: Posicione o cursor e exiba a distância percorrida no LCD (Linha 0).
-    // Dica: Posicione na coluna 8 da linha 0. Limpe com espaços ("    ") antes de escrever.
+    // TODO: Posicione o cursor e exiba a distância percorrida no LCD (Linha 2).
+    // Dica: Posicione na coluna 6 da linha 2. Limpe com espaços ("    ") antes de escrever.
     
-    // TODO: Posicione o cursor e exiba o rótulo da categoria ("POP" ou "SUV") na linha 0.
-    // Dica: Posicione na coluna 13 da linha 0.
+    // TODO: Posicione o cursor e exiba o rótulo da categoria ("POP" ou "SUV") na linha 2.
+    // Dica: Posicione na coluna 15 da linha 2 (dentro do colchete "[POP]" ou "[SUV]").
     
-    // TODO: Posicione o cursor e exiba o valor total formatado no LCD (Linha 1).
-    // Dica: Posicione na coluna 10 da linha 1. Use LCD.print(valorTotal, 2) para duas casas decimais.
+    // TODO: Posicione o cursor e exiba o valor total formatado no LCD (Linha 3).
+    // Dica: Posicione na coluna 10 da linha 3. Use LCD.print(valorTotal, 2) para duas casas decimais.
     
     // TODO (Etapa 2): Atualize as variáveis de estado para reter as leituras atuais.
     
