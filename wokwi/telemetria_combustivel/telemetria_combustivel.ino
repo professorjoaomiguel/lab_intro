@@ -1,22 +1,24 @@
 // Faculdade de Tecnologia SENAI Porto Alegre
 // Disciplina: Programação Básica
-// Experimento 03: Telemetria de Combustível e Autonomia (LCD 20x4)
+// Experimento 03: Telemetria de Combustível e Autonomia Híbrida (VoltLog - LCD 20x4)
 // 
 // Aluno: _____________________________________ Data: ___/___/_____
 //
 // -----------------------------------------------------------------------------
-// APRESENTAÇÃO E DIRETRIZES:
-// O objetivo desta atividade é projetar um painel de telemetria industrial utilizando
-// um display LCD 20x4, dois potenciômetros de ajuste e um LED físico indicador de reserva.
-// A interface apresenta barras de progresso gráficas e proteção matemática contra falhas.
+// APRESENTAÇÃO E CONTEXTO:
+// Em viagens intermunicipais (como a rota Porto Alegre a Caxias do Sul), a VoltLog
+// utiliza utilitários com motorização híbrida (motor elétrico + motor a combustão).
+// Você desenvolverá o firmware do computador de bordo principal que gerencia o
+// tanque de combustível líquido e calcula a autonomia em tempo real no LCD 20x4.
 //
 // ETAPAS DE DESENVOLVIMENTO:
 // - ETAPA 1 (Intermediária):
-//   1. Configure o pino do LED de alerta (Pino 7) como OUTPUT.
-//   2. Leia A0 e converta para Volume (faixa de 0.0 a 50.0 Litros).
-//   3. Leia A1 e converta para Consumo (faixa de 0.0 a 20.0 L/h).
+//   1. Configure o pino do LED físico de alerta de reserva (Pino 7) como OUTPUT.
+//   2. Leia o sensor de nível A0 e converta para Volume (faixa de 0.0 a 50.0 Litros).
+//   3. Leia o sensor de fluxo A1 e converta para Consumo (faixa de 0.0 a 20.0 L/h).
 //   4. Calcule a autonomia (Volume / Consumo). 
-//      ATENÇÃO: proteja o código contra divisão por zero (caso consumo < 0.1 L/h).
+//      ATENÇÃO: proteja o código contra divisão por zero (caso consumo < 0.1 L/h,
+//      situação em que o utilitário está rodando 100% no motor elétrico).
 //   5. Exiba os valores numéricos de litros, consumo e autonomia no LCD 20x4.
 //
 // - ETAPA 2 (Final - Desafio):
@@ -27,7 +29,7 @@
 //      -> O número de blocos (0 a 10) é dado por percentual / 10.
 //      -> Use um loop 'for' de 10 iterações. Se o índice do loop for menor que o número
 //         de blocos calculados, imprima o bloco sólido (char(255)). Senão, imprima um espaço (" ").
-//   3. Implemente a lógica de reserva: se o volume for menor que 5.0 Litros:
+//   3. Lógica de Reserva do Tanque: se o volume for menor que 5.0 Litros:
 //      -> Acenda o LED vermelho do pino 7.
 //      -> Altere a etiqueta da linha 3 para exibir "!RESERVA!" em vez de "Autonomia:".
 //      -> Caso contrário, mantenha o LED apagado e restaure o texto original.
@@ -37,7 +39,7 @@
 // 1. O que acontece com o software se tentarmos dividir por zero no cálculo de 
 //    autonomia? Como o condicional 'if' de proteção resolve essa falha crítica?
 // 2. Qual a vantagem ergonômica de exibir uma barra de progresso visual em um 
-//    painel de telemetria industrial, em comparação com apenas números?
+//    painel de telemetria de um veículo em movimento, em comparação com apenas números?
 //
 // Resposta: ___________________________________________________________________
 // _____________________________________________________________________________
@@ -69,11 +71,11 @@ void setup() {
 }
 
 void loop() {
-  // TODO: Leia o potenciômetro de nível (A0) e mapeie proporcionalmente para 0.0 a 50.0 litros.
+  // TODO: Leia o sensor de nível (A0) e mapeie proporcionalmente para 0.0 a 50.0 litros (volume).
   // Dica: Use cálculo em ponto flutuante: volume = (analogRead(A0) / 1023.0) * 50.0
   float volume = 0.0; 
 
-  // TODO: Leia o potenciômetro de consumo (A1) e mapeie proporcionalmente para 0.0 a 20.0 L/h.
+  // TODO: Leia o sensor de consumo (A1) e mapeie proporcionalmente para 0.0 a 20.0 L/h (consumo).
   float consumo = 0.0; 
 
   // Calcule o percentual inteiro atual do tanque (0 a 100%) para uso no Filtro de Estado
@@ -88,8 +90,8 @@ void loop() {
   
   // {
     // TODO: Proteção contra Divisão por Zero.
-    // Se o consumo for muito baixo (menor que 0.1 L/h), defina a autonomia como 0 ou exiba
-    // uma constante indicando infinito. Caso contrário, execute a divisão (volume / consumo).
+    // Se o consumo for muito baixo (menor que 0.1 L/h, indicando uso exclusivo do motor elétrico),
+    // defina a autonomia de forma segura ou avise o sistema. Caso contrário, calcule (volume / consumo).
     float autonomia = 0.0;
     bool divisaoPorZero = false;
 

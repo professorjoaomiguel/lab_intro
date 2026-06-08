@@ -2,8 +2,8 @@
 // Disciplina: Programação Básica
 // Professor: João Miguel Lac Roehe
 //
-// Solução Completa - Atividade 2: Cálculo de Aluguel de Carro (Locadora Sai da Frente) com LCD 20x4
-// Simulação otimizada para o Wokwi Web.
+// Computador de Tarifação Dinâmica - Car Sharing (VoltLog - LCD 20x4)
+// Solução de Referência (Gabarito do Professor)
 
 #include <LiquidCrystal.h>
 
@@ -57,7 +57,7 @@ void loop() {
       catLabel = "SUV";
     }
     
-    // Cálculo do valor com 10% de desconto
+    // Calculation do valor com 10% de desconto
     float valorTotal = (tempo * diaria + distancia * taxaKm) * 0.9;
     
     // Atualiza o tempo no LCD (coluna 7, linha 1)

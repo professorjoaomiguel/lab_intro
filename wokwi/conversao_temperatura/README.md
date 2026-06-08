@@ -1,6 +1,6 @@
-# Experimento 01: Conversão de Temperatura com Display LCD
+# Experimento 01: Monitor Térmico das Baterias (VoltLog)
 
-Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino no simulador Wokwi Web, inserido no contexto de mobilidade elétrica da startup **VoltLog**.
 
 ---
 
@@ -14,20 +14,22 @@ Este guia orienta o desenvolvimento do primeiro experimento prático de Arduino.
 
 ---
 
-## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Realizar a leitura analógica de um potenciômetro, mapeá-la para uma faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir ambas as informações no LCD 20x4.
+## 1. O Cenário da Atividade: A Bateria da **VoltLog**
+Os veículos de entrega rápidos da **VoltLog** são 100% elétricos e equipados com bancos de baterias de íons de lítio. Sob alta carga (como subidas na serra gaúcha), essas células aquecem e precisam ser monitoradas constantemente por segurança.
+Seu trabalho como programador da VoltLog é desenvolver o firmware do **Painel de Monitoramento Térmico** (IHM) do painel do motorista utilizando o display **LCD 20x4**.
+
+*   **Nível Intermediário:** Realizar a leitura analógica do sensor de temperatura (potenciômetro em A0), mapeá-la para a faixa de $0$ a $60^{\circ}\text{C}$, converter para Fahrenheit e exibir Celsius e Fahrenheit no LCD 20x4.
 *   **Nível Final (Desafio):** 
-    1.  Otimizar o código para eliminar completamente a oscilação (*flicker*) do display LCD, redesenhando os dados apenas quando o valor sofrer alteração.
-    2.  Implementar controle de estado visual (Alerta de Temperatura): se a temperatura for maior ou igual a $40^{\circ}\text{C}$, liga o LED Vermelho (Pino 7), desliga o LED Verde (Pino 8) e escreve `ALERTA` no LCD. Caso contrário (temperatura normal), mantém o LED Verde (Pino 8) ligado, o LED Vermelho desligado e escreve `OK` no LCD.
+    1.  Otimizar o display contra oscilações (*flicker*), atualizando os números na tela apenas quando a temperatura mudar.
+    2.  Implementar o sistema de alarme visual: se a temperatura atingir $40^{\circ}\text{C}$ ou mais, aciona o LED Vermelho de Alerta (Pino 7), desliga o LED Verde (Pino 8) e imprime `ALERTA` na tela (avisando o acionamento do cooler). Caso contrário, mantém o LED Verde (Pino 8) ligado (temperatura segura), LED Vermelho desligado e imprime `OK` no LCD.
 
 ---
 
 ## 2. Cenário e Teoria
 
 ### A Função `map()`
-No Arduino Uno, o Conversor Analógico-Digital (ADC) possui resolução de 10 bits. Isso significa que a leitura de um sensor de tensão analógico de 0V a 5V (como o potenciômetro) é mapeada para uma escala numérica inteira de **0 a 1023**.
-
-Para converter esse valor proporcionalmente em uma escala física diferente (como graus Celsius de $0$ a $60^{\circ}\text{C}$), utilizamos a função `map()`. 
+No Arduino Uno, a leitura de um sensor analógico de tensão de 0V a 5V (potenciômetro) é mapeada para uma escala digital de **0 a 1023**.
+Para converter proporcionalmente a leitura do sensor em uma temperatura de $0$ a $60^{\circ}\text{C}$, utilizamos a função `map()`. 
 
 #### Sintaxe:
 ```cpp
@@ -39,9 +41,9 @@ A função realiza uma interpolação linear utilizando a seguinte fórmula:
 
 $$y = (valor - deMin) \times \frac{paraMax - paraMin}{deMax - deMin} + paraMin$$
 
-No caso da nossa atividade, para transformar o valor analógico do potenciômetro (`0` a `1023`) para a escala de temperatura (`0` a `60`), usamos:
+No código do Arduino, mapeamos o sensor térmico usando:
 ```cpp
-int tempC = map(potenciometro, 0, 1023, 0, 60);
+int tempC = map(leituraSensor, 0, 1023, 0, 60);
 ```
 
 ### Conversão Celsius para Fahrenheit
@@ -49,33 +51,32 @@ A conversão matemática clássica é dada pela fórmula:
 
 $$F = C \times 1.8 + 32$$
 
-No código C/C++ do Arduino, lembre-se de usar números reais (`9.0` e `5.0` ou `1.8`) na divisão/multiplicação para evitar o truncamento da divisão inteira.
+No código C/C++ do Arduino, lembre-se de usar números de ponto flutuante (`1.8` ou `9.0 / 5.0`) para evitar o truncamento da divisão inteira.
 
 ---
 
-### O Display LCD (HD44780) e a Origem do Flicker (Cintilação)
-Displays LCD de caracteres (como o modelo de 16 colunas e 2 linhas) possuem um controlador interno que gerencia o acendimento físico dos cristais líquidos. A comunicação com este circuito integrado auxiliar é relativamente lenta se comparada ao clock do Arduino:
-*   **O comando `LCD.clear()`:** Ao chamar a função `LCD.clear()`, o controlador interno do LCD desliga fisicamente todos os pixels e envia o cursor para a posição inicial. Essa operação exige cerca de **1,64 milissegundos** para ser finalizada no hardware.
-*   **Como o flicker acontece:** Se o programa do microcontrolador executar comandos de limpeza total ou reescrever textos fixos repetidamente dentro do `loop()`, o display passará mais tempo no processo de apagar/redesenhar pixels do que exibindo informações estáticas. Visualmente, isso é percebido como uma **tela piscando constantemente (flicker)**.
+### O Display LCD (HD44780) e o Flicker (Cintilação)
+Displays LCD de caracteres possuem comunicação lenta. A chamada `LCD.clear()` leva cerca de **1,64 milissegundos** no hardware, pois o controlador desliga fisicamente os pixels. 
+Se você limpar a tela continuamente dentro do `loop()`, o display passará mais tempo desligado do que exibindo informações estáticas, causando um tremor visual constante (**flicker**).
 
 ### Estratégia de Software: Atualização por Filtro de Estado
-A rotina correta de controle de telas em sistemas embarcados segue os seguintes princípios:
-1.  **Escrita Estática Única (setup):** Rótulos fixos como `"TempC:      oC"` e `"TempF:      oF"` são definidos apenas uma vez durante a inicialização no `setup()`.
-2.  **Comparação de Estado (loop):** Mantemos variáveis globais para registrar a última informação desenhada (ex: `ultimoTempC`).
-3.  **Escrita Dinâmica sob Demanda:** Comparamos o valor lido atualmente com a variável de estado. O envio de dados para o display só é feito caso haja mudança real (`if (tempC != ultimoTempC)`).
-4.  **Sobrescrita de Resíduos:** Para evitar que o display exiba caracteres "fantasmas" (por exemplo, o número `10` caindo para `9` e exibindo `90` por não limpar a segunda casa decimal), posicionamos o cursor, escrevemos espaços em branco (`"    "`) para apagar o resíduo anterior e só então escrevemos o novo valor.
+Para evitar o flicker em painéis profissionais:
+1.  **Escrita Estática Única (setup):** Escreva rótulos fixos como `"PAINEL DE TEMPERATURA"`, `"Celsius:"`, `"Fahrenheit:"` e `"Status:"` apenas uma vez no `setup()`.
+2.  **Comparação de Estado (loop):** Crie uma variável global `ultimoTempC` para registrar o último valor impresso.
+3.  **Escrita Dinâmica sob Demanda:** O programa só escreve no display se a temperatura atual for diferente da última lida (`if (tempC != ultimoTempC)`).
+4.  **Sobrescrita de Resíduos:** Limpe com espaços em branco `"   "` o local do número antigo antes de imprimir o novo para não acumular dígitos fantasmas (ex: `10` caindo para `9` e exibindo `90` por resíduo).
 
 ---
 
-## 3. Componentes e Conexões (Wokwi)
+## 3. Componentes e Conexões
 *   **Arduino Uno R3**
 *   **Display LCD 20x4 (Ligação Paralela)**
     *   `RS` -> Pino 12 | `E` -> Pino 11
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
-*   **Potenciômetro:** Cursor no pino analógico `A0`
-*   **LED Vermelho (Alerta Temp Alta):** Conectado no pino digital 7 (com resistor de 220 ohms)
-*   **LED Verde (Status Normal):** Conectado no pino digital 8 (com resistor de 220 ohms)
+*   **Sensor Térmico (Potenciômetro):** Cursor conectado ao pino analógico `A0`
+*   **LED Vermelho (Alerta Bateria):** Conectado no pino digital 7 (com resistor de 220 ohms)
+*   **LED Verde (Bateria Segura):** Conectado no pino digital 8 (com resistor de 220 ohms)
 
 ---
 
@@ -90,9 +91,9 @@ A rotina correta de controle de telas em sistemas embarcados segue os seguintes 
 
 ## 5. ✅ Checklist de Entrega
 1.  **Etapa Intermediária:** Temperatura calculada e exibida no display.
-2.  **Etapa Final:** Circuito operando sem piscar a tela, com controle de status visual de LEDs e exibição de `OK`/`ALERTA` no LCD a partir de 40 °C.
+2.  **Etapa Final:** Circuito operando no Wokwi sem piscar a tela, com controle de status visual de LEDs e exibição de `OK`/`ALERTA` no LCD 20x4.
 3.  **Reflexão Técnica:** Preenchimento da reflexão obrigatória no cabeçalho do arquivo [conversao_temperatura.ino](file:///C:/GitHub/lab_intro/wokwi/conversao_temperatura/conversao_temperatura.ino).
-4.  **Explicação Oral:** Capacidade de explicar as conexões físicas, a lógica matemática do mapeamento e a lógica de condicionais para alarmes.
+4.  **Explicação Oral:** Capacidade de explicar a lógica matemática do mapeamento e a lógica de condicionais para alarmes.
 
 ---
 

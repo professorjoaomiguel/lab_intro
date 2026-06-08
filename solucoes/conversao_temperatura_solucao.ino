@@ -2,8 +2,8 @@
 // Disciplina: Programação Básica
 // Professor: João Miguel Lac Roehe
 //
-// Solução Completa - Atividade 1: Conversão de Temperatura (Celsius para Fahrenheit) com display LCD 20x4
-// Simulação otimizada para o Wokwi Web.
+// Módulo de Monitoramento Térmico das Baterias (VoltLog - LCD 20x4)
+// Solução de Referência (Gabarito do Professor)
 
 #include <LiquidCrystal.h>
 
@@ -34,7 +34,7 @@ void setup() {
 }
 
 void loop() {
-  // Lê o potenciômetro em A0 (0 a 1023)
+  // Lê o sensor analógico de temperatura em A0 (0 a 1023)
   int potenciometro = analogRead(A0);
   
   // Mapeia a leitura para 0 a 60 graus Celsius

@@ -2,8 +2,8 @@
 // Disciplina: Programação Básica
 // Professor: João Miguel Lac Roehe
 //
-// Solução Completa - Experimento 03: Telemetria de Combustível e Autonomia (LCD 20x4)
-// Simulação otimizada para o Wokwi.
+// Computador de Bordo Híbrido e Autonomia (VoltLog - LCD 20x4)
+// Solução de Referência (Gabarito do Professor)
 
 #include <LiquidCrystal.h>
 
@@ -49,7 +49,7 @@ void loop() {
   // Só atualiza o LCD se houver mudança de estado significativa
   if (percentualInt != ultimoPercentual || consumoInt != ultimoConsumoInt) {
     
-    // 1. Proteção de software contra divisão por zero
+    // 1. Proteção de software contra divisão por zero (motor elétrico ativo, consumo combustível = 0)
     float autonomia = 0.0;
     bool divisaoPorZero = false;
     

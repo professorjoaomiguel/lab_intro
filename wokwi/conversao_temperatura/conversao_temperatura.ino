@@ -1,27 +1,27 @@
 // Faculdade de Tecnologia SENAI Porto Alegre
 // Disciplina: Programação Básica
-// Experimento 01: Conversão de Temperatura com Display LCD (Wokwi 20x4)
+// Experimento 01: Monitor Térmico das Baterias (VoltLog - LCD 20x4)
 // 
 // Aluno: _____________________________________ Data: ___/___/_____
 //
 // -----------------------------------------------------------------------------
-// APRESENTAÇÃO E DIRETRIZES:
-// O objetivo desta atividade é ler um sensor analógico (representado pelo potenciômetro),
-// realizar cálculos matemáticos de mapeamento e conversão de escala em C++, e
-// apresentar os resultados no LCD 20x4 de forma estável (sem piscar a tela).
-// Além disso, há um controle de estado com LEDs de sinalização baseados em um limiar.
+// APRESENTAÇÃO E CONTEXTO:
+// Na VoltLog, startup de logística urbana inteligente, os utilitários de entrega 
+// elétricos utilizam bancos de baterias de íons de lítio que geram muito calor sob carga.
+// Para evitar degradação e riscos de incêndio (thermal runaway), o painel eletrônico
+// da cabine do motorista (IHM) monitora constantemente a temperatura das células.
 //
 // ETAPAS DE DESENVOLVIMENTO:
 // - ETAPA 1 (Intermediária): 
-//   1. Configure os pinos digitais dos LEDs como saídas.
-//   2. Leia o pino A0 usando analogRead().
-//   3. Converta o valor (0-1023) para Celsius (0-60) usando a função map().
-//   4. Calcule Fahrenheit usando a fórmula física (F = C * 1.8 + 32).
-//   5. Imprima ambos os valores Celsius e Fahrenheit no LCD 20x4.
+//   1. Configure os pinos digitais dos LEDs de alarme físico como saídas.
+//   2. Leia o sensor de temperatura analógico em A0 (representado pelo potenciômetro).
+//   3. Converta a leitura (0-1023) para Celsius (0-60 °C) usando a função map().
+//   4. Calcule o equivalente em Fahrenheit usando a fórmula física (F = C * 1.8 + 32).
+//   5. Imprima Celsius e Fahrenheit no LCD 20x4 do painel do motorista.
 //   *(Nesta etapa, o uso de lcd.clear() causará oscilação/flicker na tela).*
 //
 // - ETAPA 2 (Final - Desafio):
-//   1. Elimine o flicker escrevendo os rótulos estáticos uma única vez no setup().
+//   1. Elimine o flicker escrevendo os rótulos estáticos no setup() de uma única vez.
 //      -> Linha 0: "PAINEL DE TEMPERATURA"
 //      -> Linha 1: "Celsius:       oC"
 //      -> Linha 2: "Fahrenheit:    oF"
@@ -29,9 +29,10 @@
 //   2. No loop(), envolva toda a escrita do display e controle dos LEDs dentro de
 //      uma condição 'if' que verifica se o valor atual de 'tempC' mudou em relação
 //      a 'ultimoTempC' (Filtro de Estado).
-//   3. Implemente a lógica do alarme: se a temperatura atingir 40 °C ou mais,
-//      acenda o LED Vermelho, apague o LED Verde e exiba "ALERTA" no LCD. 
-//      Caso contrário, mantenha o LED Verde aceso, Vermelho apagado e exiba "OK".
+//   3. Lógica de Alarme da Bateria: se a temperatura atingir 40 °C ou mais:
+//      -> Acenda o LED Vermelho, apague o LED Verde e exiba "ALERTA" no LCD. 
+//      -> Caso contrário (temperatura segura), mantenha o LED Verde aceso, LED Vermelho
+//         apagado e exiba "OK" no LCD.
 //   4. Limpe o espaço numérico com espaços em branco ("    ") antes de imprimir
 //      novos números para evitar resíduos numéricos antigos na tela.
 // -----------------------------------------------------------------------------
@@ -54,7 +55,7 @@ LiquidCrystal LCD(12, 11, 5, 4, 3, 2);
 // Elas armazenam o último valor impresso para podermos fazer comparações.
 int ultimoTempC = -1; 
 
-// TODO: Defina os pinos correspondentes para os LEDs vermelho e verde.
+// TODO: Defina os pinos correspondentes para os LEDs vermelho (alarme) e verde (seguro).
 // Conectamos o LED Vermelho no pino digital 7 e o LED Verde no pino digital 8.
 int pinoVermelho = 7;
 int pinoVerde = 8;
@@ -63,7 +64,7 @@ void setup() {
   // Inicializa o LCD configurando a resolução para 20 colunas e 4 linhas
   LCD.begin(20, 4);
   
-  // TODO: Configure os pinos digitais dos LEDs como saídas.
+  // TODO: Configure os pinos digitais dos LEDs de alarme como saídas.
   // Dica de pesquisa: use a função 'pinMode(pino, modo)' com o modo 'OUTPUT'.
   
   // TODO (Etapa 2): Escreva os rótulos fixos (labels) que nunca mudam no display.
@@ -81,11 +82,11 @@ void setup() {
 }
 
 void loop() {
-  // TODO: Realize a leitura analógica do potenciômetro conectado ao pino A0.
+  // TODO: Realize a leitura analógica do sensor de temperatura (A0).
   // Dica de pesquisa: use a função 'analogRead(pino)'. Ela retorna um inteiro de 0 a 1023.
   int potenciometro = 0; 
   
-  // TODO: Converta o valor bruto do potenciômetro para graus Celsius (escala de 0 a 60).
+  // TODO: Converta o valor bruto lido para graus Celsius (escala de 0 a 60).
   // Dica de pesquisa: use a função 'map(valor, deMin, deMax, paraMin, paraMax)'.
   int tempC = 0; 
 

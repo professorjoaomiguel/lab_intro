@@ -1,22 +1,23 @@
 // Faculdade de Tecnologia SENAI Porto Alegre
 // Disciplina: Programação Básica
-// Experimento 02: Cálculo de Aluguel de Carro com Display LCD (Wokwi 20x4)
+// Experimento 02: Computador de Tarifação Dinâmica - Car Sharing (VoltLog - LCD 20x4)
 // 
 // Aluno: _____________________________________ Data: ___/___/_____
 //
 // -----------------------------------------------------------------------------
-// APRESENTAÇÃO E DIRETRIZES:
-// O objetivo desta atividade é simular as duas entradas de um sistema de aluguel de carros
-// (Locadora "Sai da Frente") utilizando dois potenciômetros. O programa calcula o custo total
-// aplicando um desconto de 10% e exibe tudo formatado no LCD 20x4 de maneira otimizada.
+// APRESENTAÇÃO E CONTEXTO:
+// A VoltLog aluga seus utilitários elétricos de carga para motoristas de entrega
+// parceiros em turnos flexíveis (Car Sharing). O cálculo de tarifa é processado em tempo
+// real pelo computador de bordo principal do veículo no encerramento do expediente.
 //
 // ETAPAS DE DESENVOLVIMENTO:
 // - ETAPA 1 (Intermediária):
 //   1. Leia o potenciômetro 1 (A0) e converta para Tempo (1 a 30 dias).
 //   2. Leia o potenciômetro 2 (A1) e converta para Distância (1 a 1000 km).
-//   3. Calcule o valor total da locação com a fórmula:
-//      -> Custo = (Dias * Diária + Km * TaxaKm) * 0.90 (desconto de 10%)
-//   4. Imprima os valores numéricos de dias, km e o custo total no LCD no layout correspondente.
+//   3. Calcule o valor total da locação com a fórmula padrão de negócio:
+//      -> Custo = (Dias * Diária + Km * TaxaKm) * 0.90 (desconto de 10% de fidelidade)
+//   4. Imprima os valores de dias, km, a categoria ativa e o custo total no LCD 20x4.
+//      *(Nesta etapa, a tela pode piscar devido ao redesenho contínuo no loop).*
 //
 // - ETAPA 2 (Final - Desafio):
 //   1. Elimine o flicker escrevendo os rótulos de texto fixo uma única vez dentro do setup().
@@ -24,10 +25,13 @@
 //      -> Linha 1: "Tempo:    dias"
 //      -> Linha 2: "Dist:     km  [   ]"
 //      -> Linha 3: "Total: R$ "
-//   2. No loop(), implemente um Filtro de Estado duplo: atualize as saídas numéricas 
+//   2. No loop(), implemente um Filtro de Estado Composto: atualize as saídas numéricas 
 //      do LCD apenas se o valor atual de tempo for diferente de 'ultimoTempo' 
-//      OU se a distância atual for diferente de 'ultimaDistancia' OU a chave mudar.
-//   3. Limpe as casas numéricas dinâmicas com espaços em branco ("  " ou "    ") antes
+//      OU se a distância atual for diferente de 'ultimaDistancia' OU a chave seletora mudar.
+//   3. Lógica de Tarifação Dinâmica: leia a chave slide (Pino 9) que define a categoria:
+//      -> LOW (Popular - POP): Diária de R$ 30,00 e R$ 0,01 por km.
+//      -> HIGH (Utilitário SUV - SUV): Diária de R$ 80,00 e R$ 0,05 por km.
+//   4. Limpe as casas numéricas dinâmicas com espaços em branco ("  " ou "    ") antes
 //      de imprimir para apagar dígitos órfãos residuais.
 // -----------------------------------------------------------------------------
 //

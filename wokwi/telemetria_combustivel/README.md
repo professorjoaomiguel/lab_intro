@@ -1,6 +1,6 @@
-# Experimento 03: Telemetria de Combustível e Autonomia (LCD 20x4)
+# Experimento 03: Telemetria de Combustível e Autonomia Híbrida (VoltLog)
 
-Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino. Leia atentamente as seções abaixo para entender as etapas, a teoria por trás da atividade e como simular o circuito.
+Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino no simulador Wokwi Web, inserido no contexto de mobilidade híbrida da startup **VoltLog**.
 
 ---
 
@@ -14,8 +14,12 @@ Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino.
 
 ---
 
-## 1. Objetivos de Aprendizagem
-*   **Nível Intermediário:** Ler e reescalar duas entradas analógicas usando cálculo em ponto flutuante: volume do combustível ($0.0$ a $50.0$ litros) e taxa de consumo de combustível ($0.0$ a $20.0$ L/h). Calcular a autonomia do veículo de forma segura contra falhas matemáticas (divisão por zero) e apresentar no LCD de 20 colunas e 4 linhas.
+## 1. O Cenário da Atividade: Computador de Bordo Híbrido da **VoltLog**
+Nas rotas logísticas de longa distância (como de Porto Alegre a Passo Fundo), a **VoltLog** utiliza utilitários com motorização híbrida (motor elétrico de tração + motor a combustão gerador de energia). 
+Você desenvolverá o firmware do **Computador de Bordo Principal** do veículo híbrido usando o display **LCD 20x4**. Ele lê sensores de volume do combustível restante e o consumo instantâneo.
+
+*   **Nível Intermediário:** Ler e reescalar duas entradas analógicas usando cálculo em ponto flutuante: volume do combustível ($0.0$ a $50.0$ litros) e taxa de consumo de combustível ($0.0$ a $20.0$ L/h). Calcular a autonomia do veículo de forma segura contra falhas matemáticas (divisão por zero) e apresentar no LCD 20x4.
+    *   *Nota Contextual:* Se o utilitário estiver rodando exclusivamente no motor elétrico de tração, o consumo de combustível líquido será nulo ($0.0$ L/h). O código deve detectar preventivamente isso e evitar a quebra por divisão por zero.
 *   **Nível Final (Desafio):**
     1.  Otimizar o display contra oscilações utilizando o Filtro de Estado.
     2.  Desenhar de forma dinâmica uma barra de progresso horizontal gráfica na Linha 2 do display LCD utilizando caracteres sólidos (bloco preenchido com o código `char(255)`).
@@ -26,13 +30,12 @@ Este guia orienta o desenvolvimento do terceiro experimento prático de Arduino.
 ## 2. Cenário e Teoria
 
 ### Proteção Contra Divisão por Zero
-Em programação de sistemas embarcados, falhas matemáticas como tentar dividir um número por zero podem travar o processador ou produzir valores inválidos (como `NaN` ou `Infinity`). 
-Ao calcular a autonomia de combustível ($Autonomia = Volume / Consumo$), se o potenciômetro de consumo estiver no mínimo ($0.0$ L/h), haverá uma tentativa de divisão por zero.
-Para contornar este problema crítico, devemos usar uma estrutura condicional:
+Em sistemas embarcados, falhas matemáticas como dividir por zero podem travar o processador ou produzir valores inválidos (`NaN` ou `Infinity`). 
+Se o utilitário da VoltLog rodar só na bateria elétrica, o motor a combustão é desligado e o consumo de combustível cai a $0.0$ L/h. Para evitar erros na conta de autonomia ($Volume / Consumo$), usamos proteção condicional:
 
 ```cpp
 if (consumo < 0.1) {
-  // Define que a autonomia é "infinita" ou zero e avisa o sistema
+  // Motor a combustão inativo (rodando no elétrico) -> autonomia de combustível líquido é "infinita"
   divisaoPorZero = true;
 } else {
   autonomia = volume / consumo;
@@ -40,9 +43,9 @@ if (consumo < 0.1) {
 ```
 
 ### Barra de Progresso Gráfica no LCD
-Displays LCD de caracteres possuem 256 posições na tabela ASCII padrão. O caractere de código **255** representa um bloco totalmente preenchido (sólido).
-Para desenhar uma barra de progresso de 10 segmentos:
-1.  Descubra o percentual atual do volume do tanque (escala de 0% a 100%).
+O caractere ASCII **255** representa um bloco totalmente preenchido.
+Para desenhar a barra de progresso do tanque de combustível:
+1.  Calcule a porcentagem de combustível (de 0% a 100%).
 2.  Divida o percentual por 10 para saber quantos blocos sólidos (0 a 10) devem ser acesos.
 3.  Utilize um laço de repetição `for` de 10 passos para imprimir `char(255)` para blocos preenchidos e espaço em branco `" "` para blocos vazios:
 
@@ -59,14 +62,14 @@ for (int i = 0; i < 10; i++) {
 
 ---
 
-## 3. Componentes e Conexões (Wokwi)
+## 3. Componentes e Conexões
 *   **Arduino Uno R3**
 *   **Display LCD 20x4 (Ligação Paralela)**
     *   `RS` -> Pino 12 | `E` -> Pino 11
     *   `D4` -> Pino 5 | `D5` -> Pino 4 | `D6` -> Pino 3 | `D7` -> Pino 2
     *   `VCC` -> 5V | `GND` -> GND
-*   **Potenciômetro 1 (Nível Combustível):** Cursor no pino analógico `A0`
-*   **Potenciômetro 2 (Consumo):** Cursor no pino analógico `A1`
+*   **Sensor de Nível (Potenciômetro 1):** Conectado no pino analógico `A0`
+*   **Sensor de Consumo (Potenciômetro 2):** Conectado no pino analógico `A1`
 *   **LED de Alerta de Reserva:** Conectado no pino digital **7** (com resistor de 220 ohms)
 
 ---
