@@ -41,6 +41,8 @@
 //    operações matemáticas com inteiros?
 // 2. Como a condição composta '||' (OR) ajuda a atualizar o LCD apenas quando
 //    houver mudança real em um dos dois potenciômetros?
+// 3. Ao fazer o desafio opcional (mudar diária SUV para 100 ou Km para 0.10), 
+//    como você alterou o código e como isso se refletiu no cálculo do custo final?
 //
 // Resposta: ___________________________________________________________________
 // _____________________________________________________________________________
