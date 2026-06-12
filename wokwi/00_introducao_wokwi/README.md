@@ -97,11 +97,11 @@ Para poder ler estas instruções de forma integrada diretamente no simulador:
 
 ### Passo 5: Rodar a Simulação (A Primeira Vitória!)
 1. No painel de circuito da direita, procure pelo **botão redondo verde (Play)** com a palavra *Start Simulation* e clique nele.
-2. *Observe o circuito:* **O LED vermelho conectado ao Arduino começou a piscar lentamente a cada 1 segundo?**
-3. *Observe o painel inferior:* **Uma aba chamada "Serial Monitor" abriu exibindo as mensagens de "LED LIGADO" e "LED DESLIGADO" em tempo real?**
+2. *Observe o circuito:* **O LED vermelho e o LED verde estão piscando de forma alternada — quando um acende, o outro apaga?**
+3. *Observe o painel inferior:* **Uma aba chamada "Serial Monitor" abriu exibindo as mensagens de estado dos dois LEDs em tempo real?**
 
 > **🧪 Teste e Verifique (Vitória Rápida!):**
-> Se o LED físico vermelho estiver acendendo e o painel inferior estiver mostrando as mensagens de texto correndo de segundo em segundo, parabéns! Você acabou de rodar sua primeira simulação e ler dados enviados via porta serial!
+> Se os dois LEDs estiverem alternando (vermelho ↔ verde) e o painel inferior mostrar as mensagens correndo a cada segundo, parabéns! Você acabou de rodar sua primeira simulação com dois pinos controlados de forma sincronizada!
 
 ---
 
@@ -131,31 +131,47 @@ Podemos mudar as propriedades físicas dos componentes diretamente no arquivo de
 > *   **O LED físico piscando na tela mudou da cor vermelha para a cor azul?**
 > *   *Parabéns!* Você aprendeu a alterar propriedades físicas de componentes virtuais diretamente no arquivo JSON.
 
-### Passo 8: Praticando no Editor Visual (Adicionar e Customizar Componentes)
+### Passo 8: Altere, Teste e Veja o Que Acontece!
 
-Agora vamos mexer no hardware usando as mãos (virtualmente) e atalhos rápidos! Vamos adicionar um novo LED ao nosso circuito para praticar:
-1. Pare a simulação clicando em **Stop** (se ela estiver rodando).
-2. Clique em qualquer área em branco do painel da direita (o painel de circuitos) para focar nele.
-3. Pressione a tecla **`A`** no seu teclado. O menu de seleção de componentes surgirá na tela.
-4. Digite **`LED`** na barra de pesquisa e selecione o componente **LED** comum. Ele aparecerá no centro do painel.
-5. Arraste esse novo LED para uma posição vazia próxima ao Arduino.
-6. Com o LED selecionado (ele ficará com um contorno tracejado azul):
-   * Pressione a tecla **`R`** algumas vezes. *Observe como ele gira 90 graus a cada clique!* Isso ajuda muito a alinhar resistores e outros componentes.
-   * Pressione a tecla **`D`** uma vez. *Um segundo LED idêntico surgirá ao lado dele!* (Você pode deletar este LED extra clicando nele e pressionando a tecla **`Delete`**).
-7. Vamos conectar o LED original:
-   * Coloque o mouse sobre a perna esquerda do LED (chamada *Cathode* ou terminal negativo).
-   * Clique nela e depois clique em qualquer pino cinza escrito **`GND`** no Arduino Uno. Um fio de ligação verde ou preto será gerado automaticamente.
-   * Coloque o mouse sobre a perna direita do LED (chamada *Anode* ou terminal positivo).
-   * Clique nela e depois clique no pino **`12`** do Arduino Uno.
-8. Customizando as cores dos fios com atalhos de teclado:
-   * Clique em cima do fio que você conectou ao pino 12 para selecioná-lo.
-   * Com o fio selecionado, pressione a tecla **`2`** no seu teclado. *O fio mudará de cor instantaneamente para Vermelho!*
-   * Agora selecione o fio conectado ao GND e pressione a tecla **`0`** para pintá-lo de **Preto** (o padrão de circuitos eletrônicos para cabos terra).
+O circuito já possui **dois LEDs** prontos: o **vermelho** (pino 13) e o **verde** (pino 12).
+Eles piscam de forma alternada — quando um acende, o outro apaga.
+
+Agora é a sua vez de modificar o comportamento deles! Experimente os desafios abaixo:
+
+#### 🟡 Desafio 1 — Mudar a velocidade da alternância
+1. Pare a simulação.
+2. No código, localize as duas linhas com `delay(1000);`.
+3. Altere os dois valores de `1000` para `300` (0,3 segundo).
+4. Inicie a simulação novamente.
 
 > **🧪 Teste e Verifique:**
-> *   **Você conseguiu adicionar, rotacionar e conectar o LED usando apenas as teclas do teclado e o mouse?**
-> *   **Os fios mudaram de cor ao pressionar `2` e `0`?**
-> *   *Perfeito!* Você acaba de dominar as ferramentas visuais do simulador de circuitos. Agora o desenho de qualquer circuito será incrivelmente ágil!
+> *   **Os LEDs passaram a alternar muito mais rápido?**
+> *   **As mensagens no Monitor Serial correm mais depressa?**
+
+#### 🟠 Desafio 2 — Fazer os LEDs piscarem em tempos diferentes
+E se o LED vermelho ficasse ligado por mais tempo que o verde?
+1. Pare a simulação.
+2. Separe os dois `delay()` do código para terem valores diferentes:
+   * Após ligar o LED vermelho (e desligar o verde): use `delay(800);`
+   * Após ligar o LED verde (e desligar o vermelho): use `delay(200);`
+3. Inicie a simulação novamente.
+
+> **🧪 Teste e Verifique:**
+> *   **O LED vermelho fica aceso por mais tempo que o verde?**
+> *   *Isso simula um semáforo assimétrico — ótima introdução ao controle de tempo!*
+
+#### 🔴 Desafio 3 — Inverter quem começa ligado
+E se o LED **verde** fosse o primeiro a acender ao ligar o Arduino?
+1. Pare a simulação.
+2. Na **FASE 1** do loop, troque os valores:
+   * `digitalWrite(13, HIGH)` → `digitalWrite(13, LOW)`
+   * `digitalWrite(12, LOW)`  → `digitalWrite(12, HIGH)`
+3. Faça o mesmo ajuste na **FASE 2** (invertendo de volta).
+4. Inicie a simulação e observe qual LED acende primeiro!
+
+> **🧪 Teste e Verifique:**
+> *   **O LED verde agora é o primeiro a acender?**
+> *   *Perceba que a lógica de alternância é a mesma — só a ordem de início mudou!*
 
 ---
 
@@ -222,11 +238,12 @@ Você possui duas opções para entregar a sua atividade prática no Classroom. 
 2.  [ ] Criou o arquivo `README.md` no simulador e colou o roteiro para leitura integrada lado a lado.
 3.  [ ] Criou o arquivo `folha_respostas.md` no simulador e respondeu às reflexões rápidas.
 4.  [ ] Carregou o circuito (`diagram.json`) e o código base (`sketch.ino`).
-5.  [ ] Viu o LED vermelho piscar e leu as mensagens no Monitor Serial inferior.
-6.  [ ] Alterou o código para piscar o LED e enviar dados rapidamente a 0.2 segundos (200ms).
-7.  [ ] Alterou a cor do LED no arquivo diagram.json para azul.
-8.  [ ] Adicionou um LED pelo painel visual, rotacionou-o e alterou as cores dos fios usando atalhos (`2` e `0`).
-9.  [ ] Salvou o projeto, fez o download dos arquivos individuais (ou copiou o link) e entregou.
+5.  [ ] Viu os dois LEDs (vermelho e verde) alternando e leu as mensagens no Monitor Serial.
+6.  [ ] Alterou o código para piscar os LEDs rapidamente a 0.3 segundos (300ms) — Desafio 1.
+7.  [ ] Fez os LEDs alternarem em tempos diferentes (800ms × 200ms) — Desafio 2.
+8.  [ ] Inverteu a ordem de início dos LEDs (verde acende primeiro) — Desafio 3.
+9.  [ ] Alterou a cor do LED no arquivo diagram.json para azul (Passo 7).
+10. [ ] Salvou o projeto, fez o download dos arquivos individuais (ou copiou o link) e entregou.
 
 *Você concluiu o Experimento Zero com sucesso! Agora você sabe como a informação corre em fios elétricos e como operar o simulador. Você está pronto para iniciar as atividades práticas da VoltLog!*
 
