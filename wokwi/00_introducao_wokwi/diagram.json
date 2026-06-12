@@ -4,18 +4,13 @@
   "editor": "wokwi",
   "parts": [
     { "type": "wokwi-arduino-uno", "id": "uno", "top": 40, "left": 0 },
-    { "type": "wokwi-led", "id": "led1", "top": -100, "left": 80,  "attrs": { "color": "red"   } },
-    { "type": "wokwi-resistor", "id": "r1",   "top": -50,  "left": 80,  "attrs": { "value": "220" } },
-    { "type": "wokwi-led", "id": "led2", "top": -100, "left": 160, "attrs": { "color": "green" } },
-    { "type": "wokwi-resistor", "id": "r2",   "top": -50,  "left": 160, "attrs": { "value": "220" } }
+    { "type": "wokwi-led", "id": "led", "top": -100, "left": 100, "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": -50, "left": 100, "attrs": { "value": "220" } }
   ],
   "connections": [
-    [ "uno:13",    "r1:1",    "red",   [] ],
-    [ "r1:2",      "led1:A",  "red",   [] ],
-    [ "uno:GND.1", "led1:K",  "black", [] ],
-    [ "uno:12",    "r2:1",    "green", [] ],
-    [ "r2:2",      "led2:A",  "green", [] ],
-    [ "uno:GND.2", "led2:K",  "black", [] ]
+    [ "uno:13", "r1:1", "green", [] ],
+    [ "r1:2", "led:A", "red", [] ],
+    [ "uno:GND.1", "led:K", "black", [] ]
   ],
   "dependencies": {}
 }
